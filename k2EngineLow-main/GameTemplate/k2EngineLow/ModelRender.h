@@ -11,6 +11,11 @@ namespace nsK2EngineLow
 		/// <summary>
 		/// 初期化
 		/// </summary>
+		/// <param name="filePath">ファイルパス</param>
+		/// <param name="animationClips">アニメーションクリップ</param>
+		/// <param name="animationClipsNum">アニメーションクリップの数</param>
+		/// <param name="enModelUpAxis">モデルの上方向</param>
+		/// <param name="isShadowReciever">シャドウレシーバーフラグ(trueなら影が落ちる)</param>
 		void Init(
 			const char* filePath,
 			AnimationClip* animationClips = nullptr,
@@ -79,15 +84,6 @@ namespace nsK2EngineLow
 			SetPosition(pos);
 			SetRotation(rot);
 			SetScale(scale);
-		}
-
-		/// <summary>
-		/// モデルを取得
-		/// </summary>
-		/// <returns></returns>
-		Model& GetModel()
-		{
-			return m_model;
 		}
 
 		/// <summary>
@@ -163,18 +159,29 @@ namespace nsK2EngineLow
 		/// <param name="filePath"></param>
 		void InitSkeleton(const char* filePath);
 
+		/// <summary>
+		/// GBuffer描画モデルの初期化
+		/// </summary>
+		/// <param name="tkmFilePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		/// <param name="isShadowReciever"></param>
+		void InitModelOnRenderGBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis, bool isShadowReciever);
+
 
 	private:
-		Model m_model;										//モデル
-		Vector3 m_position = Vector3::Zero;					//ポジション
-		Vector3 m_scale = Vector3::One;						//スケール
-		Quaternion m_rotation = { 0.0f,0.0f,0.0f,1.0f };	//回転
-		Animation m_animation;								//アニメーション
-		AnimationClip* m_animationClips;					//アニメーションクリップ
-		Skeleton m_skeleton;								//スケルトン
-		int m_numAnimationClips = 0;						//アニメーションクリップナンバー
-		int m_nowAnimationNumber = -1;						//今のアニメーションクリップナンバー
-		float m_animationSpeed = 1.0f;						//アニメーションの速さ
+		Model m_zprepassModel;								// ZPrepassで描画されるモデル
+		Model m_forwardRenderModel;							// フォワードレンダリングの描画パスで描画されるモデル
+		Model m_renderToGBufferModel;						// RenderToGBufferで描画されるモデル
+		Model m_shadowModel;								// シャドウマップに描画するモデル
+		Vector3 m_position = Vector3::Zero;					// ポジション
+		Vector3 m_scale = Vector3::One;						// スケール
+		Quaternion m_rotation = { 0.0f,0.0f,0.0f,1.0f };	// 回転
+		Animation m_animation;								// アニメーション
+		AnimationClip* m_animationClips;					// アニメーションクリップ
+		Skeleton m_skeleton;								// スケルトン
+		int m_numAnimationClips = 0;						// アニメーションクリップナンバー
+		int m_nowAnimationNumber = -1;						// 今のアニメーションクリップナンバー
+		float m_animationSpeed = 1.0f;						// アニメーションの速さ
 
 	};
 }
