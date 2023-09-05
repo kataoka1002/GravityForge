@@ -142,6 +142,16 @@ namespace nsK2EngineLow
 			return m_nowAnimationNumber;
 		}
 
+		/// <summary>
+		/// ディファード用のモデルの描画
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnDraw(RenderContext& rc)
+		{
+			m_renderToGBufferModel.Draw(rc);
+		}
+
+
 
 	private:
 
