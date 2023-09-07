@@ -34,6 +34,7 @@ struct SPSIn
 struct SPSOut
 {
     float4 albedo : SV_Target0; // アルベド
+    float3 normal : SV_Target1; //法線
 };
 
 
@@ -79,6 +80,7 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.pos = mul(m, vsIn.pos);        // モデルの頂点をワールド座標系に変換
     psIn.pos = mul(mView, psIn.pos);    // ワールド座標系からカメラ座標系に変換
     psIn.pos = mul(mProj, psIn.pos);    // カメラ座標系からスクリーン座標系に変換
+    psIn.normal = normalize(mul(m, vsIn.normal));
 
     psIn.uv = vsIn.uv;
     
@@ -105,6 +107,9 @@ SPSOut PSMain(SPSIn psIn)
     
     //アルベドカラーの抽出
     psOut.albedo = g_albedo.Sample(g_sampler, psIn.uv);
+    
+    //法線情報の抽出
+    psOut.normal = (psIn.normal / 2.0f) + 0.5f;
     
     return psOut;
 }

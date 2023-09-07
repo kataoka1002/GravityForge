@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneLight.h"
 
 namespace nsK2EngineLow
 {
@@ -31,15 +32,36 @@ namespace nsK2EngineLow
 			ModelRenderObject.push_back(modelRender);
 		}
 
+		/// <summary>
+		/// シーンライトの構造体を返す
+		/// </summary>
+		/// <returns></returns>
+		Light& GetLightCB()
+		{
+			return m_sceneLight.GetLight();
+		}
+
+		/// <summary>
+		/// ディレクションライトの設定
+		/// </summary>
+		/// <param name="lightNum">ライトのナンバー</param>
+		/// <param name="direction">方向</param>
+		/// <param name="color">カラー</param>
+		void SetDirectionLight(int lightNum, Vector3 direction, Vector3 color)
+		{
+			m_sceneLight.SetDirectionLight(lightNum, direction, color);
+		}
+
 
 	private:
-
 		// GBufferの定義
 		enum EnGBuffer
 		{
-			enGBufferAlbedo,           // アルベド
-			enGBufferNum,              // G-Bufferの数
+			enGBufferAlbedo,    // アルベド
+			enGBufferNormal,
+			enGBufferNum,       // G-Bufferの数
 		};
+		SceneLight m_sceneLight;                        // シーンライト
 
 		RenderTarget m_mainRenderTarget;				//メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];			//GBuffer

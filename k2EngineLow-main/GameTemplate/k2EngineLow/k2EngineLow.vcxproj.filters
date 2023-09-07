@@ -227,6 +227,7 @@
     </ClCompile>
     <ClCompile Include="ModelRender.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="SceneLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -503,6 +504,7 @@
     </ClInclude>
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="RenderingEngine.h" />
+    <ClInclude Include="SceneLight.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
