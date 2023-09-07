@@ -5,20 +5,38 @@ namespace nsK2EngineLow
 {
 	RenderingEngine::RenderingEngine()
 	{
+		Init();
+	}
+
+	RenderingEngine::~RenderingEngine()
+	{
 
 	}
 
 	bool RenderingEngine::Start()
 	{
-		Init();
 		return true;
 	}
 
 	void RenderingEngine::Init()
 	{
+		InitMainRenderTarget();
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
 		InitDefferedLightingSprite();
+	}
+
+	void RenderingEngine::InitMainRenderTarget()
+	{
+		//メインレンダリングターゲットの作成
+		m_mainRenderTarget.Create(
+			g_graphicsEngine->GetFrameBufferWidth(),    
+			g_graphicsEngine->GetFrameBufferHeight(),   
+			1,
+			1,											
+			DXGI_FORMAT_R32G32B32A32_FLOAT,				
+			DXGI_FORMAT_D32_FLOAT						
+		);
 	}
 
 	void RenderingEngine::InitCopyToframeBufferSprite()
@@ -36,8 +54,8 @@ namespace nsK2EngineLow
 		// アルベドカラー用のターゲットを作成
 		float clearColor[] = { 0.5f,0.5f,0.5f,1.0f };
 		m_gBuffer[enGBufferAlbedo].Create(
-			FRAME_BUFFER_W,
-			FRAME_BUFFER_H,
+			g_graphicsEngine->GetFrameBufferWidth(),    
+			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -93,7 +111,7 @@ namespace nsK2EngineLow
 		rc.ClearRenderTargetViews(ARRAYSIZE(rts), rts);
 
 		// まとめてモデルレンダーを描画
-		for (auto MobjData : ModelRenderObject) 
+		for (auto& MobjData : ModelRenderObject) 
 		{
 			MobjData->OnDraw(rc);
 		}

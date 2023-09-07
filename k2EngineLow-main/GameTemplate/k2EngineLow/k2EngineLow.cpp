@@ -39,6 +39,7 @@ namespace nsK2EngineLow {
 		GameObjectManager::CreateInstance();
 		PhysicsWorld::CreateInstance();
 		g_soundEngine = new SoundEngine();
+		g_renderingEngine = new RenderingEngine;
 		if (m_graphicsEngine) {
 			//エフェクトエンジンの初期化。
 			EffectEngine::CreateInstance();
@@ -60,7 +61,6 @@ namespace nsK2EngineLow {
 		for (auto& pad : m_pad) {
 			pad.BeginFrame();
 		}
-
 	}
 	void K2EngineLow::EndFrame()
 	{

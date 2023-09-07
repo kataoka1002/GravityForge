@@ -7,7 +7,7 @@ public:
 
 	void Update();
 
-	void Draw(RenderContext& rc);
+	void Render(RenderContext& rc);
 
 private:
 	ModelRender m_model;

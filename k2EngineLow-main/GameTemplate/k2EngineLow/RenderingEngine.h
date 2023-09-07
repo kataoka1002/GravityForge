@@ -12,6 +12,7 @@ namespace nsK2EngineLow
 
 		bool Start();
 		void Init();
+		void InitMainRenderTarget();
 		void InitCopyToframeBufferSprite();
 		void InitGBuffer();
 		void InitDefferedLightingSprite();
