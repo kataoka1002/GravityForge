@@ -18,5 +18,8 @@ private:
 	};
 	AnimationClip animationClips[enAnimClip_Num];
 
+	Vector3 pos = Vector3::Zero;
+
+
 };
 

@@ -8,8 +8,9 @@ Test::Test()
 
 	m_model.Init("Assets/modelData/unityChan.tkm", animationClips, enAnimClip_Num, enModelUpAxisY);
 
-	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,1.0f }, Vector3{ 1.0f,0.0f,0.0f });
-	g_renderingEngine->SetDirectionLight(1, Vector3{ 0.0f,0.0f,1.0f }, Vector3{ 0.0f,1.0f,0.0f });
+	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,1.0f }, Vector3{ 0.5f,0.5f,0.5f });
+
+	g_renderingEngine->SetPointLight(0, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 1.0f,0.0f,0.0f }, 200.0f);
 }
 
 Test::~Test()
@@ -21,6 +22,25 @@ void Test::Update()
 {
 	m_model.PlayAnimation(enAnimClip_Idle);
 	m_model.Update();
+
+	if (g_pad[0]->IsPress(enButtonRight))
+	{
+		pos.x += 1.0f;
+	}
+	if (g_pad[0]->IsPress(enButtonLeft))
+	{
+		pos.x -= 1.0f;
+	}
+	if (g_pad[0]->IsPress(enButtonUp))
+	{
+		pos.y += 1.0f;
+	}
+	if (g_pad[0]->IsPress(enButtonDown))
+	{
+		pos.y -= 1.0f;
+	}
+	g_renderingEngine->SetPointLightPosition(0, pos);
+
 }
 
 void Test::Render(RenderContext& rc)

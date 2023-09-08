@@ -44,12 +44,29 @@ namespace nsK2EngineLow
 		/// <summary>
 		/// ディレクションライトの設定
 		/// </summary>
-		/// <param name="lightNum">ライトのナンバー</param>
+		/// <param name="lightNum">ナンバー</param>
 		/// <param name="direction">方向</param>
 		/// <param name="color">カラー</param>
 		void SetDirectionLight(int lightNum, Vector3 direction, Vector3 color)
 		{
 			m_sceneLight.SetDirectionLight(lightNum, direction, color);
+		}
+
+		/// <summary>
+		/// ポイントライトの設定
+		/// </summary>
+		/// <param name="lightNum">ナンバー</param>
+		/// <param name="position">ポジション</param>
+		/// <param name="color">カラー</param>
+		/// <param name="range">影響範囲</param>
+		void SetPointLight(int lightNum, Vector3 position, Vector3 color, float range)
+		{
+			m_sceneLight.SetPointLight(lightNum, position, color, range);
+		}
+
+		void SetPointLightPosition(int lightNum, Vector3 position)
+		{
+			m_sceneLight.SetPointLightPosition(lightNum, position);
 		}
 
 
@@ -64,10 +81,8 @@ namespace nsK2EngineLow
 		};
 
 		SceneLight m_sceneLight;                        // シーンライト
-
 		RenderTarget m_mainRenderTarget;				//メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];			//GBuffer
-
 		Sprite m_copyToframeBufferSprite;				//メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 		Sprite m_diferredLightingSprite;				//ディファードライティング用のスプライト
 
