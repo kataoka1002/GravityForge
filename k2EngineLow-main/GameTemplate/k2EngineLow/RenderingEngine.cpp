@@ -73,6 +73,14 @@ namespace nsK2EngineLow
 			DXGI_FORMAT_UNKNOWN
 		);
 
+		m_gBuffer[enGBufferWorldPos].Create(
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
+			1,
+			1,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_UNKNOWN
+		);
 	}
 
 	void RenderingEngine::InitDefferedLightingSprite()
@@ -85,6 +93,7 @@ namespace nsK2EngineLow
 		// ディファードライティングで使用するテクスチャを設定
 		spriteInitData.m_textures[enGBufferAlbedo] = &m_gBuffer[enGBufferAlbedo].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferNormal] = &m_gBuffer[enGBufferNormal].GetRenderTargetTexture();
+		spriteInitData.m_textures[enGBufferWorldPos] = &m_gBuffer[enGBufferWorldPos].GetRenderTargetTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -113,7 +122,8 @@ namespace nsK2EngineLow
 		// レンダリングターゲットをG-Bufferに変更して書き込む
 		RenderTarget* rts[] = {
 			&m_gBuffer[enGBufferAlbedo],   // 0番目のレンダリングターゲット
-			&m_gBuffer[enGBufferNormal]
+			&m_gBuffer[enGBufferNormal],
+			&m_gBuffer[enGBufferWorldPos]
 		};
 
 		// まず、レンダリングターゲットとして設定できるようになるまで待つ

@@ -58,9 +58,11 @@ namespace nsK2EngineLow
 		enum EnGBuffer
 		{
 			enGBufferAlbedo,    // アルベド
-			enGBufferNormal,
+			enGBufferNormal,	//法線
+			enGBufferWorldPos,	//ワールド座標
 			enGBufferNum,       // G-Bufferの数
 		};
+
 		SceneLight m_sceneLight;                        // シーンライト
 
 		RenderTarget m_mainRenderTarget;				//メインレンダリングターゲット

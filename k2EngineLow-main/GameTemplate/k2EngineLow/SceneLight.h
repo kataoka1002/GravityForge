@@ -16,12 +16,16 @@ namespace nsK2EngineLow
 	struct Light
 	{
 		DirectionLight directionLight[MAX_DIRECTION_LIGHT];	//ディレクションライトの配列
+		Vector3 eyePos = Vector3::Zero;						//カメラの位置
 	};
 
 
 	class SceneLight : public Noncopyable
 	{
 	public:
+		//コンストラクタ
+		SceneLight();
+
 		//ディレクションライトの設定
 		void SetDirectionLight(int lightNum, Vector3 direction, Vector3 color)
 		{
