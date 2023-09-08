@@ -3,6 +3,7 @@
  */
 static const int MAX_DIRECTION_LIGHT = 4;
 static const int MAX_POINT_LIGHT = 128;
+static const int MAX_SPOT_LIGHT = 128;
 
 // 構造体
 struct DirectionLight
@@ -18,6 +19,15 @@ struct PointLight
     float ptRange;       //影響範囲
 };
 
+struct SpotLight
+{
+    float3 spPosition;  //ポジション
+    float3 spColor;     //カラー
+    float spRange;      //影響範囲
+    float3 spDirection; //射出方向
+    float spAngle;      //射出角度
+};
+
 
 cbuffer cb : register(b0)
 {
@@ -30,6 +40,7 @@ cbuffer LightCb : register(b1)
     DirectionLight directionLight[MAX_DIRECTION_LIGHT];
     float3 eyePos;
     PointLight pointLight[MAX_POINT_LIGHT];
+    SpotLight spotLight[MAX_SPOT_LIGHT];
 }
 
 struct VSInput
@@ -55,6 +66,7 @@ float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
 float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal);
 float3 CalcDirectionLight(float3 normal,float3 worldPos);
 float3 CalcPointLight(float3 normal, float3 worldPos);
+float3 CalcSpotLight(float3 normal, float3 worldPos);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -89,9 +101,12 @@ float4 PSMain(PSInput In) : SV_Target0
     // ポイントライトの強さ設定
     float3 ptLig = CalcPointLight(normal, worldPos);
     
+    // スポットライトの強さ設定
+    float3 spLig = CalcSpotLight(normal, worldPos);
+    
     
     // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig;
+    float3 lightPow = dirLig + ptLig + spLig;
     
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
@@ -146,7 +161,7 @@ float3 CalcPointLight(float3 normal,float3 worldPos)
 {
     float3 lig;
     
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < MAX_POINT_LIGHT; i++)
     {
      	// このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
@@ -180,9 +195,74 @@ float3 CalcPointLight(float3 normal,float3 worldPos)
         specPoint *= affect;
         
         // 最終的に返す強さに足していく
-        lig += diffPoint;
-        lig += specPoint;
+        lig += diffPoint + specPoint;
     }
 
+    return lig;
+}
+
+float3 CalcSpotLight(float3 normal,float3 worldPos)
+{
+    float3 lig = { 0.0f, 0.0f, 0.0f };
+    
+    for (int i = 0; i < MAX_SPOT_LIGHT; i++)
+    {
+        //サーフェイスに入射するスポットライトの光の向きを計算する
+        float3 LigDir = worldPos - spotLight[i].spPosition;
+	    //正規化
+        LigDir = normalize(LigDir);
+    
+	    //減衰なしのLambert拡散反射光を計算する
+        float3 diffSpot = CalcLambertDiffuse(LigDir, spotLight[i].spColor, normal);
+    
+	    //減衰なしのPhong鏡面反射の計算
+        float3 specSpot = CalcPhongSpecular(LigDir, spotLight[i].spColor, worldPos, normal);
+    
+	    //スポットライトとの距離を計算する
+        float distance = length(worldPos - spotLight[i].spPosition);
+    
+	    //影響率は距離に比例して小さくなっていく
+        float affect = 1.0f - 1.0f / spotLight[i].spRange * distance;
+	    //影響力がマイナスにならないように
+        if (affect < 0.0f)
+        {
+            affect = 0.0f;
+        }
+    
+	    //影響を指数関数的にする
+        affect = pow(affect, 3.0f);
+    
+	    //拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
+        diffSpot *= affect;
+        specSpot *= affect;
+    
+        // ここからは角度による影響率を求める
+        
+	    //入射光と射出方向の角度を求める
+        float angle = dot(LigDir, spotLight[i].spDirection);
+    
+	    //dot()で求めた値をacos()に渡して角度を求める
+        angle = abs(acos(angle));
+    
+	    //角度に比例して小さくなっていく影響率を計算する
+        affect = 1.0f - 1.0f / spotLight[i].spAngle * angle;
+        if (affect < 0.0f)
+        {
+            affect = 0.0f;
+        }
+    
+	    //影響を指数関数的にする
+        affect = pow(affect, 0.5f);
+    
+	    //角度による影響率を反射光に乗算して、影響を弱める
+        diffSpot *= affect;
+        specSpot *= affect;
+
+        //最終的に返す強さに足していく
+        lig += diffSpot;
+        lig += specSpot;
+
+    }
+	
     return lig;
 }

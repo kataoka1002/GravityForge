@@ -69,6 +69,20 @@ namespace nsK2EngineLow
 			m_sceneLight.SetPointLightPosition(lightNum, position);
 		}
 
+		/// <summary>
+		/// スポットライトの設定
+		/// </summary>
+		/// <param name="lightNum">ナンバー</param>
+		/// <param name="position">ポジション</param>
+		/// <param name="color">カラー</param>
+		/// <param name="range">影響範囲</param>
+		/// <param name="direction">射出方向</param>
+		/// <param name="angle">射出角度</param>
+		void SetSpotLight(int lightNum, Vector3 position, Vector3 color, float range, Vector3 direction, float angle)
+		{
+			m_sceneLight.SetSpotLight(lightNum, position, color, range, direction, angle);
+		}
+
 
 	private:
 		// GBufferの定義

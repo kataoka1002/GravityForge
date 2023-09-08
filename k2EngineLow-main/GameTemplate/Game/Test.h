@@ -11,6 +11,7 @@ public:
 
 private:
 	ModelRender m_model;
+	ModelRender m_bg;
 
 	enum EnAnimationClip {
 		enAnimClip_Idle,
@@ -18,7 +19,7 @@ private:
 	};
 	AnimationClip animationClips[enAnimClip_Num];
 
-	Vector3 pos = Vector3::Zero;
+	Vector3 pos = {0.0f,0.0f,-50.0f};
 
 
 };
