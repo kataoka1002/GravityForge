@@ -34,6 +34,16 @@ namespace nsK2EngineLow
 		float angle = 0.0f;
 	};
 
+	//半球ライト構造体
+	struct HemLight
+	{
+		Vector3 skyColor = Vector3::Zero;
+		float pad = 0.0f;
+		Vector3 groundColor = Vector3::Zero;
+		float pad2 = 0.0f;
+		Vector3 groundNormal = Vector3::Zero;
+	};
+
 
 	//ライト構造体
 	struct Light
@@ -43,6 +53,7 @@ namespace nsK2EngineLow
 		float pad = 0.0f;
 		PointLight pointLight[MAX_POINT_LIGHT];				//ポイントライトの配列
 		SpotLight spotLight[MAX_SPOT_LIGHT];				//スポットライトの配列
+		HemLight hemLight;									//半球ライト
 	};
 
 
@@ -81,6 +92,14 @@ namespace nsK2EngineLow
 			m_light.spotLight[lightNum].range = range;
 			m_light.spotLight[lightNum].direction = direction;
 			m_light.spotLight[lightNum].angle = angle;
+		}
+
+		//半球ライトの設定
+		void SetHemLight(Vector3 skyColor, Vector3 groundColor, Vector3 normal)
+		{
+			m_light.hemLight.skyColor = skyColor;
+			m_light.hemLight.groundColor = groundColor;
+			m_light.hemLight.groundNormal = normal;
 		}
 
 		//構造体を返す

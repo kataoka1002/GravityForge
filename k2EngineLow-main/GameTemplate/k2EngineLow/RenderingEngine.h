@@ -83,6 +83,17 @@ namespace nsK2EngineLow
 			m_sceneLight.SetSpotLight(lightNum, position, color, range, direction, angle);
 		}
 
+		/// <summary>
+		/// 半球ライトの設定
+		/// </summary>
+		/// <param name="skyColor">空の色</param>
+		/// <param name="groundColor">地面の色</param>
+		/// <param name="normal">地面の法線</param>
+		void SetHemLight(Vector3 skyColor, Vector3 groundColor, Vector3 normal)
+		{
+			m_sceneLight.SetHemLight(skyColor, groundColor, normal);
+		}
+
 
 	private:
 		// GBufferの定義

@@ -9,6 +9,8 @@ Test::Test()
 	m_model.Init("Assets/modelData/unityChan.tkm", animationClips, enAnimClip_Num, enModelUpAxisY);
 	m_bg.Init("Assets/modelData/bg.tkm");
 
+	g_renderingEngine->SetHemLight({ 0.0f,0.0f,1.0f }, { 1.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f });
+
 	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,-1.0f }, Vector3{ 0.5f,0.5f,0.5f });
 
 	g_renderingEngine->SetPointLight(0, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 1.0f,0.0f,0.0f }, 200.0f);

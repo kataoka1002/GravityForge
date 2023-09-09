@@ -28,6 +28,13 @@ struct SpotLight
     float spAngle;      //射出角度
 };
 
+struct HemLight
+{
+    float3 skyColor;        //空の色
+    float3 groundColor;     //地面の色
+    float3 groundNormal;    //地面の法線
+};
+
 
 cbuffer cb : register(b0)
 {
@@ -41,6 +48,7 @@ cbuffer LightCb : register(b1)
     float3 eyePos;
     PointLight pointLight[MAX_POINT_LIGHT];
     SpotLight spotLight[MAX_SPOT_LIGHT];
+    HemLight hemLight;
 }
 
 struct VSInput
@@ -69,6 +77,7 @@ float3 CalcDirectionLight(float3 normal,float3 worldPos);
 float3 CalcPointLight(float3 normal, float3 worldPos);
 float3 CalcSpotLight(float3 normal, float3 worldPos);
 float3 CalcLimPower(float3 normal, float3 normalInView);
+float3 CalcHemLight(float3 normal);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -112,9 +121,12 @@ float4 PSMain(PSInput In) : SV_Target0
     //リムライトの強さ設定
     float3 limLig = CalcLimPower(normal, normalInView);
     
+    //半球ライトの強さ設定
+    float3 hemLig = CalcHemLight(normal);
+    
     
     // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig + spLig + limLig;
+    float3 lightPow = dirLig + ptLig + spLig + limLig + hemLig;
     
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
@@ -301,3 +313,17 @@ float3 CalcLimPower(float3 normal,float3 normalInView)
 
     return lig;
 }
+
+//半球ライトの計算
+float3 CalcHemLight(float3 normal)
+{
+	//サーフェイスの法線と地面の法線との内積を計算する
+    float t = dot(normal, hemLight.groundNormal);
+    
+	//内積の結果を0～1の範囲に変換
+    t = (t + 1.0f) / 2.0f;
+    
+	//地面と天球色を補完率tで線形補完し、返す
+    return lerp(hemLight.groundColor, hemLight.skyColor, t);
+}
+
