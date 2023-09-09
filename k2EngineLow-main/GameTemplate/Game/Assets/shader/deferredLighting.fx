@@ -56,10 +56,11 @@ struct PSInput
 };
 
 // 変数定義
-Texture2D<float4> albedoTexture : register(t0);     // アルベド
-Texture2D<float4> normalTexture : register(t1);     // 法線
-Texture2D<float4> worldPosTexture : register(t2);   // ワールド座標
-sampler Sampler : register(s0);                     // サンプラー
+Texture2D<float4> albedoTexture : register(t0);         // アルベド
+Texture2D<float4> normalTexture : register(t1);         // 法線
+Texture2D<float4> worldPosTexture : register(t2);       // ワールド座標
+Texture2D<float4> normalInViewTexture : register(t3);   // カメラ空間の法線
+sampler Sampler : register(s0);                         // サンプラー
 
 // 関数定義
 float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
@@ -67,6 +68,7 @@ float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3
 float3 CalcDirectionLight(float3 normal,float3 worldPos);
 float3 CalcPointLight(float3 normal, float3 worldPos);
 float3 CalcSpotLight(float3 normal, float3 worldPos);
+float3 CalcLimPower(float3 normal, float3 normalInView);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -91,6 +93,9 @@ float4 PSMain(PSInput In) : SV_Target0
     
     // ワールド座標
     float3 worldPos = worldPosTexture.Sample(Sampler, In.uv).xyz;
+    
+    // カメラ空間の法線
+    float3 normalInView = normalInViewTexture.Sample(Sampler, In.uv).xyz;
 
     // --------------------------------------------------------------------
     
@@ -104,9 +109,12 @@ float4 PSMain(PSInput In) : SV_Target0
     // スポットライトの強さ設定
     float3 spLig = CalcSpotLight(normal, worldPos);
     
+    //リムライトの強さ設定
+    float3 limLig = CalcLimPower(normal, normalInView);
+    
     
     // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig + spLig;
+    float3 lightPow = dirLig + ptLig + spLig + limLig;
     
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
@@ -156,7 +164,7 @@ float3 CalcDirectionLight(float3 normal, float3 worldPos)
     return lig;
 }
 
-//ポイントライトによる反射光を計算する
+//ポイントライトの計算
 float3 CalcPointLight(float3 normal,float3 worldPos)
 {
     float3 lig;
@@ -201,6 +209,7 @@ float3 CalcPointLight(float3 normal,float3 worldPos)
     return lig;
 }
 
+//スポットライトの計算
 float3 CalcSpotLight(float3 normal,float3 worldPos)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
@@ -264,5 +273,31 @@ float3 CalcSpotLight(float3 normal,float3 worldPos)
 
     }
 	
+    return lig;
+}
+
+//リムライトの計算
+float3 CalcLimPower(float3 normal,float3 normalInView)
+{
+    float3 lig = { 0.0f, 0.0f, 0.0f };
+    
+    for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
+    {
+        //サーフェイスの法線と光の入射方向に依存するリムの強さを求める
+        float power1 = 1.0f - max(0.0f, dot(directionLight[i].dirDirection, normal));
+        
+	    //サーフェイスの法線と視線の方向に依存するリムの強さを求める
+        float power2 = 1.0f - max(0.0f, normalInView.z * -1.0f);
+        
+	    //最終的なリムの強さを求める
+        float limPower = power1 * power2;
+        
+	    //pow()を使用し強さの変化を指数関数的にする
+        limPower = pow(limPower, 1.3f);
+        
+        //リムライトのカラーを計算し足していく
+        lig += directionLight[i].dirColor * limPower;
+    }
+
     return lig;
 }

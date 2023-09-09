@@ -73,12 +73,23 @@ namespace nsK2EngineLow
 			DXGI_FORMAT_UNKNOWN
 		);
 
+		//ワールド座標用のターゲットを作成
 		m_gBuffer[enGBufferWorldPos].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
 			1,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_UNKNOWN
+		);
+
+		//カメラ空間の法線用のターゲットを作成
+		m_gBuffer[enGBufferNormalInView].Create(
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_FORMAT_UNKNOWN
 		);
 	}
@@ -94,6 +105,7 @@ namespace nsK2EngineLow
 		spriteInitData.m_textures[enGBufferAlbedo] = &m_gBuffer[enGBufferAlbedo].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferNormal] = &m_gBuffer[enGBufferNormal].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferWorldPos] = &m_gBuffer[enGBufferWorldPos].GetRenderTargetTexture();
+		spriteInitData.m_textures[enGBufferNormalInView] = &m_gBuffer[enGBufferNormalInView].GetRenderTargetTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -123,7 +135,8 @@ namespace nsK2EngineLow
 		RenderTarget* rts[] = {
 			&m_gBuffer[enGBufferAlbedo],   // 0番目のレンダリングターゲット
 			&m_gBuffer[enGBufferNormal],
-			&m_gBuffer[enGBufferWorldPos]
+			&m_gBuffer[enGBufferWorldPos],
+			& m_gBuffer[enGBufferNormalInView]
 		};
 
 		// まず、レンダリングターゲットとして設定できるようになるまで待つ

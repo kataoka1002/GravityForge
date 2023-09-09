@@ -29,14 +29,16 @@ struct SPSIn
     float3 normal : NORMAL;
     float2 uv : TEXCOORD0;
     float3 worldPos : TEXCOORD1;
+    float3 normalInView : TEXCOORD2;
 };
 
 // ピクセルシェーダーからの出力
 struct SPSOut
 {
-    float4 albedo : SV_Target0; // アルベド
-    float3 normal : SV_Target1; //法線
-    float3 worldPos : SV_Target2;
+    float4 albedo : SV_Target0;         // アルベド
+    float3 normal : SV_Target1;         //法線
+    float3 worldPos : SV_Target2;       //ワールド座標
+    float3 normalInView : SV_Target3;   //カメラ空間の法線
 };
 
 
@@ -84,9 +86,10 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.pos = mul(mView, psIn.pos);    // ワールド座標系からカメラ座標系に変換
     psIn.pos = mul(mProj, psIn.pos);    // カメラ座標系からスクリーン座標系に変換
     psIn.normal = normalize(mul(m, vsIn.normal));
+    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
 
     psIn.uv = vsIn.uv;
-    
+        
     return psIn;
 }
 
@@ -116,6 +119,9 @@ SPSOut PSMain(SPSIn psIn)
     
     //ワールド座標の抽出
     psOut.worldPos = psIn.worldPos;
+    
+    //カメラ空間の法線の抽出
+    psOut.normalInView = psIn.normalInView;
     
     return psOut;
 }
