@@ -39,16 +39,17 @@ struct SPSIn
 // ピクセルシェーダーからの出力
 struct SPSOut
 {
-    float4 albedo : SV_Target0;         // アルベド
-    float3 normal : SV_Target1;         // 法線
-    float3 worldPos : SV_Target2;       // ワールド座標
-    float3 normalInView : SV_Target3;   // カメラ空間の法線
+    float4 albedo : SV_Target0;                 // アルベド
+    float4 normalAndSpecular : SV_Target1;      // 法線
+    float3 worldPos : SV_Target2;               // ワールド座標
+    float3 normalInView : SV_Target3;           // カメラ空間の法線
 };
 
 
 //シェーダーリソース
 Texture2D<float4> g_albedo : register(t0);              // アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);           // 法線マップ
+Texture2D<float4> g_specularMap : register(t2);         // スペキュラマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列。
 
 //サンプラーステート
@@ -123,7 +124,10 @@ SPSOut PSMain(SPSIn psIn)
     psOut.albedo = g_albedo.Sample(g_sampler, psIn.uv);
     
     //法線マップによる法線情報の抽出
-    psOut.normal = CalcNormal(psIn);
+    psOut.normalAndSpecular.xyz = CalcNormal(psIn);
+    
+    //スペキュラ強度の抽出
+    psOut.normalAndSpecular.w = g_specularMap.Sample(g_sampler, psIn.uv).r;
         
     //ワールド座標の抽出
     psOut.worldPos = psIn.worldPos;

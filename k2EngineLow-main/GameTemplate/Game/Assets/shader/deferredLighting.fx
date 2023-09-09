@@ -64,18 +64,18 @@ struct PSInput
 };
 
 // 変数定義
-Texture2D<float4> albedoTexture : register(t0);         // アルベド
-Texture2D<float4> normalTexture : register(t1);         // 法線
-Texture2D<float4> worldPosTexture : register(t2);       // ワールド座標
-Texture2D<float4> normalInViewTexture : register(t3);   // カメラ空間の法線
-sampler Sampler : register(s0);                         // サンプラー
+Texture2D<float4> albedoTexture : register(t0);             // アルベド
+Texture2D<float4> normalAndSpecularTexture : register(t1);  // 法線
+Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
+Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
+sampler Sampler : register(s0);                             // サンプラー
 
 // 関数定義
 float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
-float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal);
-float3 CalcDirectionLight(float3 normal,float3 worldPos);
-float3 CalcPointLight(float3 normal, float3 worldPos);
-float3 CalcSpotLight(float3 normal, float3 worldPos);
+float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal, float speclarPow);
+float3 CalcDirectionLight(float3 normal,float3 worldPos,float specularPow);
+float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow);
+float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow);
 float3 CalcLimPower(float3 normal, float3 normalInView);
 float3 CalcHemLight(float3 normal);
 
@@ -97,8 +97,11 @@ float4 PSMain(PSInput In) : SV_Target0
     float4 albedo = albedoTexture.Sample(Sampler, In.uv);
     
     // 法線
-    float3 normal = normalTexture.Sample(Sampler, In.uv).xyz;
+    float3 normal = normalAndSpecularTexture.Sample(Sampler, In.uv).xyz;
     normal = (normal * 2.0f) - 1.0f;
+    
+    // スペキュラ強度
+    float speclarPow = normalAndSpecularTexture.Sample(Sampler, In.uv).w;
     
     // ワールド座標
     float3 worldPos = worldPosTexture.Sample(Sampler, In.uv).xyz;
@@ -110,13 +113,13 @@ float4 PSMain(PSInput In) : SV_Target0
     
     
     // ディレクションライトの強さ計算
-    float3 dirLig = CalcDirectionLight(normal, worldPos);
+    float3 dirLig = CalcDirectionLight(normal, worldPos, speclarPow);
     
     // ポイントライトの強さ設定
-    float3 ptLig = CalcPointLight(normal, worldPos);
+    float3 ptLig = CalcPointLight(normal, worldPos, speclarPow);
     
     // スポットライトの強さ設定
-    float3 spLig = CalcSpotLight(normal, worldPos);
+    float3 spLig = CalcSpotLight(normal, worldPos, speclarPow);
     
     //リムライトの強さ設定
     float3 limLig = CalcLimPower(normal, normalInView);
@@ -148,7 +151,7 @@ float3 CalcLambertDiffuse(float3 direction,float3 color,float3 normal)
 }
 
 //鏡面反射の計算
-float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal)
+float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal, float speclarPow)
 {
     float3 toEye = normalize(eyePos - worldPos);
     
@@ -157,27 +160,27 @@ float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3
     float power = max(0.0f, dot(toEye, refVec));
     power = pow(power, 5.0f);
     
-    float3 lig = color * power;
+    float3 lig = color * power * speclarPow;
     
     return lig;
 }
 
 //ディレクションライトの計算
-float3 CalcDirectionLight(float3 normal, float3 worldPos)
+float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow)
 {
     float3 lig;
     
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
     {
         lig += CalcLambertDiffuse(directionLight[i].dirDirection, directionLight[i].dirColor, normal);
-        lig += CalcPhongSpecular(directionLight[i].dirDirection, directionLight[i].dirColor, worldPos, normal);
+        lig += CalcPhongSpecular(directionLight[i].dirDirection, directionLight[i].dirColor, worldPos, normal,specularPow);
     }
     
     return lig;
 }
 
 //ポイントライトの計算
-float3 CalcPointLight(float3 normal,float3 worldPos)
+float3 CalcPointLight(float3 normal,float3 worldPos,float specularPow)
 {
     float3 lig;
     
@@ -193,7 +196,7 @@ float3 CalcPointLight(float3 normal,float3 worldPos)
         float3 diffPoint = CalcLambertDiffuse(ligDir, pointLight[i].ptColor, normal);
 
         // 減衰なしのPhong鏡面反射光を計算する
-        float3 specPoint = CalcPhongSpecular(ligDir, pointLight[i].ptColor, worldPos, normal);
+        float3 specPoint = CalcPhongSpecular(ligDir, pointLight[i].ptColor, worldPos, normal, specularPow);
 
         // 距離による影響率を計算する
         // ポイントライトとの距離を計算する
@@ -222,7 +225,7 @@ float3 CalcPointLight(float3 normal,float3 worldPos)
 }
 
 //スポットライトの計算
-float3 CalcSpotLight(float3 normal,float3 worldPos)
+float3 CalcSpotLight(float3 normal,float3 worldPos, float specularPow)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
     
@@ -237,7 +240,7 @@ float3 CalcSpotLight(float3 normal,float3 worldPos)
         float3 diffSpot = CalcLambertDiffuse(LigDir, spotLight[i].spColor, normal);
     
 	    //減衰なしのPhong鏡面反射の計算
-        float3 specSpot = CalcPhongSpecular(LigDir, spotLight[i].spColor, worldPos, normal);
+        float3 specSpot = CalcPhongSpecular(LigDir, spotLight[i].spColor, worldPos, normal, specularPow);
     
 	    //スポットライトとの距離を計算する
         float distance = length(worldPos - spotLight[i].spPosition);

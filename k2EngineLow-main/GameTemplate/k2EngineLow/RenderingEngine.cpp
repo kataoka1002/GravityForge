@@ -92,6 +92,16 @@ namespace nsK2EngineLow
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_FORMAT_UNKNOWN
 		);
+
+		//スペキュラマップ用のターゲットを作成
+		m_gBuffer[enGBufferNormalInView].Create(
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_UNKNOWN
+		);
 	}
 
 	void RenderingEngine::InitDefferedLightingSprite()
