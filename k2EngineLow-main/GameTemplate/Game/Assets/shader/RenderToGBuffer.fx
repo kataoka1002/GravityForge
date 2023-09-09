@@ -20,6 +20,8 @@ struct SVSIn
     float3 normal : NORMAL;
     float2 uv : TEXCOORD0;
     SSkinVSIn skinVert; //スキン用のデータ。
+    float3 tangent : TANGENT;
+    float3 biNomal : BINORMAL;
 };
 
 //ピクセルシェーダーへの入力
@@ -30,25 +32,29 @@ struct SPSIn
     float2 uv : TEXCOORD0;
     float3 worldPos : TEXCOORD1;
     float3 normalInView : TEXCOORD2;
+    float3 tangent : TANGENT;
+    float3 biNomal : BINORMAL;
 };
 
 // ピクセルシェーダーからの出力
 struct SPSOut
 {
     float4 albedo : SV_Target0;         // アルベド
-    float3 normal : SV_Target1;         //法線
-    float3 worldPos : SV_Target2;       //ワールド座標
-    float3 normalInView : SV_Target3;   //カメラ空間の法線
+    float3 normal : SV_Target1;         // 法線
+    float3 worldPos : SV_Target2;       // ワールド座標
+    float3 normalInView : SV_Target3;   // カメラ空間の法線
 };
 
 
 //シェーダーリソース
-Texture2D<float4> g_albedo : register(t0); //アルベドマップ
-StructuredBuffer<float4x4> g_boneMatrix : register(t3); //ボーン行列。
+Texture2D<float4> g_albedo : register(t0);              // アルベドマップ
+Texture2D<float4> g_normalMap : register(t1);           // 法線マップ
+StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列。
 
 //サンプラーステート
 sampler g_sampler : register(s0);
 
+float3 CalcNormal(SPSIn psIn);
 
 //スキン行列を計算する。
 float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
@@ -81,15 +87,17 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
         m = mWorld;
     }
 
-    psIn.pos = mul(m, vsIn.pos);        // モデルの頂点をワールド座標系に変換
+    psIn.pos = mul(m, vsIn.pos);                    // モデルの頂点をワールド座標系に変換
     psIn.worldPos = psIn.pos;
-    psIn.pos = mul(mView, psIn.pos);    // ワールド座標系からカメラ座標系に変換
-    psIn.pos = mul(mProj, psIn.pos);    // カメラ座標系からスクリーン座標系に変換
+    psIn.pos = mul(mView, psIn.pos);                // ワールド座標系からカメラ座標系に変換
+    psIn.pos = mul(mProj, psIn.pos);                // カメラ座標系からスクリーン座標系に変換
     psIn.normal = normalize(mul(m, vsIn.normal));
-    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
+    psIn.normalInView = mul(mView, psIn.normal);    // カメラ空間の法線を求める
+    psIn.tangent = normalize(mul(m, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
+    psIn.biNomal = normalize(mul(m, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
 
     psIn.uv = vsIn.uv;
-        
+    
     return psIn;
 }
 
@@ -114,9 +122,9 @@ SPSOut PSMain(SPSIn psIn)
     //アルベドカラーの抽出
     psOut.albedo = g_albedo.Sample(g_sampler, psIn.uv);
     
-    //法線情報の抽出
-    psOut.normal = (psIn.normal / 2.0f) + 0.5f;
-    
+    //法線マップによる法線情報の抽出
+    psOut.normal = CalcNormal(psIn);
+        
     //ワールド座標の抽出
     psOut.worldPos = psIn.worldPos;
     
@@ -124,4 +132,21 @@ SPSOut PSMain(SPSIn psIn)
     psOut.normalInView = psIn.normalInView;
     
     return psOut;
+}
+
+////ココから関数/////////////////////////////////////////////////////////////////////
+
+float3 CalcNormal(SPSIn psIn)
+{
+    // 法線マップからタンジェントスペースの法線をサンプリングする
+    float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+    localNormal = (localNormal - 0.5f) * 2.0f;
+    
+    // タンジェントスペースの法線をワールドスペースに変換する
+    float3 normal = psIn.tangent * localNormal.x + psIn.biNomal * localNormal.y + psIn.normal * localNormal.z;
+    
+    // 出力は0～1に丸められてしまいマイナスの値が失われてしまうので-1～1を0～1に変換する
+    normal = (normal / 2.0f) + 0.5f;
+
+    return normal;
 }
