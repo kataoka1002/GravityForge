@@ -21,6 +21,7 @@ private:
 
 	Vector3 pos = {0.0f,0.0f,-50.0f};
 
-
+	SpriteRender m_sprite;
+	FontRender m_font;
 };
 

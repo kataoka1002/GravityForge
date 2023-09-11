@@ -3,6 +3,9 @@
 
 Test::Test()
 {
+	m_sprite.Init("Assets/modelData/utc_nomal.dds", 100.0f, 100.0f);
+	m_sprite.SetPosition({ -100.0f,50.0f,0.0f });
+
 	animationClips[enAnimClip_Idle].Load("Assets/animData/idle.tka");
 	animationClips[enAnimClip_Idle].SetLoopFlag(true);
 
@@ -51,10 +54,24 @@ void Test::Update()
 	dir.Normalize();
 	g_renderingEngine->SetSpotLight(0, pos, Vector3{ 10.0f,10.0f,10.0f }, 300.0f, dir, Math::DegToRad(25.0f));
 
+
+	//ìGÇéEÇµÇΩêîÇÃï\é¶
+	wchar_t text[256];
+	swprintf_s(text, 256, L"%02dÅ@/%02d", 20, 55);
+	m_font.SetPivot({ 0.0f,0.5f });
+	m_font.SetText(text);
+	m_font.SetPosition(Vector3(100, 100.0f, 0.0f));
+	m_font.SetShadowParam(true, 1.0f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	m_font.SetScale(2.5f);
+	m_font.SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	m_sprite.Update();
 }
 
 void Test::Render(RenderContext& rc)
 {
 	m_model.Draw(rc);
 	m_bg.Draw(rc);
+	m_sprite.Draw(rc);
+	m_font.Draw(rc);
 }

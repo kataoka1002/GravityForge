@@ -21,6 +21,7 @@ namespace nsK2EngineLow
 	void RenderingEngine::Init()
 	{
 		InitMainRenderTarget();
+		Init2DSprite();
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
 		InitDefferedLightingSprite();
@@ -37,6 +38,48 @@ namespace nsK2EngineLow
 			DXGI_FORMAT_R32G32B32A32_FLOAT,				
 			DXGI_FORMAT_D32_FLOAT						
 		);
+	}
+
+	void RenderingEngine::Init2DSprite()
+	{
+		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+
+		//2D用のターゲットの初期化
+		m_2DRenderTarget.Create(
+			m_mainRenderTarget.GetWidth(),
+			m_mainRenderTarget.GetHeight(),
+			1,
+			1,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
+		);
+
+		//最終合成用のスプライトを初期化する
+		SpriteInitData spriteInitData;
+		//2D用のシェーダーを使用する
+		spriteInitData.m_fxFilePath = "Assets/shader/sprite.fx";
+		spriteInitData.m_vsEntryPointFunc = "VSMain";
+		spriteInitData.m_psEntryPoinFunc = "PSMain";
+		spriteInitData.m_alphaBlendMode = AlphaBlendMode_None;
+
+		//テクスチャは2Dレンダ―ターゲット。
+		spriteInitData.m_textures[0] = &m_2DRenderTarget.GetRenderTargetTexture();
+		//解像度はmainRenderTargetの幅と高さ
+		spriteInitData.m_width = m_mainRenderTarget.GetWidth();
+		spriteInitData.m_height = m_mainRenderTarget.GetHeight();
+		//レンダリングターゲットのフォーマット。
+		spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
+		m_2DSprite.Init(spriteInitData);
+
+		//テクスチャはメインレンダ―ターゲット。
+		spriteInitData.m_textures[0] = &m_mainRenderTarget.GetRenderTargetTexture();
+		//解像度は2Dレンダ―ターゲットの幅と高さ
+		spriteInitData.m_width = m_2DRenderTarget.GetWidth();
+		spriteInitData.m_height = m_2DRenderTarget.GetHeight();
+		//レンダリングターゲットのフォーマット。
+		spriteInitData.m_colorBufferFormat[0] = m_2DRenderTarget.GetColorBufferFormat();
+		m_mainSprite.Init(spriteInitData);
 	}
 
 	void RenderingEngine::InitCopyToframeBufferSprite()
@@ -132,6 +175,9 @@ namespace nsK2EngineLow
 		//ディファードライティング
 		DeferredLighting(rc);
 
+		//フォントとスプライトの描画
+		SpriteFontDraw(rc);
+
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
 
@@ -159,9 +205,9 @@ namespace nsK2EngineLow
 		rc.ClearRenderTargetViews(ARRAYSIZE(rts), rts);
 
 		// まとめてモデルレンダーを描画
-		for (auto& MobjData : ModelRenderObject) 
+		for (auto& ModelData : ModelRenderObject) 
 		{
-			MobjData->OnDraw(rc);
+			ModelData->OnDraw(rc);
 		}
 
 		// レンダリングターゲットへの書き込み待ち
@@ -176,6 +222,42 @@ namespace nsK2EngineLow
 
 		// G-Bufferの内容を元にしてディファードライティング
 		m_diferredLightingSprite.Draw(rc);
+
+		// メインレンダリングターゲットへの書き込み終了待ち
+		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+	}
+
+	void RenderingEngine::SpriteFontDraw(RenderContext& rc)
+	{
+		// 2D用のターゲットが使えるようになるまで待つ
+		rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
+
+		// ターゲットセット
+		rc.SetRenderTargetAndViewport(m_2DRenderTarget);
+
+		// ターゲットのクリア
+		rc.ClearRenderTargetView(m_2DRenderTarget);
+
+		m_mainSprite.Draw(rc);
+
+		// スプライトと文字を描画
+		for(auto SpriteData : SpriteRenderObject)
+		{
+			SpriteData->OnDraw(rc);
+		}
+		for(auto FontData : FontRenderObject) 
+		{
+			FontData->OnDraw(rc);
+		}
+
+		// 描画されるまで待つ
+		rc.WaitUntilFinishDrawingToRenderTarget(m_2DRenderTarget);
+
+		// ターゲットをメインに戻す
+		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
+
+		m_2DSprite.Draw(rc);
 
 		// メインレンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);

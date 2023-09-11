@@ -4,6 +4,8 @@
 namespace nsK2EngineLow
 {
 	class ModelRender;
+	class SpriteRender;
+	class FontRender;
 
 	class RenderingEngine : public Noncopyable
 	{
@@ -14,12 +16,14 @@ namespace nsK2EngineLow
 		bool Start();
 		void Init();
 		void InitMainRenderTarget();
+		void Init2DSprite();
 		void InitCopyToframeBufferSprite();
 		void InitGBuffer();
 		void InitDefferedLightingSprite();
 		void Execute(RenderContext& rc);
 		void RenderToGBuffer(RenderContext& rc);
 		void DeferredLighting(RenderContext& rc);
+		void SpriteFontDraw(RenderContext& rc);
 		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 		void ObjectClear();
 
@@ -30,6 +34,24 @@ namespace nsK2EngineLow
 		void AddModelRenderObject(ModelRender* modelRender)
 		{
 			ModelRenderObject.push_back(modelRender);
+		}
+
+		/// <summary>
+		/// スプライトレンダーをコンテナの後ろにくっつける
+		/// </summary>
+		/// <param name="spriteRender">スプライトレンダー</param>
+		void AddSpriteRenderObject(SpriteRender* spriteRender)
+		{
+			SpriteRenderObject.push_back(spriteRender);
+		}
+
+		/// <summary>
+		/// フォントレンダーをコンテナの後ろにくっつける
+		/// </summary>
+		/// <param name="fontRender">フォントレンダー</param>
+		void AddFontRenderObject(FontRender* fontRender)
+		{
+			FontRenderObject.push_back(fontRender);
 		}
 
 		/// <summary>
@@ -107,12 +129,17 @@ namespace nsK2EngineLow
 		};
 
 		SceneLight m_sceneLight;                        // シーンライト
-		RenderTarget m_mainRenderTarget;				//メインレンダリングターゲット
-		RenderTarget m_gBuffer[enGBufferNum];			//GBuffer
-		Sprite m_copyToframeBufferSprite;				//メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
-		Sprite m_diferredLightingSprite;				//ディファードライティング用のスプライト
+		RenderTarget m_mainRenderTarget;				// メインレンダリングターゲット
+		RenderTarget m_gBuffer[enGBufferNum];			// GBuffer
+		RenderTarget m_2DRenderTarget;					// 2D描画用のターゲット
+		Sprite m_copyToframeBufferSprite;				// メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
+		Sprite m_diferredLightingSprite;				// ディファードライティング用のスプライト
+		Sprite m_2DSprite;								// 2D描画用のスプライト
+		Sprite m_mainSprite;							// メインスプライト
 
-		std::vector<ModelRender*> ModelRenderObject;	//モデルレンダー
+		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
+		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
+		std::vector<FontRender*> FontRenderObject;		// フォントレンダー
 
 	};
 
