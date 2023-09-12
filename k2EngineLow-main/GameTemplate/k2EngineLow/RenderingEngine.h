@@ -121,11 +121,12 @@ namespace nsK2EngineLow
 		// GBufferの定義
 		enum EnGBuffer
 		{
-			enGBufferAlbedo,		// アルベド
-			enGBufferNormal,		// 法線
-			enGBufferWorldPos,		// ワールド座標
-			enGBufferNormalInView,	// カメラ空間の法線
-			enGBufferNum,			// G-Bufferの数
+			enGBufferAlbedo,				// アルベド
+			enGBufferNormal,				// 法線
+			enGBufferWorldPos,				// ワールド座標
+			enGBufferNormalInView,			// カメラ空間の法線
+			enGBufferMetallicSmooth,		// メタリックスムースマップ
+			enGBufferNum,					// G-Bufferの数
 		};
 
 		SceneLight m_sceneLight;                        // シーンライト

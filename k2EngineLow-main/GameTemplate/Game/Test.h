@@ -12,6 +12,8 @@ public:
 private:
 	ModelRender m_model;
 	ModelRender m_bg;
+	ModelRender m_guitar;
+	Quaternion qRot;
 
 	enum EnAnimationClip {
 		enAnimClip_Idle,

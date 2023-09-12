@@ -77,8 +77,8 @@ namespace nsK2EngineLow {
 		modelInitData.m_modelUpAxis = enModelUpAxis;
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		//modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
-		//modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
+		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 

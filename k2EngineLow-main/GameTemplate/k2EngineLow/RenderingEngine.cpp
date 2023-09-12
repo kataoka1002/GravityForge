@@ -106,7 +106,7 @@ namespace nsK2EngineLow
 			clearColor
 		);
 
-		//法線用のターゲットを作成
+		//法線とスペキュラ用のターゲットを作成
 		m_gBuffer[enGBufferNormal].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -136,8 +136,8 @@ namespace nsK2EngineLow
 			DXGI_FORMAT_UNKNOWN
 		);
 
-		//スペキュラマップ用のターゲットを作成
-		m_gBuffer[enGBufferNormalInView].Create(
+		//メタリックスムースマップ用のターゲットを作成
+		m_gBuffer[enGBufferMetallicSmooth].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
 			g_graphicsEngine->GetFrameBufferHeight(),
 			1,
@@ -159,6 +159,7 @@ namespace nsK2EngineLow
 		spriteInitData.m_textures[enGBufferNormal] = &m_gBuffer[enGBufferNormal].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferWorldPos] = &m_gBuffer[enGBufferWorldPos].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferNormalInView] = &m_gBuffer[enGBufferNormalInView].GetRenderTargetTexture();
+		spriteInitData.m_textures[enGBufferMetallicSmooth] = &m_gBuffer[enGBufferMetallicSmooth].GetRenderTargetTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -192,7 +193,8 @@ namespace nsK2EngineLow
 			&m_gBuffer[enGBufferAlbedo],   // 0番目のレンダリングターゲット
 			&m_gBuffer[enGBufferNormal],
 			&m_gBuffer[enGBufferWorldPos],
-			& m_gBuffer[enGBufferNormalInView]
+			&m_gBuffer[enGBufferNormalInView],
+			&m_gBuffer[enGBufferMetallicSmooth]
 		};
 
 		// まず、レンダリングターゲットとして設定できるようになるまで待つ
@@ -278,5 +280,7 @@ namespace nsK2EngineLow
 	{
 		//クリア
 		ModelRenderObject.clear();
+		SpriteRenderObject.clear();
+		FontRenderObject.clear();
 	}
 }
