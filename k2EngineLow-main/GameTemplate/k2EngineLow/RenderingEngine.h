@@ -134,6 +134,7 @@ namespace nsK2EngineLow
 		RenderTarget m_mainRenderTarget;				// メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];			// GBuffer
 		RenderTarget m_2DRenderTarget;					// 2D描画用のターゲット
+		RenderTarget m_shadowMap;
 		Sprite m_copyToframeBufferSprite;				// メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 		Sprite m_diferredLightingSprite;				// ディファードライティング用のスプライト
 		Sprite m_2DSprite;								// 2D描画用のスプライト
@@ -142,6 +143,7 @@ namespace nsK2EngineLow
 		Camera m_lightCamera;
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
+		std::vector<ModelRender*> ShadowModelObject;
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
 		std::vector<FontRender*> FontRenderObject;		// フォントレンダー
 

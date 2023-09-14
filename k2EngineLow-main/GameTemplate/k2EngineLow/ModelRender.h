@@ -21,7 +21,7 @@ namespace nsK2EngineLow
 			AnimationClip* animationClips = nullptr,
 			int animationClipsNum = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadowReciever = true);
+			bool isShadowReciever = false);
 
 		/// <summary>
 		/// 更新処理
@@ -178,11 +178,13 @@ namespace nsK2EngineLow
 		void InitModelOnRenderGBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis, bool isShadowReciever);
 
 
+		void InitShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis);
+
 	private:
 		Model m_zprepassModel;								// ZPrepassで描画されるモデル
 		Model m_forwardRenderModel;							// フォワードレンダリングの描画パスで描画されるモデル
 		Model m_renderToGBufferModel;						// RenderToGBufferで描画されるモデル
-		Model m_shadowModel;								// シャドウマップに描画するモデル
+		Model m_shadowDrawModel;							// シャドウマップに描画するモデル
 		Vector3 m_position = Vector3::Zero;					// ポジション
 		Vector3 m_scale = Vector3::One;						// スケール
 		Quaternion m_rotation = { 0.0f,0.0f,0.0f,1.0f };	// 回転

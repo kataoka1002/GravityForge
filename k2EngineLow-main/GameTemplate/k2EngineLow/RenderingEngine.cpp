@@ -25,23 +25,23 @@ namespace nsK2EngineLow
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
 		InitDefferedLightingSprite();
-		//m_postEffect.Init(m_mainRenderTarget);
-		m_lightCamera.SetPosition(50.0f, 100.0f, -50.0f);
-		m_lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
-		m_lightCamera.SetUp(1, 0, 0);
-		m_lightCamera.Update();
-		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		RenderTarget shadowMap;
-		shadowMap.Create(
-			1024,
-			1024,
-			1,
-			1,
-			// 【注目】シャドウマップのカラーバッファーのフォーマットを変更している
-			DXGI_FORMAT_R32_FLOAT,
-			DXGI_FORMAT_D32_FLOAT,
-			clearColor
-		);
+		m_postEffect.Init(m_mainRenderTarget);
+
+
+		//m_lightCamera.SetPosition(50.0f, 100.0f, -50.0f);
+		//m_lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
+		//m_lightCamera.SetUp(1, 0, 0);
+		//m_lightCamera.Update();
+		//float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		//m_shadowMap.Create(
+		//	1024,
+		//	1024,
+		//	1,
+		//	1,
+		//	DXGI_FORMAT_R32_FLOAT,
+		//	DXGI_FORMAT_D32_FLOAT,
+		//	clearColor
+		//);
 
 	}
 
@@ -113,7 +113,7 @@ namespace nsK2EngineLow
 	void RenderingEngine::InitGBuffer()
 	{
 		// アルベドカラー用のターゲットを作成
-		float clearColor[] = { 0.5f,0.5f,0.5f,1.0f };
+		float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };
 		m_gBuffer[enGBufferAlbedo].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),    
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -198,11 +198,19 @@ namespace nsK2EngineLow
 		//ディファードライティング
 		DeferredLighting(rc);
 
+		//rc.WaitUntilToPossibleSetRenderTarget(m_shadowMap);
+		//rc.SetRenderTargetAndViewport(m_shadowMap);
+
+		//m_diferredLightingSprite.Draw(rc);
+
+		//rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMap);
+
+
 		//フォントとスプライトの描画
 		SpriteFontDraw(rc);
 
 		//ポストエフェクトの実行
-		//m_postEffect.Render(rc, m_mainRenderTarget);
+		m_postEffect.Render(rc, m_mainRenderTarget);
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);

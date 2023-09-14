@@ -1,176 +1,12 @@
-/*!
- * @brief	スプライト用のシェーダー
- */
-
-
-static const int MAX_DIRECTION_LIGHT = 4;
-static const int MAX_POINT_LIGHT = 4;
-static const int MAX_SPOT_LIGHT = 4;
-static const float PI = 3.1415926f;
-
-// 構造体
-struct DirectionLight
-{
-    float3 dirDirection;    //方向
-    float3 dirColor;        //カラー
-};
-
-struct PointLight
-{
-    float3 ptPosition;   //ポジション
-    float3 ptColor;      //カラー
-    float ptRange;       //影響範囲
-};
-
-struct SpotLight
-{
-    float3 spPosition;  //ポジション
-    float3 spColor;     //カラー
-    float spRange;      //影響範囲
-    float3 spDirection; //射出方向
-    float spAngle;      //射出角度
-};
-
-struct HemLight
-{
-    float3 skyColor;        //空の色
-    float3 groundColor;     //地面の色
-    float3 groundNormal;    //地面の法線
-};
-
-
-cbuffer cb : register(b0)
-{
-    float4x4 mvp;
-    float4 mulColor;
-};
-
-cbuffer LightCb : register(b1)
-{
-    DirectionLight directionLight[MAX_DIRECTION_LIGHT];
-    float3 eyePos;
-    PointLight pointLight[MAX_POINT_LIGHT];
-    SpotLight spotLight[MAX_SPOT_LIGHT];
-    HemLight hemLight;
-}
-
-struct VSInput
-{
-    float4 pos : POSITION;
-    float2 uv : TEXCOORD0;
-};
-
-struct PSInput
-{
-    float4 pos : SV_POSITION;
-    float2 uv : TEXCOORD0;
-};
-
-// 変数定義
-Texture2D<float4> albedoTexture : register(t0);             // アルベド
-Texture2D<float4> normalTexture : register(t1);             // 法線
-Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
-Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
-Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
-sampler Sampler : register(s0);                             // サンプラー
-
-// 関数定義
-float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
-float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal, float speclarPow);
-float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow);
-float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth);
-float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow);
-float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos);
-float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow);
-float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos);
-float3 CalcLimPower(float3 normal, float3 normalInView);
-float3 CalcHemLight(float3 normal);
-float CalcBeckmann(float m, float t);
-float CalcSpcFresnel(float f0, float u);
-float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic);
-float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
-float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
-
-// 頂点シェーダー
-PSInput VSMain(VSInput vsIn)
-{
-    PSInput psIn;
-    psIn.pos = mul(mvp, vsIn.pos);
-    psIn.uv = vsIn.uv;
-    return psIn;
-}
-
-// ピクセルシェーダー
-float4 PSMain(PSInput In) : SV_Target0
-{
-	// GBufferの内容を使ってライティング-----------------------------------
-    
-    // アルベド
-    float4 albedo = albedoTexture.Sample(Sampler, In.uv);
-    
-    // 法線
-    float3 normal = normalTexture.Sample(Sampler, In.uv).xyz;
-    normal = (normal * 2.0f) - 1.0f;
-    
-    // ワールド座標
-    float3 worldPos = worldPosTexture.Sample(Sampler, In.uv).xyz;
-    
-    // カメラ空間の法線
-    float3 normalInView = normalInViewTexture.Sample(Sampler, In.uv).xyz;
-    
-    // スペキュラカラーはアルベドカラーと同じ
-    float3 specColor = albedo;
-
-    // 金属度(スペキュラ)
-    float metallic = metallicSmoothTexture.Sample(Sampler, In.uv).r;
-
-    // 滑らかさ
-    float smooth = metallicSmoothTexture.Sample(Sampler, In.uv).a;
-
-    // --------------------------------------------------------------------
-    
-    // 視線に向かって伸びるベクトルを計算する
-    float3 toEye = normalize(eyePos - worldPos);
-
-    
-    // ディレクションライトの強さ計算
-    //float3 dirLig = CalcDirectionLight(normal, worldPos, metallic);
-    float3 dirLig = CalcPBRDirectionLight(normal, toEye, albedo, specColor, metallic, smooth);
-    
-    // ポイントライトの強さ設定
-    //float3 ptLig = CalcPointLight(normal, worldPos, metallic);
-    float3 ptLig = CalcPBRPointLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
-    
-    // スポットライトの強さ設定
-    //float3 spLig = CalcSpotLight(normal, worldPos, metallic);
-    float3 spLig = CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
-    
-    //リムライトの強さ設定
-    float3 limLig = CalcLimPower(normal, normalInView);
-    
-    //半球ライトの強さ設定
-    float3 hemLig = CalcHemLight(normal);
-    
-    
-    // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig + spLig + limLig + hemLig;
-    
-    // ライトの光を計算し最終的なカラーを設定    
-    float4 finalColor = albedo;
-    finalColor.xyz *= lightPow;
-	
-    return finalColor;
-}
-
-////////ココから関数/////////////////////////////////////////////////////////////////////////////////////////////////////
+//////ココから関数/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //拡散反射の計算
 float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal)
 {
     float power = max(0.0f, dot(normal, direction) * -1.0f);
-    
+
     float3 lig = color * power;
-    
+
     return lig;
 }
 
@@ -178,14 +14,14 @@ float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal)
 float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal, float speclarPow)
 {
     float3 toEye = normalize(eyePos - worldPos);
-    
+
     float3 refVec = reflect(direction, normal);
-    
+
     float power = max(0.0f, dot(toEye, refVec));
     power = pow(power, 5.0f);
-    
+
     float3 lig = color * power * speclarPow;
-    
+
     return lig;
 }
 
@@ -193,13 +29,13 @@ float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3
 float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow)
 {
     float3 lig;
-    
+
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
     {
         lig += CalcLambertDiffuse(directionLight[i].dirDirection, directionLight[i].dirColor, normal);
         lig += CalcPhongSpecular(directionLight[i].dirDirection, directionLight[i].dirColor, worldPos, normal, specularPow);
     }
-    
+
     return lig;
 }
 
@@ -207,13 +43,13 @@ float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow)
 float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
-    
+
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
     {
         // PBRによるライトの強さを求める
         lig += CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, directionLight[i].dirDirection, directionLight[i].dirColor);
     }
-    
+
     return lig;
 }
 
@@ -221,10 +57,10 @@ float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 
 float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow)
 {
     float3 lig;
-    
+
     for (int i = 0; i < MAX_POINT_LIGHT; i++)
     {
-     	// このサーフェイスに入射しているポイントライトの光の向きを計算する
+        // このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
 
         // 正規化して大きさ1のベクトルにする
@@ -254,7 +90,7 @@ float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow)
         // 拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
         diffPoint *= affect;
         specPoint *= affect;
-        
+
         // 最終的に返す強さに足していく
         lig += diffPoint + specPoint;
     }
@@ -266,10 +102,10 @@ float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow)
 float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
-    
+
     for (int i = 0; i < MAX_POINT_LIGHT; i++)
     {
-     	// このサーフェイスに入射しているポイントライトの光の向きを計算する
+        // このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
 
         // 正規化して大きさ1のベクトルにする
@@ -304,57 +140,57 @@ float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 spec
 float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
-    
+
     for (int i = 0; i < MAX_SPOT_LIGHT; i++)
     {
         //サーフェイスに入射するスポットライトの光の向きを計算する
         float3 LigDir = worldPos - spotLight[i].spPosition;
-	    //正規化
+        //正規化
         LigDir = normalize(LigDir);
-    
-	    //減衰なしのLambert拡散反射光を計算する
+
+        //減衰なしのLambert拡散反射光を計算する
         float3 diffSpot = CalcLambertDiffuse(LigDir, spotLight[i].spColor, normal);
-    
-	    //減衰なしのPhong鏡面反射の計算
+
+        //減衰なしのPhong鏡面反射の計算
         float3 specSpot = CalcPhongSpecular(LigDir, spotLight[i].spColor, worldPos, normal, specularPow);
-    
-	    //スポットライトとの距離を計算する
+
+        //スポットライトとの距離を計算する
         float distance = length(worldPos - spotLight[i].spPosition);
-    
-	    //影響率は距離に比例して小さくなっていく
+
+        //影響率は距離に比例して小さくなっていく
         float affect = 1.0f - 1.0f / spotLight[i].spRange * distance;
-	    //影響力がマイナスにならないように
+        //影響力がマイナスにならないように
         if (affect < 0.0f)
         {
             affect = 0.0f;
         }
-    
-	    //影響を指数関数的にする
+
+        //影響を指数関数的にする
         affect = pow(affect, 3.0f);
-    
-	    //拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
+
+        //拡散反射光と鏡面反射光に減衰率を乗算して影響を弱める
         diffSpot *= affect;
         specSpot *= affect;
-    
+
         // ここからは角度による影響率を求める
-        
-	    //入射光と射出方向の角度を求める
+
+        //入射光と射出方向の角度を求める
         float angle = dot(LigDir, spotLight[i].spDirection);
-    
-	    //dot()で求めた値をacos()に渡して角度を求める
+
+        //dot()で求めた値をacos()に渡して角度を求める
         angle = abs(acos(angle));
-    
-	    //角度に比例して小さくなっていく影響率を計算する
+
+        //角度に比例して小さくなっていく影響率を計算する
         affect = 1.0f - 1.0f / spotLight[i].spAngle * angle;
         if (affect < 0.0f)
         {
             affect = 0.0f;
         }
-    
-	    //影響を指数関数的にする
+
+        //影響を指数関数的にする
         affect = pow(affect, 0.5f);
-    
-	    //角度による影響率を反射光に乗算して、影響を弱める
+
+        //角度による影響率を反射光に乗算して、影響を弱める
         diffSpot *= affect;
         specSpot *= affect;
 
@@ -363,7 +199,7 @@ float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow)
         lig += specSpot;
 
     }
-	
+
     return lig;
 }
 
@@ -371,59 +207,59 @@ float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow)
 float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
-    
+
     for (int i = 0; i < MAX_SPOT_LIGHT; i++)
     {
         //サーフェイスに入射するスポットライトの光の向きを計算する
         float3 ligDir = worldPos - spotLight[i].spPosition;
-	    //正規化
+        //正規化
         ligDir = normalize(ligDir);
-    
+
         // PBRによる光の強さを計算する        
         float3 PBRLig = CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, ligDir, spotLight[i].spColor);
 
-	    //スポットライトとの距離を計算する
+        //スポットライトとの距離を計算する
         float distance = length(worldPos - spotLight[i].spPosition);
-    
-	    //影響率は距離に比例して小さくなっていく
+
+        //影響率は距離に比例して小さくなっていく
         float affect = 1.0f - 1.0f / spotLight[i].spRange * distance;
-	    //影響力がマイナスにならないように
+        //影響力がマイナスにならないように
         if (affect < 0.0f)
         {
             affect = 0.0f;
         }
-    
-	    //影響を指数関数的にする
+
+        //影響を指数関数的にする
         affect = pow(affect, 3.0f);
-    
-	    //減衰率を乗算して影響を弱める
+
+        //減衰率を乗算して影響を弱める
         PBRLig *= affect;
-    
+
         // ここからは角度による影響率を求める
-        
-	    //入射光と射出方向の角度を求める
+
+        //入射光と射出方向の角度を求める
         float angle = dot(ligDir, spotLight[i].spDirection);
-    
-	    //dot()で求めた値をacos()に渡して角度を求める
+
+        //dot()で求めた値をacos()に渡して角度を求める
         angle = abs(acos(angle));
-    
-	    //角度に比例して小さくなっていく影響率を計算する
+
+        //角度に比例して小さくなっていく影響率を計算する
         affect = 1.0f - 1.0f / spotLight[i].spAngle * angle;
         if (affect < 0.0f)
         {
             affect = 0.0f;
         }
-    
-	    //影響を指数関数的にする
+
+        //影響を指数関数的にする
         affect = pow(affect, 0.5f);
-    
-	    //角度による影響率を反射光に乗算して、影響を弱める
+
+        //角度による影響率を反射光に乗算して、影響を弱める
         PBRLig *= affect;
 
         //最終的に返す強さに足していく
         lig += PBRLig;
     }
-	
+
     return lig;
 }
 
@@ -431,21 +267,21 @@ float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specC
 float3 CalcLimPower(float3 normal, float3 normalInView)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
-    
+
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
     {
         //サーフェイスの法線と光の入射方向に依存するリムの強さを求める
         float power1 = 1.0f - max(0.0f, dot(directionLight[i].dirDirection, normal));
-        
-	    //サーフェイスの法線と視線の方向に依存するリムの強さを求める
+
+        //サーフェイスの法線と視線の方向に依存するリムの強さを求める
         float power2 = 1.0f - max(0.0f, normalInView.z * -1.0f);
-        
-	    //最終的なリムの強さを求める
+
+        //最終的なリムの強さを求める
         float limPower = power1 * power2;
-        
-	    //pow()を使用し強さの変化を指数関数的にする
+
+        //pow()を使用し強さの変化を指数関数的にする
         limPower = pow(limPower, 1.3f);
-        
+
         //リムライトのカラーを計算し足していく
         lig += directionLight[i].dirColor * limPower;
     }
@@ -456,13 +292,13 @@ float3 CalcLimPower(float3 normal, float3 normalInView)
 //半球ライトの計算
 float3 CalcHemLight(float3 normal)
 {
-	//サーフェイスの法線と地面の法線との内積を計算する
+    //サーフェイスの法線と地面の法線との内積を計算する
     float t = dot(normal, hemLight.groundNormal);
-    
-	//内積の結果を0～1の範囲に変換
+
+    //内積の結果を0～1の範囲に変換
     t = (t + 1.0f) / 2.0f;
-    
-	//地面と天球色を補完率tで線形補完し、返す
+
+    //地面と天球色を補完率tで線形補完し、返す
     return lerp(hemLight.groundColor, hemLight.skyColor, t);
 }
 
@@ -583,6 +419,3 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
     // 滑らかさが高ければ、拡散反射は弱くなる
     return diffuse * (1.0f - smooth) + spec / albedo;
 }
-
-
-

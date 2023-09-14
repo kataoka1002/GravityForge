@@ -31,8 +31,12 @@ namespace nsK2EngineLow {
 		 
 		// ZPrepass描画用のモデルを初期化
 		 
-		// シャドウマップ描画用のモデルを初期化
-
+		// 影を受ける側じゃないなら
+		//if (isShadowReciever != true)
+		//{
+		//	// シャドウマップ描画用のモデルを初期化
+		//	InitShadowDrawModel();
+		//}
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
@@ -82,10 +86,33 @@ namespace nsK2EngineLow {
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 
+	void ModelRender::InitShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
+	{
+		//シャドウマップに書きこむモデルの設定
+		ModelInitData sadowDrawModelInitData;
+		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
+		if (m_animationClips != nullptr)
+		{
+			//スケルトンを指定する。
+			sadowDrawModelInitData.m_skeleton = &m_skeleton;
+			sadowDrawModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
+		else
+		{
+			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMain";
+		}
+		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
+		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
+		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+
+		m_shadowDrawModel.Init(sadowDrawModelInitData);
+	}
+
 	void ModelRender::Update()
 	{
 		//モデル側に移動回転拡大を渡す
 		m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_shadowDrawModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 		if (m_skeleton.IsInited()) 
 		{

@@ -7,8 +7,8 @@ Test::Test()
 	animationClips[enAnimClip_Idle].SetLoopFlag(true);
 
 	m_model.Init("Assets/modelData/unityChan.tkm", animationClips, enAnimClip_Num, enModelUpAxisY);
-	m_bg.Init("Assets/modelData/bg.tkm");
-	m_guitar.Init("Assets/modelData/guitar.tkm",nullptr, enAnimClip_Num, enModelUpAxisZ);
+	m_bg.Init("Assets/modelData/sample.tkm");
+	m_guitar.Init("Assets/modelData/guitar.tkm",nullptr, enAnimClip_Num, enModelUpAxisY);
 	m_guitar.SetPosition({ 0.0f,50.0f,-80.0f });
 
 
@@ -55,13 +55,12 @@ void Test::Update()
 
 	if (g_pad[0]->IsPress(enButtonY))
 	{
-		pow += {0.1f, 0.1f, 0.1f};
+		pow += {1.1f, 1.1f, 1.1f};
 	}
 	if (g_pad[0]->IsPress(enButtonX))
 	{
 		pow -= {0.1f, 0.1f, 0.1f};
 	}
-
 
 	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,-1.0f }, pow);
 
@@ -75,7 +74,7 @@ void Test::Update()
 
 void Test::Render(RenderContext& rc)
 {
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 	m_bg.Draw(rc);
-	m_guitar.Draw(rc);
+	//m_guitar.Draw(rc);
 }
