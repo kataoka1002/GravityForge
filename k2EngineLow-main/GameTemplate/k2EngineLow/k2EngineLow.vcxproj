@@ -324,6 +324,7 @@
     <ClCompile Include="physics\PhysicsStaticObject.cpp" />
     <ClCompile Include="physics\RigidBody.cpp" />
     <ClCompile Include="physics\SphereCollider.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="SceneLight.cpp" />
     <ClCompile Include="sound\SoundEngine.cpp" />
@@ -419,7 +420,9 @@
     <ClInclude Include="physics\PhysicsStaticObject.h" />
     <ClInclude Include="physics\RigidBody.h" />
     <ClInclude Include="physics\SphereCollider.h" />
+    <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RenderingEngine.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SceneLight.h" />
     <ClInclude Include="sound\SoundEngine.h" />
     <ClInclude Include="sound\SoundSource.h" />
@@ -434,6 +437,9 @@
     <ClInclude Include="tkFile\TknFile.h" />
     <ClInclude Include="tkFile\TksFile.h" />
     <ClInclude Include="util\TResourceBank.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="k2EngineLow.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

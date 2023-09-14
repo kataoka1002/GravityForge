@@ -230,6 +230,7 @@
     <ClCompile Include="SceneLight.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -509,6 +510,8 @@
     <ClInclude Include="SceneLight.h" />
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="SpriteRender.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="PostEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">
@@ -568,5 +571,8 @@
     <Filter Include="AI\PathFinding">
       <UniqueIdentifier>{72d94fe6-e599-4523-8e54-81df808c96fd}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="k2EngineLow.rc" />
   </ItemGroup>
 </Project>

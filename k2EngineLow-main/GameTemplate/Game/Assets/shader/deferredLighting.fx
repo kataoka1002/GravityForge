@@ -2,8 +2,8 @@
  * @brief	スプライト用のシェーダー
  */
 static const int MAX_DIRECTION_LIGHT = 4;
-static const int MAX_POINT_LIGHT = 128;
-static const int MAX_SPOT_LIGHT = 128;
+static const int MAX_POINT_LIGHT = 4;
+static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
 
 // 構造体
@@ -365,6 +365,7 @@ float3 CalcSpotLight(float3 normal,float3 worldPos, float specularPow)
     return lig;
 }
 
+//PBRのスポットライトを計算
 float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };

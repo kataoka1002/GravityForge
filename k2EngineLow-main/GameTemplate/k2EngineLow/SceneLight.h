@@ -2,8 +2,8 @@
 namespace nsK2EngineLow
 {
 	const int MAX_DIRECTION_LIGHT = 4;
-	const int MAX_POINT_LIGHT = 128;
-	const int MAX_SPOT_LIGHT = 128;
+	const int MAX_POINT_LIGHT = 4;
+	const int MAX_SPOT_LIGHT = 4;
 
 	//ディレクションライト構造体
 	struct DirectionLight

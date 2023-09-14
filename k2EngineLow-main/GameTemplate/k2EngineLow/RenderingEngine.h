@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneLight.h"
+#include "PostEffect.h"
 
 namespace nsK2EngineLow
 {
@@ -137,6 +138,8 @@ namespace nsK2EngineLow
 		Sprite m_diferredLightingSprite;				// ディファードライティング用のスプライト
 		Sprite m_2DSprite;								// 2D描画用のスプライト
 		Sprite m_mainSprite;							// メインスプライト
+		PostEffect m_postEffect;						// ポストエフェクト
+		Camera m_lightCamera;
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー

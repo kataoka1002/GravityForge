@@ -25,6 +25,24 @@ namespace nsK2EngineLow
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
 		InitDefferedLightingSprite();
+		//m_postEffect.Init(m_mainRenderTarget);
+		m_lightCamera.SetPosition(50.0f, 100.0f, -50.0f);
+		m_lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
+		m_lightCamera.SetUp(1, 0, 0);
+		m_lightCamera.Update();
+		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		RenderTarget shadowMap;
+		shadowMap.Create(
+			1024,
+			1024,
+			1,
+			1,
+			// 【注目】シャドウマップのカラーバッファーのフォーマットを変更している
+			DXGI_FORMAT_R32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
+		);
+
 	}
 
 	void RenderingEngine::InitMainRenderTarget()
@@ -42,7 +60,7 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::Init2DSprite()
 	{
-		float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
+		float clearColor[4] = { 0.5f,0.5f,0.5f,1.0f };
 
 		//2D用のターゲットの初期化
 		m_2DRenderTarget.Create(
@@ -113,7 +131,8 @@ namespace nsK2EngineLow
 			1,
 			1,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
 		);
 
 		//ワールド座標用のターゲットを作成
@@ -123,7 +142,8 @@ namespace nsK2EngineLow
 			1,
 			1,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
 		);
 
 		//カメラ空間の法線用のターゲットを作成
@@ -133,7 +153,8 @@ namespace nsK2EngineLow
 			1,
 			1,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
 		);
 
 		//メタリックスムースマップ用のターゲットを作成
@@ -143,7 +164,8 @@ namespace nsK2EngineLow
 			1,
 			1,
 			DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_FORMAT_UNKNOWN
+			DXGI_FORMAT_UNKNOWN,
+			clearColor
 		);
 	}
 
@@ -178,6 +200,9 @@ namespace nsK2EngineLow
 
 		//フォントとスプライトの描画
 		SpriteFontDraw(rc);
+
+		//ポストエフェクトの実行
+		//m_postEffect.Render(rc, m_mainRenderTarget);
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
