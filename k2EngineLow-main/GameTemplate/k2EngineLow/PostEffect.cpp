@@ -10,7 +10,6 @@ namespace nsK2EngineLow {
 			g_graphicsEngine->GetFrameBufferHeight(),   // テクスチャの高さ
 			1,
 			1,			
-			//renderTarget.GetColorBufferFormat(),		// カラーバッファーのフォーマットを32bit浮動小数点にしている
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			DXGI_FORMAT_UNKNOWN
 		);

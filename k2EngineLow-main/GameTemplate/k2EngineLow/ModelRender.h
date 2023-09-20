@@ -151,6 +151,15 @@ namespace nsK2EngineLow
 			m_renderToGBufferModel.Draw(rc);
 		}
 
+		/// <summary>
+		/// シャドウモデルの描画
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnShadowModelDraw(RenderContext& rc)
+		{
+			m_shadowDrawModel.Draw(rc, g_renderingEngine->GetLightCamera());
+		}
+
 
 
 	private:

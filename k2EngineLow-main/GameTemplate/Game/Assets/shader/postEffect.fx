@@ -50,8 +50,9 @@ float4 PSSamplingLuminance(PSInput In) : SV_Target0
     //サンプリングしたカラーの明るさを計算
     float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
     
-    //カラーがの明るさが1以下ならピクセルキルをする
+    //カラーの明るさが1以下ならピクセルキルをする
     clip(t - 1.0f);
+    
     return color;
 }
 Texture2D<float4> g_bokeTexture_0 : register(t0);

@@ -21,10 +21,12 @@ namespace nsK2EngineLow
 		void InitCopyToframeBufferSprite();
 		void InitGBuffer();
 		void InitDefferedLightingSprite();
+		void InitShadow();
 		void Execute(RenderContext& rc);
 		void RenderToGBuffer(RenderContext& rc);
 		void DeferredLighting(RenderContext& rc);
 		void SpriteFontDraw(RenderContext& rc);
+		void DrawShadow(RenderContext& rc);
 		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 		void ObjectClear();
 
@@ -62,6 +64,11 @@ namespace nsK2EngineLow
 		Light& GetLightCB()
 		{
 			return m_sceneLight.GetLight();
+		}
+
+		Camera& GetLightCamera()
+		{
+			return m_lightCamera;
 		}
 
 		/// <summary>
@@ -117,6 +124,15 @@ namespace nsK2EngineLow
 			m_sceneLight.SetHemLight(skyColor, groundColor, normal);
 		}
 
+		void SetLVP(Matrix mat)
+		{
+			m_sceneLight.SetLVP(mat);
+		}
+
+		RenderTarget& GetShadowMap()
+		{
+			return m_shadowMap;
+		}
 
 	private:
 		// GBufferの定義
@@ -143,7 +159,6 @@ namespace nsK2EngineLow
 		Camera m_lightCamera;
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
-		std::vector<ModelRender*> ShadowModelObject;
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
 		std::vector<FontRender*> FontRenderObject;		// フォントレンダー
 

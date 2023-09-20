@@ -32,11 +32,11 @@ namespace nsK2EngineLow {
 		// ZPrepass描画用のモデルを初期化
 		 
 		// 影を受ける側じゃないなら
-		//if (isShadowReciever != true)
-		//{
-		//	// シャドウマップ描画用のモデルを初期化
-		//	InitShadowDrawModel();
-		//}
+		if (isShadowReciever != true)
+		{
+			// シャドウマップ描画用のモデルを初期化
+			InitShadowDrawModel(filePath, enModelUpAxis);
+		}
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
@@ -63,7 +63,6 @@ namespace nsK2EngineLow {
 	{
 		ModelInitData modelInitData;
 		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
-		modelInitData.m_psEntryPointFunc = "PSMain";
 		if (m_animationClips != nullptr) 
 		{
 			//スケルトンを指定する。
@@ -74,10 +73,15 @@ namespace nsK2EngineLow {
 		{
 			modelInitData.m_vsEntryPointFunc = "VSMain";
 		}
-		/*if (isShadowReciever) 
+
+		if (isShadowReciever) 
 		{
-			modelInitData.m_psEntryPointFunc = "PSMainShadowReciever";
-		}*/
+			modelInitData.m_psEntryPointFunc = "PSShadowMain";
+		}
+		else
+		{
+			modelInitData.m_psEntryPointFunc = "PSMain";
+		}
 		modelInitData.m_modelUpAxis = enModelUpAxis;
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -91,6 +95,7 @@ namespace nsK2EngineLow {
 		//シャドウマップに書きこむモデルの設定
 		ModelInitData sadowDrawModelInitData;
 		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
+		sadowDrawModelInitData.m_psEntryPointFunc = "PSMain";
 		if (m_animationClips != nullptr)
 		{
 			//スケルトンを指定する。
@@ -126,6 +131,6 @@ namespace nsK2EngineLow {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		g_renderingEngine->AddModelRenderObject(this);
+		g_renderingEngine->AddModelRenderObject(this);		
 	}
 }

@@ -7,6 +7,8 @@ static const int MAX_DIRECTION_LIGHT = 4;
 static const int MAX_POINT_LIGHT = 4;
 static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
+static const float3 ZERO = { 0.0f, 0.0f, 0.0f };
+
 
 // 構造体
 struct DirectionLight
@@ -52,6 +54,7 @@ cbuffer LightCb : register(b1)
     PointLight pointLight[MAX_POINT_LIGHT];
     SpotLight spotLight[MAX_SPOT_LIGHT];
     HemLight hemLight;
+    float4x4 mLVP;				//ライトビュープロプロジェクション行列
 }
 
 struct VSInput
@@ -72,6 +75,7 @@ Texture2D<float4> normalTexture : register(t1);             // 法線
 Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
 Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
+Texture2D<float4> shadowMap : register(t5);                 // シャドウマップ(GBufferではない)
 sampler Sampler : register(s0);                             // サンプラー
 
 // 関数定義
@@ -110,7 +114,7 @@ float4 PSMain(PSInput In) : SV_Target0
     
     // 法線
     float3 normal = normalTexture.Sample(Sampler, In.uv).xyz;
-    normal = (normal * 2.0f) - 1.0f;
+    normal = (normal - 0.5f) * 2.0f;
     
     // ワールド座標
     float3 worldPos = worldPosTexture.Sample(Sampler, In.uv).xyz;
@@ -126,7 +130,7 @@ float4 PSMain(PSInput In) : SV_Target0
 
     // 滑らかさ
     float smooth = metallicSmoothTexture.Sample(Sampler, In.uv).a;
-
+        
     // --------------------------------------------------------------------
     
     // 視線に向かって伸びるベクトルを計算する
@@ -155,10 +159,44 @@ float4 PSMain(PSInput In) : SV_Target0
     // 全てのライトの影響力を求める
     float3 lightPow = dirLig + ptLig + spLig + limLig + hemLig;
     
+    
+    float shadowPow = 1.0f;
+
+    //シャドウレシーバーなら
+    //if (normalTexture.Sample(Sampler, In.uv).w == 1.0f)
+    {
+	    //ライトビュースクリーン空間の座標からUV空間に座標変換
+	    //ライトビュースクリーン空間からUV座標空間に変換している
+        float4 posInLVP = mul(mLVP, float4(worldPos, 1.0f));
+
+        float2 shadowMapUV = posInLVP.xy / posInLVP.w;
+        shadowMapUV *= float2(0.5f, -0.5f);
+        shadowMapUV += 0.5f;
+
+	    //ライトビュースクリーン空間でのZ値を計算する
+        float zInLVP = posInLVP.z / posInLVP.w;
+
+	    //UV座標を使ってシャドウマップから影情報をサンプリング
+        if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
+	    && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
+        {
+		    //計算したUV座標を使って、シャドウマップから深度値をサンプリング
+            float2 zInshadowMap = shadowMap.Sample(Sampler, shadowMapUV).xy;
+            
+		    //シャドウマップに書き込まれているZ値と比較する
+            if (zInLVP >= zInshadowMap.r + 0.00005)
+            {
+			    //遮蔽されている
+                shadowPow = 0.5f;
+            }
+        }
+    }
+	    
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
     finalColor.xyz *= lightPow;
-	
+    finalColor *= shadowPow;
+    
     return finalColor;
 }
 
@@ -209,9 +247,9 @@ float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 
     float3 lig = { 0.0f, 0.0f, 0.0f };
     
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
-    {
+    {        
         // PBRによるライトの強さを求める
-        lig += CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, directionLight[i].dirDirection, directionLight[i].dirColor);
+        lig += CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, directionLight[i].dirDirection, directionLight[i].dirColor);                  
     }
     
     return lig;
@@ -226,7 +264,7 @@ float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow)
     {
      	// このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
-
+        
         // 正規化して大きさ1のベクトルにする
         ligDir = normalize(ligDir);
 
@@ -271,6 +309,12 @@ float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 spec
     {
      	// このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
+
+        //// 光の向きが0なら計算しない
+        //if (ligDir == ZERO)
+        //{
+        //    continue;
+        //}
 
         // 正規化して大きさ1のベクトルにする
         ligDir = normalize(ligDir);
@@ -376,6 +420,13 @@ float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specC
     {
         //サーフェイスに入射するスポットライトの光の向きを計算する
         float3 ligDir = worldPos - spotLight[i].spPosition;
+        
+        //// 光の向きが0なら計算しない
+        //if (ligDir == ZERO)
+        //{
+        //    continue;
+        //}
+
 	    //正規化
         ligDir = normalize(ligDir);
     
@@ -578,6 +629,11 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
     // 金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白
     // スペキュラカラーの強さを鏡面反射率として扱う
     spec *= lerp(float3(1.0f, 1.0f, 1.0f), specColor, metallic);
+    
+    // 最後にalbedoで割るので0割りが起きないように修正する
+    albedo.x = max(0.000001f, albedo.x);
+    albedo.y = max(0.000001f, albedo.y);
+    albedo.z = max(0.000001f, albedo.z);
 
     // 滑らかさを使って、拡散反射光と鏡面反射光を合成する
     // 滑らかさが高ければ、拡散反射は弱くなる

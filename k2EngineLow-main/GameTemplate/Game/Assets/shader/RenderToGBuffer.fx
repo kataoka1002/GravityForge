@@ -116,7 +116,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
 
 
 //モデル用のピクセルシェーダーのエントリーポイント
-SPSOut PSMain(SPSIn psIn)
+SPSOut PSMainCore(SPSIn psIn, uniform bool isDrawShadow)
 {
     //GBufferに出力
     SPSOut psOut;
@@ -126,6 +126,16 @@ SPSOut PSMain(SPSIn psIn)
     
     //法線マップによる法線情報の抽出
     psOut.normal.xyz = CalcNormal(psIn);
+    
+    //影を落とす方か落とされる方かを抽出
+    if(isDrawShadow == true)
+    {
+        psOut.normal.w = 1.0f;
+    }
+    else
+    {
+        psOut.normal.w = 0.0f;
+    }
     
     //ワールド座標の抽出
     psOut.worldPos = psIn.worldPos;
@@ -138,6 +148,18 @@ SPSOut PSMain(SPSIn psIn)
     
     
     return psOut;
+}
+
+//シャドウマップを描画する方のエントリーポイント
+SPSOut PSMain(SPSIn psIn) : SV_Target0
+{
+    return PSMainCore(psIn, false);
+}
+
+//シャドウレシーバーのエントリーポイント
+SPSOut PSShadowMain(SPSIn psIn) : SV_Target0
+{
+    return PSMainCore(psIn, true);
 }
 
 

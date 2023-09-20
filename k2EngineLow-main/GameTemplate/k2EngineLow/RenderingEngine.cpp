@@ -24,25 +24,9 @@ namespace nsK2EngineLow
 		Init2DSprite();
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
+		InitShadow();
 		InitDefferedLightingSprite();
 		m_postEffect.Init(m_mainRenderTarget);
-
-
-		//m_lightCamera.SetPosition(50.0f, 100.0f, -50.0f);
-		//m_lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
-		//m_lightCamera.SetUp(1, 0, 0);
-		//m_lightCamera.Update();
-		//float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		//m_shadowMap.Create(
-		//	1024,
-		//	1024,
-		//	1,
-		//	1,
-		//	DXGI_FORMAT_R32_FLOAT,
-		//	DXGI_FORMAT_D32_FLOAT,
-		//	clearColor
-		//);
-
 	}
 
 	void RenderingEngine::InitMainRenderTarget()
@@ -55,6 +39,31 @@ namespace nsK2EngineLow
 			1,											
 			DXGI_FORMAT_R32G32B32A32_FLOAT,				
 			DXGI_FORMAT_D32_FLOAT						
+		);
+	}
+
+	void RenderingEngine::InitShadow()
+	{
+		//ライトカメラの設定
+		m_lightCamera.SetPosition(150.0f, 250.0f, -150.0f);
+		m_lightCamera.SetTarget(0.0f, 30.0f, 0.0f);
+		m_lightCamera.SetUp(0, 1, 0);
+		m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
+		m_lightCamera.Update();
+
+		//ライトビュープロジェクション行列の設定
+		SetLVP(m_lightCamera.GetViewProjectionMatrix());
+
+		//シャドウマップの設定
+		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		m_shadowMap.Create(
+			1024,
+			1024,
+			1,
+			1,
+			DXGI_FORMAT_R32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
 		);
 	}
 
@@ -113,7 +122,7 @@ namespace nsK2EngineLow
 	void RenderingEngine::InitGBuffer()
 	{
 		// アルベドカラー用のターゲットを作成
-		float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };
+		float clearColor[] = { 0.5f,0.5f,0.5f,1.0f };
 		m_gBuffer[enGBufferAlbedo].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),    
 			g_graphicsEngine->GetFrameBufferHeight(),
@@ -182,6 +191,7 @@ namespace nsK2EngineLow
 		spriteInitData.m_textures[enGBufferWorldPos] = &m_gBuffer[enGBufferWorldPos].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferNormalInView] = &m_gBuffer[enGBufferNormalInView].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferMetallicSmooth] = &m_gBuffer[enGBufferMetallicSmooth].GetRenderTargetTexture();
+		spriteInitData.m_textures[5] = &m_shadowMap.GetRenderTargetTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -195,22 +205,17 @@ namespace nsK2EngineLow
 		//GBufferへのレンダリング
 		RenderToGBuffer(rc);
 
+		//シャドウマップに影を描画
+		DrawShadow(rc);
+
 		//ディファードライティング
 		DeferredLighting(rc);
 
-		//rc.WaitUntilToPossibleSetRenderTarget(m_shadowMap);
-		//rc.SetRenderTargetAndViewport(m_shadowMap);
-
-		//m_diferredLightingSprite.Draw(rc);
-
-		//rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMap);
-
+		//ポストエフェクトの実行
+		m_postEffect.Render(rc, m_mainRenderTarget);
 
 		//フォントとスプライトの描画
 		SpriteFontDraw(rc);
-
-		//ポストエフェクトの実行
-		m_postEffect.Render(rc, m_mainRenderTarget);
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
@@ -227,7 +232,7 @@ namespace nsK2EngineLow
 			&m_gBuffer[enGBufferNormal],
 			&m_gBuffer[enGBufferWorldPos],
 			&m_gBuffer[enGBufferNormalInView],
-			&m_gBuffer[enGBufferMetallicSmooth]
+			&m_gBuffer[enGBufferMetallicSmooth],
 		};
 
 		// まず、レンダリングターゲットとして設定できるようになるまで待つ
@@ -260,6 +265,22 @@ namespace nsK2EngineLow
 
 		// メインレンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+	}
+
+	void RenderingEngine::DrawShadow(RenderContext& rc)
+	{
+		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMap);
+		rc.SetRenderTargetAndViewport(m_shadowMap);
+		rc.ClearRenderTargetView(m_shadowMap);
+
+		// まとめてシャドウモデルレンダーを描画
+		for (auto& shadowModelData : ModelRenderObject)
+		{
+			shadowModelData->OnShadowModelDraw(rc);
+		}
+
+		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMap);
+
 	}
 
 	void RenderingEngine::SpriteFontDraw(RenderContext& rc)

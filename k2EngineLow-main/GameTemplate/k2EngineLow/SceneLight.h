@@ -54,6 +54,8 @@ namespace nsK2EngineLow
 		PointLight pointLight[MAX_POINT_LIGHT];				//ポイントライトの配列
 		SpotLight spotLight[MAX_SPOT_LIGHT];				//スポットライトの配列
 		HemLight hemLight;									//半球ライト
+		float pad1 = 0.0f;
+		Matrix mLVP;
 	};
 
 
@@ -100,6 +102,11 @@ namespace nsK2EngineLow
 			m_light.hemLight.skyColor = skyColor;
 			m_light.hemLight.groundColor = groundColor;
 			m_light.hemLight.groundNormal = normal;
+		}
+
+		void SetLVP(Matrix mat)
+		{
+			m_light.mLVP = mat;
 		}
 
 		//構造体を返す
