@@ -55,7 +55,7 @@ namespace nsK2EngineLow
 		SpotLight spotLight[MAX_SPOT_LIGHT];				//スポットライトの配列
 		HemLight hemLight;									//半球ライト
 		float pad1 = 0.0f;
-		Matrix mLVP;
+		Matrix mLVP[NUM_SHADOW_MAP];						//ライトビュープロジェクション行列
 	};
 
 
@@ -104,9 +104,9 @@ namespace nsK2EngineLow
 			m_light.hemLight.groundNormal = normal;
 		}
 
-		void SetLVP(Matrix mat)
+		void SetLVP(Matrix mat, int num)
 		{
-			m_light.mLVP = mat;
+			m_light.mLVP[num] = mat;
 		}
 
 		//構造体を返す

@@ -85,8 +85,10 @@ namespace nsK2EngineLow {
 		modelInitData.m_modelUpAxis = enModelUpAxis;
 		modelInitData.m_tkmFilePath = tkmFilePath;
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
-		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		modelInitData.m_colorBufferFormat[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 
@@ -110,14 +112,18 @@ namespace nsK2EngineLow {
 		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
 		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-		m_shadowDrawModel.Init(sadowDrawModelInitData);
+		m_shadowDrawModel[0].Init(sadowDrawModelInitData);
+		m_shadowDrawModel[1].Init(sadowDrawModelInitData);
+		m_shadowDrawModel[2].Init(sadowDrawModelInitData);
 	}
 
 	void ModelRender::Update()
 	{
 		//ƒ‚ƒfƒ‹‘¤‚ÉˆÚ“®‰ñ“]Šg‘å‚ð“n‚·
 		m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-		m_shadowDrawModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_shadowDrawModel[0].UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_shadowDrawModel[1].UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_shadowDrawModel[2].UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 		if (m_skeleton.IsInited()) 
 		{
@@ -131,6 +137,7 @@ namespace nsK2EngineLow {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		g_renderingEngine->AddModelRenderObject(this);		
+		g_renderingEngine->AddModelRenderObject(this);	
+		g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
 	}
 }

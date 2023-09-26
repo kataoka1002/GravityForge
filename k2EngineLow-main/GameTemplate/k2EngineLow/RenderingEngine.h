@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneLight.h"
 #include "PostEffect.h"
+#include "ShadowMapRender.h"
 
 namespace nsK2EngineLow
 {
@@ -56,6 +57,18 @@ namespace nsK2EngineLow
 		{
 			FontRenderObject.push_back(fontRender);
 		}
+
+		/// <summary>
+		/// シャドウマップへの描画パスにモデルを追加
+		/// </summary>
+		/// <param name="model0">近景用のシャドウマップに描画するモデル</param>
+		/// <param name="model1">中景用のシャドウマップ1に描画するモデル</param>
+		/// <param name="model2">遠景用のシャドウマップ2に描画するモデル</param>
+		void Add3DModelToRenderToShadowMap(Model& model0, Model& model1, Model& model2)
+		{
+			m_shadowMapRender.Add3DModel(model0, model1, model2);
+		}
+
 
 		/// <summary>
 		/// シーンライトの構造体を返す
@@ -124,9 +137,9 @@ namespace nsK2EngineLow
 			m_sceneLight.SetHemLight(skyColor, groundColor, normal);
 		}
 
-		void SetLVP(Matrix mat)
+		void SetLVP(Matrix mat, int num)
 		{
-			m_sceneLight.SetLVP(mat);
+			m_sceneLight.SetLVP(mat, num);
 		}
 
 		RenderTarget& GetShadowMap()
@@ -150,19 +163,18 @@ namespace nsK2EngineLow
 		RenderTarget m_mainRenderTarget;				// メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];			// GBuffer
 		RenderTarget m_2DRenderTarget;					// 2D描画用のターゲット
-		RenderTarget m_shadowMap;
+		RenderTarget m_shadowMap;						// シャドウマップ
 		Sprite m_copyToframeBufferSprite;				// メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 		Sprite m_diferredLightingSprite;				// ディファードライティング用のスプライト
 		Sprite m_2DSprite;								// 2D描画用のスプライト
 		Sprite m_mainSprite;							// メインスプライト
 		PostEffect m_postEffect;						// ポストエフェクト
-		Camera m_lightCamera;
+		Camera m_lightCamera;							// ライトカメラ
+		shadow::ShadowMapRender m_shadowMapRender;		// シャドウマップレンダー
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
 		std::vector<FontRender*> FontRenderObject;		// フォントレンダー
-
 	};
-
 }
 

@@ -231,6 +231,8 @@
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="SpriteRender.cpp" />
     <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="ShadowMapRender.cpp" />
+    <ClCompile Include="CascadeShadowMapMatrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -512,6 +514,8 @@
     <ClInclude Include="SpriteRender.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="ShadowMapRender.h" />
+    <ClInclude Include="CascadeShadowMapMatrix.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

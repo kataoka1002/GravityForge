@@ -8,6 +8,7 @@ static const int MAX_POINT_LIGHT = 4;
 static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
 static const float3 ZERO = { 0.0f, 0.0f, 0.0f };
+static const int NUM_SHADOW_MAP = 3;
 
 
 // 構造体
@@ -54,7 +55,7 @@ cbuffer LightCb : register(b1)
     PointLight pointLight[MAX_POINT_LIGHT];
     SpotLight spotLight[MAX_SPOT_LIGHT];
     HemLight hemLight;
-    float4x4 mLVP;				//ライトビュープロプロジェクション行列
+    float4x4 mLVP[NUM_SHADOW_MAP];				//ライトビュープロプロジェクション行列
 }
 
 struct VSInput
@@ -75,7 +76,7 @@ Texture2D<float4> normalTexture : register(t1);             // 法線
 Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
 Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
-Texture2D<float4> shadowMap : register(t5);                 // シャドウマップ(GBufferではない)
+Texture2D<float4> shadowMap[NUM_SHADOW_MAP] : register(t5); // シャドウマップ(GBufferではない)
 sampler Sampler : register(s0);                             // サンプラー
 
 // 関数定義
@@ -123,7 +124,7 @@ float4 PSMain(PSInput In) : SV_Target0
     float3 normalInView = normalInViewTexture.Sample(Sampler, In.uv).xyz;
     
     // スペキュラカラーはアルベドカラーと同じ
-    float3 specColor = albedo;
+    float3 specColor = albedo.xyz;
 
     // 金属度(スペキュラ)
     float metallic = metallicSmoothTexture.Sample(Sampler, In.uv).r;
@@ -163,31 +164,36 @@ float4 PSMain(PSInput In) : SV_Target0
     float shadowPow = 1.0f;
 
     //シャドウレシーバーなら
-    //if (normalTexture.Sample(Sampler, In.uv).w == 1.0f)
+    if (normalTexture.Sample(Sampler, In.uv).w == 1.0f)
     {
-	    //ライトビュースクリーン空間の座標からUV空間に座標変換
-	    //ライトビュースクリーン空間からUV座標空間に変換している
-        float4 posInLVP = mul(mLVP, float4(worldPos, 1.0f));
-
-        float2 shadowMapUV = posInLVP.xy / posInLVP.w;
-        shadowMapUV *= float2(0.5f, -0.5f);
-        shadowMapUV += 0.5f;
-
-	    //ライトビュースクリーン空間でのZ値を計算する
-        float zInLVP = posInLVP.z / posInLVP.w;
-
-	    //UV座標を使ってシャドウマップから影情報をサンプリング
-        if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
-	    && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
+        for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
         {
-		    //計算したUV座標を使って、シャドウマップから深度値をサンプリング
-            float2 zInshadowMap = shadowMap.Sample(Sampler, shadowMapUV).xy;
+	        //ライトビュースクリーン空間からUV座標空間に変換している
+            float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
+	        //ライトビュースクリーン空間でのZ値を計算する
+            float zInLVP = posInLVP.z / posInLVP.w;
             
-		    //シャドウマップに書き込まれているZ値と比較する
-            if (zInLVP >= zInshadowMap.r + 0.00005)
+            //if (zInLVP >= 0.0f && zInLVP <= 1.0f)
             {
-			    //遮蔽されている
-                shadowPow = 0.5f;
+                float2 shadowMapUV = posInLVP.xy / posInLVP.w;
+                shadowMapUV *= float2(0.5f, -0.5f);
+                shadowMapUV += 0.5f;
+
+	            //UV座標を使ってシャドウマップから影情報をサンプリング
+                if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
+	                && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
+                {
+		            //計算したUV座標を使って、シャドウマップから深度値をサンプリング
+                    float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
+            
+		            //シャドウマップに書き込まれているZ値と比較する
+                    if (zInLVP >= zInshadowMap.r + 0.00005)
+                    {
+			            //遮蔽されている
+                        shadowPow = 0.5f;
+                    }
+                    break;
+                }
             }
         }
     }

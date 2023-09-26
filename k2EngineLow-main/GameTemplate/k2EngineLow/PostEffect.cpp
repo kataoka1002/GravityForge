@@ -64,6 +64,8 @@ namespace nsK2EngineLow {
 
 	void PostEffect::Render(RenderContext& rc, RenderTarget& renderTarget)
 	{
+		BeginGPUEvent("Bloom");
+
 		// 輝度抽出用ターゲットに変更し使えるようになるまで待つ
 		rc.WaitUntilToPossibleSetRenderTarget(luminanceRenderTarget);
 		// ターゲットセット
@@ -87,5 +89,7 @@ namespace nsK2EngineLow {
 		m_finalSprite.Draw(rc);
 		// 終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(renderTarget);
+
+		EndGPUEvent();
 	}
 }

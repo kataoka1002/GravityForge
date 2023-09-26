@@ -44,27 +44,7 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::InitShadow()
 	{
-		//ライトカメラの設定
-		m_lightCamera.SetPosition(150.0f, 250.0f, -150.0f);
-		m_lightCamera.SetTarget(0.0f, 30.0f, 0.0f);
-		m_lightCamera.SetUp(0, 1, 0);
-		m_lightCamera.SetViewAngle(Math::DegToRad(20.0f));
-		m_lightCamera.Update();
-
-		//ライトビュープロジェクション行列の設定
-		SetLVP(m_lightCamera.GetViewProjectionMatrix());
-
-		//シャドウマップの設定
-		float clearColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		m_shadowMap.Create(
-			1024,
-			1024,
-			1,
-			1,
-			DXGI_FORMAT_R32_FLOAT,
-			DXGI_FORMAT_D32_FLOAT,
-			clearColor
-		);
+		m_shadowMapRender.Init();
 	}
 
 	void RenderingEngine::Init2DSprite()
@@ -191,7 +171,11 @@ namespace nsK2EngineLow
 		spriteInitData.m_textures[enGBufferWorldPos] = &m_gBuffer[enGBufferWorldPos].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferNormalInView] = &m_gBuffer[enGBufferNormalInView].GetRenderTargetTexture();
 		spriteInitData.m_textures[enGBufferMetallicSmooth] = &m_gBuffer[enGBufferMetallicSmooth].GetRenderTargetTexture();
-		spriteInitData.m_textures[5] = &m_shadowMap.GetRenderTargetTexture();
+		int texNum = 5;
+		for (int areaNo = 0; areaNo < NUM_SHADOW_MAP; areaNo++)
+		{
+			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetShadowMap(areaNo);
+		}
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -226,6 +210,8 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::RenderToGBuffer(RenderContext& rc)
 	{
+		BeginGPUEvent("RenderToGBuffer");
+
 		// レンダリングターゲットをG-Bufferに変更して書き込む
 		RenderTarget* rts[] = {
 			&m_gBuffer[enGBufferAlbedo],   // 0番目のレンダリングターゲット
@@ -252,10 +238,14 @@ namespace nsK2EngineLow
 
 		// レンダリングターゲットへの書き込み待ち
 		rc.WaitUntilFinishDrawingToRenderTargets(ARRAYSIZE(rts), rts);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::DeferredLighting(RenderContext& rc)
 	{
+		BeginGPUEvent("DeferrdLighting");
+
 		// レンダリング先をメインレンダリングターゲットにする
 		rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
 		rc.SetRenderTargetAndViewport(m_mainRenderTarget);
@@ -265,26 +255,23 @@ namespace nsK2EngineLow
 
 		// メインレンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::DrawShadow(RenderContext& rc)
 	{
-		rc.WaitUntilToPossibleSetRenderTarget(m_shadowMap);
-		rc.SetRenderTargetAndViewport(m_shadowMap);
-		rc.ClearRenderTargetView(m_shadowMap);
+		Vector3 dir = { 1.0f, -1.0f, -1.0f };
+		dir.Normalize();
 
-		// まとめてシャドウモデルレンダーを描画
-		for (auto& shadowModelData : ModelRenderObject)
-		{
-			shadowModelData->OnShadowModelDraw(rc);
-		}
-
-		rc.WaitUntilFinishDrawingToRenderTarget(m_shadowMap);
-
+		//シャドウマップの処理
+		m_shadowMapRender.Render(rc, dir);
 	}
 
 	void RenderingEngine::SpriteFontDraw(RenderContext& rc)
 	{
+		BeginGPUEvent("SpriteFontDraw");
+
 		// 2D用のターゲットが使えるようになるまで待つ
 		rc.WaitUntilToPossibleSetRenderTarget(m_2DRenderTarget);
 
@@ -317,10 +304,14 @@ namespace nsK2EngineLow
 
 		// メインレンダリングターゲットへの書き込み終了待ち
 		rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::CopyMainRenderTargetToFrameBuffer(RenderContext& rc)
 	{
+		BeginGPUEvent("CopyMainRenderTargetToFrameBuffer");
+
 		// フレームバッファにセット
 		rc.SetRenderTarget(
 			g_graphicsEngine->GetCurrentFrameBuffuerRTV(),
@@ -328,6 +319,8 @@ namespace nsK2EngineLow
 		);
 
 		m_copyToframeBufferSprite.Draw(rc);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::ObjectClear()

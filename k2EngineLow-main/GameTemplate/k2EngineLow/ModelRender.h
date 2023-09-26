@@ -2,7 +2,7 @@
 
 namespace nsK2EngineLow
 {
-	class ModelRender :public Noncopyable
+	class ModelRender : public Noncopyable
 	{
 	public:
 		ModelRender();
@@ -157,7 +157,7 @@ namespace nsK2EngineLow
 		/// <param name="rc"></param>
 		void OnShadowModelDraw(RenderContext& rc)
 		{
-			m_shadowDrawModel.Draw(rc, g_renderingEngine->GetLightCamera());
+			//m_shadowDrawModel.Draw(rc, g_renderingEngine->GetLightCamera());
 		}
 
 
@@ -193,7 +193,7 @@ namespace nsK2EngineLow
 		Model m_zprepassModel;								// ZPrepassで描画されるモデル
 		Model m_forwardRenderModel;							// フォワードレンダリングの描画パスで描画されるモデル
 		Model m_renderToGBufferModel;						// RenderToGBufferで描画されるモデル
-		Model m_shadowDrawModel;							// シャドウマップに描画するモデル
+		Model m_shadowDrawModel[NUM_SHADOW_MAP];			// シャドウマップに描画するモデル
 		Vector3 m_position = Vector3::Zero;					// ポジション
 		Vector3 m_scale = Vector3::One;						// スケール
 		Quaternion m_rotation = { 0.0f,0.0f,0.0f,1.0f };	// 回転

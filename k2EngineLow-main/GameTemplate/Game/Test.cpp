@@ -11,15 +11,11 @@ Test::Test()
 	animationClips[enAnimClip_Idle].SetLoopFlag(true);
 
 	m_model.Init("Assets/modelData/unityChan.tkm", animationClips, enAnimClip_Num, enModelUpAxisY);
-	m_bg.Init("Assets/modelData/bg.tkm", nullptr, 0, enModelUpAxisZ, true);
-	m_guitar.Init("Assets/modelData/guitar.tkm", nullptr, enAnimClip_Num, enModelUpAxisY);
-	m_guitar.SetPosition({ 0.0f,50.0f,-80.0f });
+	//m_bg.Init("Assets/modelData/bg.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_model.Init("Assets/modelData/bg/testModel.tkm");
+	m_bg.Init("Assets/modelData/bg/bg.tkm", nullptr, 0, enModelUpAxisZ, true);
 
 	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,-1.0f }, Vector3{ 0.5f,0.5f,0.5f });
-	g_renderingEngine->SetPointLight(0, { 0.0f,50.0f,-50.0f }, { 1.0f,0.0f,0.0f }, 100.0f);
-	Vector3 dir = { 1.0f,-1.0f,1.0f };
-	dir.Normalize();
-	g_renderingEngine->SetSpotLight(0, Vector3{ 0.0f,0.0f,0.0f }, Vector3{ 10.0f,10.0f,10.0f }, 300.0f, dir, Math::DegToRad(25.0f));
 }
 
 Test::~Test()
@@ -29,57 +25,21 @@ Test::~Test()
 
 void Test::Update()
 {
-	m_model.PlayAnimation(enAnimClip_Idle);
+	auto pos = g_camera3D->GetPosition();
+	auto target = g_camera3D->GetTarget();
+	pos.z -= g_pad[0]->GetLStickYF() * 2.0f;
+	target.z -= g_pad[0]->GetLStickYF() * 2.0f;
+	pos.y += g_pad[0]->GetRStickYF() * 2.0f;
+	target.y += g_pad[0]->GetRStickYF() * 2.0f;
+	g_camera3D->SetPosition(pos);
+	g_camera3D->SetTarget(target);
+
+
 	m_model.Update();
-
-	if (g_pad[0]->IsPress(enButtonRight))
-	{
-		pos.x += 1.0f;
-	}
-	if (g_pad[0]->IsPress(enButtonLeft))
-	{
-		pos.x -= 1.0f;
-	}
-	if (g_pad[0]->IsPress(enButtonUp))
-	{
-		pos.y += 1.0f;
-	}
-	if (g_pad[0]->IsPress(enButtonDown))
-	{
-		pos.y -= 1.0f;
-	}
-
-	if (g_pad[0]->IsPress(enButtonA))
-	{
-		qRot.AddRotationDegY(1.0f);
-	}
-	m_guitar.SetRotation(qRot);
-	m_guitar.Update();
-
-	if (g_pad[0]->IsPress(enButtonY))
-	{
-		pow += {0.1f, 0.1f, 0.1f};
-	}
-	if (g_pad[0]->IsPress(enButtonX))
-	{
-		pow -= {0.1f, 0.1f, 0.1f};
-	}
-
-	m_model.SetPosition(pos);
-
-	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,-1.0f }, pow);
-
-
-	Vector3 dir = { 1.0f,-1.0f,1.0f };
-	dir.Normalize();
-	//g_renderingEngine->SetSpotLight(0, pos, Vector3{ 10.0f,10.0f,10.0f }, 300.0f, dir, Math::DegToRad(25.0f));
-	//g_renderingEngine->SetPointLight(0, pos, { 1.0f,0.0f,0.0f }, 100.0f);
-
 }
 
 void Test::Render(RenderContext& rc)
 {
 	m_model.Draw(rc);
 	m_bg.Draw(rc);
-	m_guitar.Draw(rc);
 }
