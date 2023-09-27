@@ -190,7 +190,7 @@ namespace nsK2EngineLow
 		RenderToGBuffer(rc);
 
 		//シャドウマップに影を描画
-		DrawShadow(rc);
+		DrawShadowMap(rc);
 
 		//ディファードライティング
 		DeferredLighting(rc);
@@ -259,13 +259,18 @@ namespace nsK2EngineLow
 		EndGPUEvent();
 	}
 
-	void RenderingEngine::DrawShadow(RenderContext& rc)
+	void RenderingEngine::DrawShadowMap(RenderContext& rc)
 	{
-		Vector3 dir = { 1.0f, -1.0f, -1.0f };
-		dir.Normalize();
+		BeginGPUEvent("CascadeShadowDraw");
+
+		//ライトカメラの方向を設定
+		Vector3 lightCameraDir = { 1.0f, -1.0f, -1.0f };
+		lightCameraDir.Normalize();
 
 		//シャドウマップの処理
-		m_shadowMapRender.Render(rc, dir);
+		m_shadowMapRender.Render(rc, lightCameraDir);
+
+		EndGPUEvent();
 	}
 
 	void RenderingEngine::SpriteFontDraw(RenderContext& rc)

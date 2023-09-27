@@ -27,7 +27,7 @@ namespace nsK2EngineLow
 		void RenderToGBuffer(RenderContext& rc);
 		void DeferredLighting(RenderContext& rc);
 		void SpriteFontDraw(RenderContext& rc);
-		void DrawShadow(RenderContext& rc);
+		void DrawShadowMap(RenderContext& rc);
 		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 		void ObjectClear();
 

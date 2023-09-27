@@ -14,6 +14,7 @@ namespace nsK2EngineLow
             lightPos = lightDirection * -distLig;    // ライトまでの距離は外から指定できるようにする
             lightCamera.SetPosition(lightPos);
             lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
+
             // 上方向を設定
             if (fabsf(lightDirection.y) > 0.9999f)
             {
@@ -24,6 +25,7 @@ namespace nsK2EngineLow
             {
                 lightCamera.SetUp(g_vec3AxisY);
             }
+
             lightCamera.SetUpdateProjMatrixFunc(Camera::enUpdateProjMatrixFunc_Ortho);
             lightCamera.SetWidth(5000.0f);
             lightCamera.SetHeight(5000.0f);

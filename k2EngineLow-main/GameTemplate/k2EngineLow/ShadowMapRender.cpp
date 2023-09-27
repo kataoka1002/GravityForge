@@ -45,18 +45,19 @@ namespace nsK2EngineLow
 
 		void ShadowMapRender::Render(RenderContext& rc, Vector3& lightDirection)
 		{
-            BeginGPUEvent("CascadeShadow");
-
+            // ライトビュープロジェクションクロップ行列を計算
             m_cascadeShadowMapMatrix.CalcLightViewProjectionCropMatrix(lightDirection);
 
             for (int i = 0; i < NUM_SHADOW_MAP; i++)
             {
+                // 行列を定数バッファにセットする
                 g_renderingEngine->SetLVP(GetLVPMatrix(i), i);
             }
 
             int shadowMapNo = 0;
             for (auto& shadowMap : m_shadowMaps)
             {
+                // ターゲットをシャドウマップにして書き込む
                 rc.WaitUntilToPossibleSetRenderTarget(shadowMap);
                 rc.SetRenderTargetAndViewport(shadowMap);
                 rc.ClearRenderTargetView(shadowMap);
@@ -77,8 +78,6 @@ namespace nsK2EngineLow
                 rc.WaitUntilFinishDrawingToRenderTarget(shadowMap);
                 shadowMapNo++;
             }
-
-        EndGPUEvent();
 		}
 	}
 }

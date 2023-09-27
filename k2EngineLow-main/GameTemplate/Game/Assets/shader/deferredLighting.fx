@@ -7,7 +7,6 @@ static const int MAX_DIRECTION_LIGHT = 4;
 static const int MAX_POINT_LIGHT = 4;
 static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
-static const float3 ZERO = { 0.0f, 0.0f, 0.0f };
 static const int NUM_SHADOW_MAP = 3;
 
 
@@ -95,6 +94,7 @@ float CalcSpcFresnel(float f0, float u);
 float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
+float CalcShadowPow(float isDrawShadow, float3 worldPos);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -150,53 +150,18 @@ float4 PSMain(PSInput In) : SV_Target0
     //float3 spLig = CalcSpotLight(normal, worldPos, metallic);
     float3 spLig = CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
-    //リムライトの強さ設定
+    // リムライトの強さ設定
     float3 limLig = CalcLimPower(normal, normalInView);
     
-    //半球ライトの強さ設定
+    // 半球ライトの強さ設定
     float3 hemLig = CalcHemLight(normal);
     
+    // 影を落とすか落とさないかの計算
+    float shadowPow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos);
     
     // 全てのライトの影響力を求める
     float3 lightPow = dirLig + ptLig + spLig + limLig + hemLig;
     
-    
-    float shadowPow = 1.0f;
-
-    //シャドウレシーバーなら
-    if (normalTexture.Sample(Sampler, In.uv).w == 1.0f)
-    {
-        for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
-        {
-	        //ライトビュースクリーン空間からUV座標空間に変換している
-            float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
-	        //ライトビュースクリーン空間でのZ値を計算する
-            float zInLVP = posInLVP.z / posInLVP.w;
-            
-            //if (zInLVP >= 0.0f && zInLVP <= 1.0f)
-            {
-                float2 shadowMapUV = posInLVP.xy / posInLVP.w;
-                shadowMapUV *= float2(0.5f, -0.5f);
-                shadowMapUV += 0.5f;
-
-	            //UV座標を使ってシャドウマップから影情報をサンプリング
-                if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
-	                && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
-                {
-		            //計算したUV座標を使って、シャドウマップから深度値をサンプリング
-                    float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
-            
-		            //シャドウマップに書き込まれているZ値と比較する
-                    if (zInLVP >= zInshadowMap.r + 0.00005)
-                    {
-			            //遮蔽されている
-                        shadowPow = 0.5f;
-                    }
-                    break;
-                }
-            }
-        }
-    }
 	    
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
@@ -316,12 +281,6 @@ float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 spec
      	// このサーフェイスに入射しているポイントライトの光の向きを計算する
         float3 ligDir = worldPos - pointLight[i].ptPosition;
 
-        //// 光の向きが0なら計算しない
-        //if (ligDir == ZERO)
-        //{
-        //    continue;
-        //}
-
         // 正規化して大きさ1のベクトルにする
         ligDir = normalize(ligDir);
 
@@ -427,12 +386,6 @@ float3 CalcPBRSpotLight(float3 normal, float3 toEye, float4 albedo, float3 specC
         //サーフェイスに入射するスポットライトの光の向きを計算する
         float3 ligDir = worldPos - spotLight[i].spPosition;
         
-        //// 光の向きが0なら計算しない
-        //if (ligDir == ZERO)
-        //{
-        //    continue;
-        //}
-
 	    //正規化
         ligDir = normalize(ligDir);
     
@@ -636,15 +589,63 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
     // スペキュラカラーの強さを鏡面反射率として扱う
     spec *= lerp(float3(1.0f, 1.0f, 1.0f), specColor, metallic);
     
+    // 値がINFなら変更する
+    if (isinf(spec.x) || isinf(spec.y) || isinf(spec.z))
+    {
+        spec = (0.0f, 0.0f, 0.0f);
+    }
+     
     // 最後にalbedoで割るので0割りが起きないように修正する
     albedo.x = max(0.000001f, albedo.x);
     albedo.y = max(0.000001f, albedo.y);
-    albedo.z = max(0.000001f, albedo.z);
-
+    albedo.z = max(0.000001f, albedo.z);    
+   
     // 滑らかさを使って、拡散反射光と鏡面反射光を合成する
     // 滑らかさが高ければ、拡散反射は弱くなる
     return diffuse * (1.0f - smooth) + spec / albedo;
 }
 
+// 影を落とすかどうかの計算
+float CalcShadowPow(float isDrawShadow, float3 worldPos)
+{
+    float shadowPow = 1.0f;
+        
+    //シャドウレシーバーなら
+    if (isDrawShadow == 1.0f)
+    {
+        for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
+        {
+	        //ライトビュースクリーン空間からUV座標空間に変換している
+            float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
+	        //ライトビュースクリーン空間でのZ値を計算する
+            float zInLVP = posInLVP.z / posInLVP.w;
+            
+            if (zInLVP >= 0.0f && zInLVP <= 1.0f)
+            {
+                float2 shadowMapUV = posInLVP.xy / posInLVP.w;
+                shadowMapUV *= float2(0.5f, -0.5f);
+                shadowMapUV += 0.5f;
+
+	            //UV座標を使ってシャドウマップから影情報をサンプリング
+                if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
+	                && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
+                {
+		            //計算したUV座標を使って、シャドウマップから深度値をサンプリング
+                    float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
+            
+		            //シャドウマップに書き込まれているZ値と比較する
+                    if (zInLVP >= zInshadowMap.r + 0.00005)
+                    {
+			            //遮蔽されている
+                        shadowPow = 0.5f;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    return shadowPow;
+}
 
 
