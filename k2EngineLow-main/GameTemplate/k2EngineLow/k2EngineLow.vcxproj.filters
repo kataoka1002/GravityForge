@@ -233,6 +233,7 @@
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="ShadowMapRender.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
+    <ClCompile Include="SkyCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -516,6 +517,7 @@
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="ShadowMapRender.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="SkyCube.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

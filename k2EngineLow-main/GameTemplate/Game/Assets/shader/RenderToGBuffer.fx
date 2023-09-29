@@ -116,7 +116,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
 
 
 //モデル用のピクセルシェーダーのエントリーポイント
-SPSOut PSMainCore(SPSIn psIn, uniform bool isDrawShadow)
+SPSOut PSMainCore(SPSIn psIn, uniform bool isShadowReceiver)
 {
     //GBufferに出力
     SPSOut psOut;
@@ -128,7 +128,7 @@ SPSOut PSMainCore(SPSIn psIn, uniform bool isDrawShadow)
     psOut.normal.xyz = CalcNormal(psIn);
     
     //影を落とす方か落とされる方かを抽出
-    if(isDrawShadow == true)
+    if (isShadowReceiver == true)
     {
         psOut.normal.w = 1.0f;
     }

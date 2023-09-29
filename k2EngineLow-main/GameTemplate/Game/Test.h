@@ -1,10 +1,12 @@
 #pragma once
+#include "SkyCube.h"
+
 class Test : public IGameObject
 {
 public:
 	Test();
 	~Test();
-
+	bool Start();
 	void Update();
 
 	void Render(RenderContext& rc);
@@ -13,6 +15,7 @@ private:
 	ModelRender m_model;
 	ModelRender m_bg;
 	ModelRender m_guitar;
+	SkyCube* m_skyCube;
 	Quaternion qRot;
 
 	enum EnAnimationClip {

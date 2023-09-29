@@ -160,6 +160,15 @@ namespace nsK2EngineLow
 			//m_shadowDrawModel.Draw(rc, g_renderingEngine->GetLightCamera());
 		}
 
+		/// <summary>
+		/// スカイキューブの初期化
+		/// </summary>
+		/// <param name="initData"></param>
+		void InitSkyCubeModel(ModelInitData& initData)
+		{
+			m_renderToGBufferModel.Init(initData);
+		}
+
 
 
 	private:

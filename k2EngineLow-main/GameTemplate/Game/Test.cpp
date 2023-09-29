@@ -14,13 +14,28 @@ Test::Test()
 	//m_bg.Init("Assets/modelData/bg.tkm", nullptr, 0, enModelUpAxisZ, true);
 	//m_model.Init("Assets/modelData/bg/testModel.tkm");
 	m_bg.Init("Assets/modelData/bg/bg.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_bg.SetScale(0.1f);
+	m_bg.Update();
 
 	g_renderingEngine->SetDirectionLight(0, Vector3{ 0.0f,0.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
+
+	g_camera3D->SetFar(15000.0f);
 }
 
 Test::~Test()
 {
 
+}
+
+bool Test::Start()
+{
+	m_skyCube = NewGO<SkyCube>(0, "skycube");
+	m_skyCube->SetLuminance(1.0f);
+	m_skyCube->SetScale(1000.0f);
+	m_skyCube->SetPosition({ 0.0f,0.0f,0.0f });
+	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
+
+	return true;
 }
 
 void Test::Update()

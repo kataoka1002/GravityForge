@@ -94,7 +94,7 @@ float CalcSpcFresnel(float f0, float u);
 float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
-float CalcShadowPow(float isDrawShadow, float3 worldPos);
+float CalcShadowPow(float isShadowReceiver, float3 worldPos);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -606,45 +606,47 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
 }
 
 // 影を落とすかどうかの計算
-float CalcShadowPow(float isDrawShadow, float3 worldPos)
+float CalcShadowPow(float isShadowReceiver, float3 worldPos)
 {
     float shadowPow = 1.0f;
         
-    //シャドウレシーバーなら
-    if (isDrawShadow == 1.0f)
+    //シャドウレシーバーじゃないなら
+    if (isShadowReceiver != 1.0f)
     {
-        for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
+        return shadowPow;
+    }
+        
+    for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
+    {
+	    //ライトビュースクリーン空間からUV座標空間に変換している
+        float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
+	    //ライトビュースクリーン空間でのZ値を計算する
+        float zInLVP = posInLVP.z / posInLVP.w;
+            
+        if (zInLVP >= 0.0f && zInLVP <= 1.0f)
         {
-	        //ライトビュースクリーン空間からUV座標空間に変換している
-            float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
-	        //ライトビュースクリーン空間でのZ値を計算する
-            float zInLVP = posInLVP.z / posInLVP.w;
-            
-            if (zInLVP >= 0.0f && zInLVP <= 1.0f)
-            {
-                float2 shadowMapUV = posInLVP.xy / posInLVP.w;
-                shadowMapUV *= float2(0.5f, -0.5f);
-                shadowMapUV += 0.5f;
+            float2 shadowMapUV = posInLVP.xy / posInLVP.w;
+            shadowMapUV *= float2(0.5f, -0.5f);
+            shadowMapUV += 0.5f;
 
-	            //UV座標を使ってシャドウマップから影情報をサンプリング
-                if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
+	        //UV座標を使ってシャドウマップから影情報をサンプリング
+            if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
 	                && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
-                {
-		            //計算したUV座標を使って、シャドウマップから深度値をサンプリング
-                    float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
+            {
+		        //計算したUV座標を使って、シャドウマップから深度値をサンプリング
+                float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
             
-		            //シャドウマップに書き込まれているZ値と比較する
-                    if (zInLVP >= zInshadowMap.r + 0.00005)
-                    {
-			            //遮蔽されている
-                        shadowPow = 0.5f;
-                    }
-                    break;
+		        //シャドウマップに書き込まれているZ値と比較する
+                if (zInLVP >= zInshadowMap.r + 0.001)
+                {
+			        //遮蔽されている
+                    shadowPow = 0.5f;
                 }
+                break;
             }
         }
     }
-
+    
     return shadowPow;
 }
 

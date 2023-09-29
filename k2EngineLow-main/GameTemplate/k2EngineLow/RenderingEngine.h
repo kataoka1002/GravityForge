@@ -137,14 +137,14 @@ namespace nsK2EngineLow
 			m_sceneLight.SetHemLight(skyColor, groundColor, normal);
 		}
 
+		/// <summary>
+		/// 定数バッファに行列をセットする
+		/// </summary>
+		/// <param name="mat">行列</param>
+		/// <param name="num">シャドウマップの番号</param>
 		void SetLVP(Matrix mat, int num)
 		{
 			m_sceneLight.SetLVP(mat, num);
-		}
-
-		RenderTarget& GetShadowMap()
-		{
-			return m_shadowMap;
 		}
 
 	private:
