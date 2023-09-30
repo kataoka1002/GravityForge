@@ -46,7 +46,7 @@ float4 PSSamplingLuminance(PSInput In) : SV_Target0
     //輝度を抽出するピクセルシェーダー
     //メインレンダリングターゲットからカラーをサンプリング
     float4 color = mainRenderTargetTexture.Sample(Sampler, In.uv);
-
+    
     //サンプリングしたカラーの明るさを計算
     float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
     

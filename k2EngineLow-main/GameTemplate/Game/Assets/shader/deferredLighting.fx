@@ -91,8 +91,8 @@ float3 CalcLimPower(float3 normal, float3 normalInView);
 float3 CalcHemLight(float3 normal);
 float CalcBeckmann(float m, float t);
 float CalcSpcFresnel(float f0, float u);
-float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic);
-float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V);
+float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth);
+float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth);
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
 float CalcShadowPow(float isShadowReceiver, float3 worldPos);
 
@@ -453,6 +453,8 @@ float3 CalcLimPower(float3 normal, float3 normalInView)
 	    //最終的なリムの強さを求める
         float limPower = power1 * power2;
         
+        limPower = max(0.0f, limPower);
+        
 	    //pow()を使用し強さの変化を指数関数的にする
         limPower = pow(limPower, 1.3f);
         
@@ -500,22 +502,23 @@ float CalcSpcFresnel(float f0, float u)
 /// <param name="V">視点に向かうベクトル</param>
 /// <param name="N">法線ベクトル</param>
 /// <param name="metallic">金属度</param>
-float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic)
+float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth)
 {
-    float microfacet = 0.76f;
+    // マイクロファセットが小さくなりすぎると、鏡面反射が強くなりすぎることがあるので、下限を0.5にした
+    float microfacet = min(0.5f, 1.0f - smooth);
 
     // 金属度を垂直入射の時のフレネル反射率として扱う
     // 金属度が高いほどフレネル反射は大きくなる
-    float f0 = metallic;
+    float f0 = 0.5;
 
     // ライトに向かうベクトルと視線に向かうベクトルのハーフベクトルを求める
     float3 H = normalize(L + V);
 
     // 各種ベクトルがどれくらい似ているかを内積を利用して求める
-    float NdotH = saturate(dot(N, H));
-    float VdotH = saturate(dot(V, H));
-    float NdotL = saturate(dot(N, L));
-    float NdotV = saturate(dot(N, V));
+    float NdotH = max(saturate(dot(N, H)), 0.001f);
+    float VdotH = max(saturate(dot(V, H)), 0.001f);
+    float NdotL = max(saturate(dot(N, L)), 0.001f);
+    float NdotV = max(saturate(dot(N, V)), 0.001f);
 
     // D項をベックマン分布を用いて計算する
     float D = CalcBeckmann(microfacet, NdotH);
@@ -529,7 +532,7 @@ float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic)
     // m項を求める
     float m = PI * NdotV * NdotH;
 
-    // ここまで求めた、値を利用して、Cook-Torranceモデルの鏡面反射を求める
+    // ここまで求めた、値を利用して、クックトランスモデルの鏡面反射を求める
     return max(F * D * G / m, 0.0);
 }
 
@@ -539,70 +542,60 @@ float CookTorranceSpecular(float3 L, float3 V, float3 N, float metallic)
 /// <param name="N">法線</param>
 /// <param name="L">光源に向かうベクトル。光の方向と逆向きのベクトル。</param>
 /// <param name="V">視線に向かうベクトル。</param>
-float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V)
+float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth)
 {
     // 光源に向かうベクトルと視線に向かうベクトルのハーフベクトルを求める
     float3 H = normalize(L + V);
-
-    // 粗さは0.5で固定。
-    float roughness = 0.5f;
-
+    
+    //粗さは0.5で固定。
+    float roughness = 1.0f - smooth;
+    
+    //これはエネルギーの保存
     float energyBias = lerp(0.0f, 0.5f, roughness);
     float energyFactor = lerp(1.0, 1.0 / 1.51, roughness);
 
     // 光源に向かうベクトルとハーフベクトルがどれだけ似ているかを内積で求める
     float dotLH = saturate(dot(L, H));
-
-    // 光源に向かうベクトルとハーフベクトル、
-    // 光が平行に入射したときの拡散反射量を求めている
+    // 光源に向かうベクトルとハーフベクトル、光が平行に入射したときの拡散反射量を求めている。
     float Fd90 = energyBias + 2.0 * dotLH * dotLH * roughness;
-
-    // 法線と光源に向かうベクトルwを利用して拡散反射率を求める
+    
+    // 法線と光源に向かうベクトルｗを利用して拡散反射率を求めています
     float dotNL = saturate(dot(N, L));
     float FL = (1 + (Fd90 - 1) * pow(1 - dotNL, 5));
 
-    // 法線と視点に向かうベクトルを利用して拡散反射率を求める
+    
+    // 法線と視点に向かうベクトルを利用して拡散反射率を求めています
     float dotNV = saturate(dot(N, V));
     float FV = (1 + (Fd90 - 1) * pow(1 - dotNV, 5));
 
-    // 法線と光源への方向に依存する拡散反射率と、法線と視点ベクトルに依存する拡散反射率を
+    //法線と光源への方向に依存する拡散反射率と、法線と視点ベクトルに依存する拡散反射率を
     // 乗算して最終的な拡散反射率を求めている。PIで除算しているのは正規化を行うため
     return (FL * FV * energyFactor);
 }
 
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color)
 {
+    // ディズニーベースの拡散反射を実装する
     // フレネル反射を考慮した拡散反射を計算
-    float diffuseFromFresnel = CalcDiffuseFromFresnel(normal, -direction, toEye);
+    float diffuseFromFresnel = CalcDiffuseFromFresnel(normal, -direction, toEye, smooth);
 
     // 正規化Lambert拡散反射を求める
     float NdotL = saturate(dot(normal, -direction));
     float3 lambertDiffuse = color * NdotL / PI;
 
     // 最終的な拡散反射光を計算する
-    float3 diffuse = diffuseFromFresnel * lambertDiffuse;
+    float3 diffuse = albedo * diffuseFromFresnel * lambertDiffuse;
 
-    // Cook-Torranceモデルを利用した鏡面反射率を計算する
-    float3 spec = CookTorranceSpecular(-direction, toEye, normal, smooth) * color;
+    // クックトランスモデルを利用した鏡面反射率を計算する
+    // クックトランスモデルの鏡面反射率を計算する
+    float3 spec = CookTorranceSpecular(-direction, toEye, normal, smooth)* color;
 
     // 金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白
     // スペキュラカラーの強さを鏡面反射率として扱う
     spec *= lerp(float3(1.0f, 1.0f, 1.0f), specColor, metallic);
-    
-    // 値がINFなら変更する
-    if (isinf(spec.x) || isinf(spec.y) || isinf(spec.z))
-    {
-        spec = (0.0f, 0.0f, 0.0f);
-    }
-     
-    // 最後にalbedoで割るので0割りが起きないように修正する
-    albedo.x = max(0.000001f, albedo.x);
-    albedo.y = max(0.000001f, albedo.y);
-    albedo.z = max(0.000001f, albedo.z);    
-   
+
     // 滑らかさを使って、拡散反射光と鏡面反射光を合成する
-    // 滑らかさが高ければ、拡散反射は弱くなる
-    return diffuse * (1.0f - smooth) + spec / albedo;
+    return max(float3(0.0f, 0.0f, 0.0f), diffuse * (1.0f - smooth) + spec * smooth);
 }
 
 // 影を落とすかどうかの計算
