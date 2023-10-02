@@ -37,6 +37,10 @@ namespace nsK2EngineLow {
 			// シャドウマップ描画用のモデルを初期化
 			InitShadowDrawModel(filePath, enModelUpAxis);
 		}
+
+		// レイトレワールドに追加
+		g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
+		m_addRaytracingWorldModel = &m_renderToGBufferModel;
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
@@ -63,6 +67,13 @@ namespace nsK2EngineLow {
 	{
 		ModelInitData modelInitData;
 		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
+		modelInitData.m_modelUpAxis = enModelUpAxis;
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		modelInitData.m_colorBufferFormat[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
+		modelInitData.m_colorBufferFormat[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		if (m_animationClips != nullptr) 
 		{
 			//スケルトンを指定する。
@@ -82,13 +93,6 @@ namespace nsK2EngineLow {
 		{
 			modelInitData.m_psEntryPointFunc = "PSMain";
 		}
-		modelInitData.m_modelUpAxis = enModelUpAxis;
-		modelInitData.m_tkmFilePath = tkmFilePath;
-		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		modelInitData.m_colorBufferFormat[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		modelInitData.m_colorBufferFormat[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 

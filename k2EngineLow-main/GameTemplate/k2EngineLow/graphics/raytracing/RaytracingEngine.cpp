@@ -32,7 +32,7 @@ namespace nsK2EngineLow {
 			return pBuffer;
 		}
 
-		void Engine::CreateShaderResources()
+		void Engine::CreateShaderResources(const InitData& initData)
 		{
 			auto d3dDevice = g_graphicsEngine->GetD3DDevice();
 
@@ -48,6 +48,7 @@ namespace nsK2EngineLow {
 			resDesc.SampleDesc.Count = 1;
 			resDesc.Width = g_graphicsEngine->GetFrameBufferWidth();
 			m_outputResource.Init(resDesc);
+			m_outputTexture.InitFromD3DResource(m_outputResource.Get());
 
 			//レイジェネレーション用の定数バッファ。
 			Camera cam;
@@ -57,6 +58,13 @@ namespace nsK2EngineLow {
 			cam.fNear = g_camera3D->GetNear();
 			cam.fFar = g_camera3D->GetFar();
 			m_rayGenerationCB.Init(sizeof(Camera), &cam);
+
+			//追加してみた
+			m_expandSRV = std::make_unique<ExpanadSRV>();
+			m_expandSRV->Init(
+				initData.m_expandShaderResource,
+				initData.m_expandShaderResourceSize
+			);
 
 		}
 
@@ -137,7 +145,7 @@ namespace nsK2EngineLow {
 			g_graphicsEngine->BeginRender();
 			m_world.CommitRegistGeometry(rc);
 			//シェーダーリソースを作成。
-			CreateShaderResources();
+			//CreateShaderResources();
 			//各種リソースをディスクリプタヒープに登録する。
 			m_descriptorHeaps.Init(m_world, m_outputResource, m_rayGenerationCB);
 			//PSOを作成。

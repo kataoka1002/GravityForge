@@ -12,6 +12,25 @@ namespace nsK2EngineLow
 	class RenderingEngine : public Noncopyable
 	{
 	public:
+		// ディレクションライト
+		struct DirectionalLight
+		{
+			Vector3 direction = { 1.0f,0.0f,0.0f };		// ライトの方向
+			int castShadow = 0;							// 影をキャストする?
+			Vector4 color = { 1.0f,1.0f,1.0f,1.0f };    // ライトのカラー
+		};
+
+		/// <summary>
+		/// レイトレ用のライトデータ。
+		/// </summary>
+		struct RaytracingLightData 
+		{
+			DirectionalLight m_directionalLight;  // ディレクショナルライト。
+			Vector3 m_ambientLight;               // 環境光。IBLテクスチャが指定されていない場合に利用される。
+			float m_iblIntencity;                 // IBL強度。
+			int m_enableIBLTexture;               // IBLテクスチャが指定されている。
+		};
+
 		RenderingEngine();
 		~RenderingEngine();
 
@@ -147,6 +166,26 @@ namespace nsK2EngineLow
 			m_sceneLight.SetLVP(mat, num);
 		}
 
+		/// <summary>
+		/// レイトレワールドにモデルを追加。
+		/// </summary>
+		/// <param name="model">追加するモデル</param>
+		void AddModelToRaytracingWorld(Model& model)
+		{
+			g_graphicsEngine->RegistModelToRaytracingWorld(model);
+		}
+
+		/// <summary>
+		/// レイトレ用のライトデータを取得。
+		/// </summary>
+		/// <returns></returns>
+		RaytracingLightData& GetRaytracingLightData()
+		{
+			return m_raytracingLightData;
+		}
+
+
+
 	private:
 		// GBufferの定義
 		enum EnGBuffer
@@ -159,6 +198,7 @@ namespace nsK2EngineLow
 			enGBufferNum,					// G-Bufferの数
 		};
 
+		RaytracingLightData m_raytracingLightData;      // レイトレ用のライトデータ
 		SceneLight m_sceneLight;                        // シーンライト
 		RenderTarget m_mainRenderTarget;				// メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];			// GBuffer

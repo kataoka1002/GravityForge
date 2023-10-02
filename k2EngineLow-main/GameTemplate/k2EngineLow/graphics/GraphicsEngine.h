@@ -46,7 +46,7 @@ namespace nsK2EngineLow {
 		/// <param name="frameBufferwidth">フレームバッファの幅</param>
 		/// <param name="frameBufferHeight">フレームバッファの高さ</param>
 		/// <returns>falseが返ってきたら作成に失敗。</returns>
-		bool Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight);
+		bool Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight, const raytracing::InitData& raytracingInitData);
 		/// <summary>
 		/// レンダリング開始。
 		/// </summary>
@@ -177,6 +177,15 @@ namespace nsK2EngineLow {
 		{
 			m_raytracingEngine.Dispatch(rc);
 		}
+		/// <summary>
+		/// レイトレの結果のテクスチャを取得。
+		/// </summary>
+		/// <returns></returns>
+		Texture& GetRaytracingOutputTexture()
+		{
+			return m_raytracingEngine.GetOutputTexture();
+		}
+
 		/// <summary>
 		/// フレームバッファにコピー。
 		/// </summary>

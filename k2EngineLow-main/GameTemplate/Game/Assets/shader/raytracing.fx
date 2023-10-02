@@ -248,19 +248,8 @@ void rayGen()
 [shader("miss")]
 void miss(inout RayPayload payload)
 {
-    if( g_light[0].enableIBLTexture == 1){
-        // IBLテクスチャが指定されている。
-        float3 rayDirW = WorldRayDirection();
-        payload.color = SampleIBLColorFromSkyCube( 
-            g_skyCubeMap,
-            rayDirW,
-            payload.smooth,
-            g_light[0].iblIntencity
-        );
-    }else{
-        // 環境光を使う。
-        payload.color = g_light[0].ambientLight;
-    }
+    // 環境光を使う。
+    payload.color = g_light[0].ambientLight;  
 }
 
 [shader("closesthit")]
@@ -314,16 +303,16 @@ void chs(inout RayPayload payload, in BuiltInTriangleIntersectionAttributes attr
     
     // 反射レイ
     TraceReflectionRay(refPayload, normal);
-    if( payload.depth == 1){
+    if( payload.depth == 1)
+    {
         // これは一次反射なので、映り込み画像をそのまま使う。
         payload.color = refPayload.color;
-    }else{
+    }
+    else
+    {
         // 反射してきた光を足し算する。
         payload.color = lig + refPayload.color * albedoColor ;
     }
-    
-    
-
 }
 
 [shader("closesthit")]

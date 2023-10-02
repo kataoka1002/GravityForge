@@ -64,7 +64,7 @@ namespace nsK2EngineLow {
 			WaitForSingleObject(m_fenceEvent, INFINITE);
 		}
 	}
-	bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
+	bool GraphicsEngine::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight, const raytracing::InitData& raytracingInitData)
 	{
 		//
 		g_graphicsEngine = this;
@@ -150,7 +150,8 @@ namespace nsK2EngineLow {
 		m_directXTKGfxMemroy = std::make_unique<DirectX::GraphicsMemory>(m_d3dDevice);
 		//フォント描画エンジンを初期化。
 		m_fontEngine.Init();
-
+		//シェーダーリソースを作成。
+		m_raytracingEngine.CreateShaderResources(raytracingInitData);
 		return true;
 	}
 

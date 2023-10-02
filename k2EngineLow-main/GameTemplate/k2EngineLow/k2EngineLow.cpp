@@ -25,10 +25,15 @@ namespace nsK2EngineLow {
 	}
 	void K2EngineLow::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	{
+		//追加してみた
+		raytracing::InitData raytracintInitData;
+		raytracintInitData.m_expandShaderResource = &g_renderingEngine->GetRaytracingLightData();
+		raytracintInitData.m_expandShaderResourceSize = sizeof(g_renderingEngine->GetRaytracingLightData());
+
 		if (hwnd) {
 			//グラフィックエンジンの初期化。
 			m_graphicsEngine = new GraphicsEngine();
-			m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight);
+			m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight,raytracintInitData);
 		}
 		g_gameTime = &m_gameTime;
 		//ゲームパッドの初期化。

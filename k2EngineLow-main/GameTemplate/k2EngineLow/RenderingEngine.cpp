@@ -176,6 +176,7 @@ namespace nsK2EngineLow
 		{
 			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetShadowMap(areaNo);
 		}
+		spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
@@ -191,6 +192,17 @@ namespace nsK2EngineLow
 
 		//シャドウマップに影を描画
 		DrawShadowMap(rc);
+
+		
+		// レイトレ用のライトデータをコピー。
+		//m_raytracingLightData.m_directionalLight = m_sceneLight.GetLight().directionLight[0];
+		m_raytracingLightData.m_iblIntencity = 1.0f;
+		m_raytracingLightData.m_ambientLight = { 0.2f,0.2f,0.2f };
+		m_raytracingLightData.m_enableIBLTexture = 0;
+
+		// レイトレで移りこみ画像を生成
+		g_graphicsEngine->BuildRaytracingWorld(rc);
+		g_graphicsEngine->DispatchRaytracing(rc);
 
 		//ディファードライティング
 		DeferredLighting(rc);

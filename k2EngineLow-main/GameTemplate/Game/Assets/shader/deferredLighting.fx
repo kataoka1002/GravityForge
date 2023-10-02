@@ -76,6 +76,9 @@ Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
 Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
 Texture2D<float4> shadowMap[NUM_SHADOW_MAP] : register(t5); // シャドウマップ(GBufferではない)
+
+Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
+
 sampler Sampler : register(s0);                             // サンプラー
 
 // 関数定義
@@ -575,7 +578,6 @@ float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth)
 
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color)
 {
-    // ディズニーベースの拡散反射を実装する
     // フレネル反射を考慮した拡散反射を計算
     float diffuseFromFresnel = CalcDiffuseFromFresnel(normal, -direction, toEye, smooth);
 
@@ -586,7 +588,6 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
     // 最終的な拡散反射光を計算する
     float3 diffuse = albedo * diffuseFromFresnel * lambertDiffuse;
 
-    // クックトランスモデルを利用した鏡面反射率を計算する
     // クックトランスモデルの鏡面反射率を計算する
     float3 spec = CookTorranceSpecular(-direction, toEye, normal, smooth)* color;
 
