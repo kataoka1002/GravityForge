@@ -167,6 +167,15 @@ namespace nsK2EngineLow
 		}
 
 		/// <summary>
+		/// EyePosの設定
+		/// </summary>
+		/// <param name="pos">座標</param>
+		void SetEyePosition(Vector3 pos)
+		{
+			m_sceneLight.SetEyePos(pos);
+		}
+
+		/// <summary>
 		/// レイトレワールドにモデルを追加。
 		/// </summary>
 		/// <param name="model">追加するモデル</param>

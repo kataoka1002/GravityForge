@@ -68,7 +68,7 @@ namespace nsK2EngineLow {
 			/// <summary>
 			/// シェーダーリソースを作成。
 			/// </summary>
-			void CreateShaderResources(const InitData& initData);
+			void CreateShaderResources(/*const InitData& initData*/);
 		private:
 			/// <summary>
 			/// シェーダーテーブルを作成。

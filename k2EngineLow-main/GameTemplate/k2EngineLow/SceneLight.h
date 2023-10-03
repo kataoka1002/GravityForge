@@ -109,6 +109,11 @@ namespace nsK2EngineLow
 			m_light.mLVP[num] = mat;
 		}
 
+		void SetEyePos(Vector3 pos)
+		{
+			m_light.eyePos = pos;
+		}
+
 		//ç\ë¢ëÃÇï‘Ç∑
 		Light& GetLight()
 		{

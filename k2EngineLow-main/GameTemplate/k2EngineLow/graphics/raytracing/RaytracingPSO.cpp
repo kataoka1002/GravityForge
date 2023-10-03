@@ -208,8 +208,8 @@ namespace nsK2EngineLow {
 		void PSO::Init(const DescriptorHeaps& descriptorHeaps)
 		{
 			// ’Ç‰Á‚µ‚Ä‚Ý‚½
-			ReleaseD3D12Object(m_pipelineState);
-			m_pipelineState = nullptr;
+			//ReleaseD3D12Object(m_pipelineState);
+			//m_pipelineState = nullptr;
 
 			m_srvUavCbvHeap = &descriptorHeaps.GetSrvUavCbvDescriptorHeap();
 			using namespace BuildSubObjectHelper;

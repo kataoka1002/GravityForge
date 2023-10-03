@@ -151,7 +151,7 @@ namespace nsK2EngineLow {
 		//フォント描画エンジンを初期化。
 		m_fontEngine.Init();
 		//シェーダーリソースを作成。
-		m_raytracingEngine.CreateShaderResources(raytracingInitData);
+		//m_raytracingEngine.CreateShaderResources(raytracingInitData);
 		return true;
 	}
 

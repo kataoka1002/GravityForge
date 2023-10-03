@@ -77,7 +77,7 @@ Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
 Texture2D<float4> shadowMap[NUM_SHADOW_MAP] : register(t5); // シャドウマップ(GBufferではない)
 
-Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
+//Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
 
 sampler Sampler : register(s0);                             // サンプラー
 
@@ -153,7 +153,7 @@ float4 PSMain(PSInput In) : SV_Target0
     //float3 spLig = CalcSpotLight(normal, worldPos, metallic);
     float3 spLig = CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
-    // リムライトの強さ設定
+    // リムライトの強さ設定(おかしい)
     float3 limLig = CalcLimPower(normal, normalInView);
     
     // 半球ライトの強さ設定
@@ -163,12 +163,12 @@ float4 PSMain(PSInput In) : SV_Target0
     float shadowPow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos);
     
     // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig + spLig + limLig + hemLig;
+    float3 lightPow = dirLig + ptLig + spLig /*+ limLig*/ + hemLig;
     
 	    
     // ライトの光を計算し最終的なカラーを設定    
     float4 finalColor = albedo;
-    finalColor.xyz *= lightPow;
+    finalColor.xyz += lightPow;
     finalColor *= shadowPow;
     
     return finalColor;
@@ -484,12 +484,20 @@ float3 CalcHemLight(float3 normal)
 //ベックマン分布を計算する
 float CalcBeckmann(float m, float t)
 {
+    //float t2 = t * t;
+    //float t4 = t * t * t * t;
+    //float m2 = m * m;
+    //float D = 1.0f / (4.0f * m2 * t4);
+    //D *= exp((-1.0f / m2) * (1.0f - t2) / t2);
+    //return D;
+    
     float t2 = t * t;
     float t4 = t * t * t * t;
     float m2 = m * m;
     float D = 1.0f / (4.0f * m2 * t4);
     D *= exp((-1.0f / m2) * (1.0f - t2) / t2);
     return D;
+
 }
 
 //フレネルを計算
@@ -508,7 +516,7 @@ float CalcSpcFresnel(float f0, float u)
 float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth)
 {
     // マイクロファセットが小さくなりすぎると、鏡面反射が強くなりすぎることがあるので、下限を0.5にした
-    float microfacet = min(0.5f, 1.0f - smooth);
+    float microfacet = max(0.5f, 1.0f - smooth);
 
     // 金属度を垂直入射の時のフレネル反射率として扱う
     // 金属度が高いほどフレネル反射は大きくなる
@@ -533,7 +541,7 @@ float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth)
     float G = min(1.0f, min(2 * NdotH * NdotV / VdotH, 2 * NdotH * NdotL / VdotH));
 
     // m項を求める
-    float m = PI * NdotV * NdotH;
+    float m = max(0.01f,PI * NdotV * NdotH);  
 
     // ここまで求めた、値を利用して、クックトランスモデルの鏡面反射を求める
     return max(F * D * G / m, 0.0);

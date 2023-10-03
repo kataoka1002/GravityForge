@@ -39,8 +39,8 @@ namespace nsK2EngineLow {
 		}
 
 		// レイトレワールドに追加
-		g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
-		m_addRaytracingWorldModel = &m_renderToGBufferModel;
+		//g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
+		//m_addRaytracingWorldModel = &m_renderToGBufferModel;
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)
