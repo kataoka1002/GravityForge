@@ -167,7 +167,7 @@ float4 PSMain(PSInput In) : SV_Target0
     
     // ‰e‚Ì—‚¿‹ï‡‚ğŒvZ‚·‚éB
     float shadow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos) * normalTexture.Sample(Sampler, In.uv).w;
-    lig *= max(0.3f, 1.0f - shadow);
+    lig *= max(0.5f, 1.0f - shadow);
     
     float4 finalColor = 1.0f;
     finalColor.xyz = lig;    
