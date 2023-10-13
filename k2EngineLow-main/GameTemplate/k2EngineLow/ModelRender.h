@@ -24,6 +24,12 @@ namespace nsK2EngineLow
 			bool isShadowReciever = false);
 
 		/// <summary>
+		/// 頂点シェーダーのエントリーポイントを指定する
+		/// </summary>
+		/// <param name="modelInitData">モデルイニットデータ</param>
+		void SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData);
+
+		/// <summary>
 		/// 更新処理
 		/// </summary>
 		void Update();

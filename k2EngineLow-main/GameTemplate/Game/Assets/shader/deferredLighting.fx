@@ -8,6 +8,7 @@ static const int MAX_POINT_LIGHT = 4;
 static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
 static const int NUM_SHADOW_MAP = 3;
+static const int INFINITY = 40.0f;
 
 
 // 構造体
@@ -85,7 +86,7 @@ sampler Sampler : register(s0);                             // サンプラー
 float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
 float3 CalcPhongSpecular(float3 direction, float3 color, float3 worldPos, float3 normal, float speclarPow);
 float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow);
-float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth);
+float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float isShadowReceiver, float3 worldPos);
 float3 CalcPointLight(float3 normal, float3 worldPos, float specularPow);
 float3 CalcPBRPointLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 worldPos);
 float3 CalcSpotLight(float3 normal, float3 worldPos, float specularPow);
@@ -98,6 +99,7 @@ float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth);
 float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth);
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
 float CalcShadowPow(float isShadowReceiver, float3 worldPos);
+float Chebyshev(float2 moments, float depth);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -134,43 +136,41 @@ float4 PSMain(PSInput In) : SV_Target0
 
     // 滑らかさ
     float smooth = metallicSmoothTexture.Sample(Sampler, In.uv).a;
+
+    // 視線に向かって伸びるベクトルを計算する
+    float3 toEye = normalize(eyePos - worldPos);
         
     // --------------------------------------------------------------------
     
-    // 視線に向かって伸びるベクトルを計算する
-    float3 toEye = normalize(eyePos - worldPos);
-
     
-    // ディレクションライトの強さ計算
-    //float3 dirLig = CalcDirectionLight(normal, worldPos, metallic);
-    float3 dirLig = CalcPBRDirectionLight(normal, toEye, albedo, specColor, metallic, smooth);
+    // ディレクションライトの計算
+    //float3 lig = CalcDirectionLight(normal, worldPos, metallic);
+    float3 lig = CalcPBRDirectionLight(normal, toEye, albedo, specColor, metallic, smooth, normalTexture.Sample(Sampler, In.uv).w, worldPos);
     
     // ポイントライトの強さ設定
-    //float3 ptLig = CalcPointLight(normal, worldPos, metallic);
-    float3 ptLig = CalcPBRPointLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
+    //lig += CalcPointLight(normal, worldPos, metallic);
+    lig += CalcPBRPointLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
     // スポットライトの強さ設定
-    //float3 spLig = CalcSpotLight(normal, worldPos, metallic);
-    float3 spLig = CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
+    //lig += CalcSpotLight(normal, worldPos, metallic);
+    lig += CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
     // リムライトの強さ設定(おかしい)
-    float3 limLig = CalcLimPower(normal, normalInView);
+    //lig += CalcLimPower(normal, normalInView);
     
     // 半球ライトの強さ設定
-    float3 hemLig = CalcHemLight(normal);
+    lig += CalcHemLight(normal);
+            
+    // 環境光による底上げ
+    float ambientLight = 1.1f;
+    lig += albedo * ambientLight;
     
-    // 影を落とすか落とさないかの計算
-    float shadowPow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos);
+    // 影の落ち具合を計算する。
+    float shadow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos) * normalTexture.Sample(Sampler, In.uv).w;
+    lig *= max(0.3f, 1.0f - shadow);
     
-    // 全てのライトの影響力を求める
-    float3 lightPow = dirLig + ptLig + spLig /*+ limLig*/ + hemLig;
-    
-	    
-    // ライトの光を計算し最終的なカラーを設定    
-    float4 finalColor = albedo;
-    finalColor.xyz += lightPow;
-    finalColor *= shadowPow;
-    
+    float4 finalColor = 1.0f;
+    finalColor.xyz = lig;    
     return finalColor;
 }
 
@@ -216,14 +216,14 @@ float3 CalcDirectionLight(float3 normal, float3 worldPos, float specularPow)
 }
 
 //PBRのディレクションライトの計算
-float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth)
+float3 CalcPBRDirectionLight(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float isShadowReceiver, float3 worldPos)
 {
     float3 lig = { 0.0f, 0.0f, 0.0f };
     
     for (int i = 0; i < MAX_DIRECTION_LIGHT; i++)
     {        
         // PBRによるライトの強さを求める
-        lig += CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, directionLight[i].dirDirection, directionLight[i].dirColor);                  
+        lig += CalcPBR(normal, toEye, albedo, specColor, metallic, smooth, directionLight[i].dirDirection, directionLight[i].dirColor);
     }
     
     return lig;
@@ -484,20 +484,12 @@ float3 CalcHemLight(float3 normal)
 //ベックマン分布を計算する
 float CalcBeckmann(float m, float t)
 {
-    //float t2 = t * t;
-    //float t4 = t * t * t * t;
-    //float m2 = m * m;
-    //float D = 1.0f / (4.0f * m2 * t4);
-    //D *= exp((-1.0f / m2) * (1.0f - t2) / t2);
-    //return D;
-    
     float t2 = t * t;
     float t4 = t * t * t * t;
     float m2 = m * m;
     float D = 1.0f / (4.0f * m2 * t4);
     D *= exp((-1.0f / m2) * (1.0f - t2) / t2);
     return D;
-
 }
 
 //フレネルを計算
@@ -607,49 +599,60 @@ float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, flo
     return max(float3(0.0f, 0.0f, 0.0f), diffuse * (1.0f - smooth) + spec * smooth);
 }
 
+// チェビシェフの不等式を利用して、影になる可能性を計算する。
+float Chebyshev(float2 moments, float depth)
+{
+    if (depth <= moments.x)
+    {
+        return 0.0f;
+    }
+    // 遮蔽されているなら、チェビシェフの不等式を利用して光が当たる確率を求める
+    float depth_sq = moments.x * moments.x;
+    // このグループの分散具合を求める
+    // 分散が大きいほど、varianceの数値は大きくなる
+    float variance = moments.y - depth_sq;
+    // このピクセルのライトから見た深度値とシャドウマップの平均の深度値の差を求める
+    float md = depth - moments.x;
+    // 光が届く確率を求める
+    float lit_factor = variance / (variance + md * md);
+    float lig_factor_min = 0.3f;
+    // 光が届く確率の下限以下は影になるようにする。
+    lit_factor = saturate((lit_factor - lig_factor_min) / (1.0f - lig_factor_min));
+    // 光が届く確率から影になる確率を求める。
+    return 1.0f - lit_factor;
+}
+
 // 影を落とすかどうかの計算
 float CalcShadowPow(float isShadowReceiver, float3 worldPos)
 {
-    float shadowPow = 1.0f;
-        
-    //シャドウレシーバーじゃないなら
-    if (isShadowReceiver != 1.0f)
-    {
-        return shadowPow;
-    }
-        
+    float shadow = 0.0f;
+    
     for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
     {
-	    //ライトビュースクリーン空間からUV座標空間に変換している
         float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));
-	    //ライトビュースクリーン空間でのZ値を計算する
+        float2 shadowMapUV = posInLVP.xy / posInLVP.w;
         float zInLVP = posInLVP.z / posInLVP.w;
-            
-        if (zInLVP >= 0.0f && zInLVP <= 1.0f)
+        shadowMapUV *= float2(0.5f, -0.5f);
+        shadowMapUV += 0.5f;
+        
+        // シャドウマップUVが範囲内か判定
+        if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
+            && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f
+            && zInLVP < 0.98f && zInLVP > 0.02f)
         {
-            float2 shadowMapUV = posInLVP.xy / posInLVP.w;
-            shadowMapUV *= float2(0.5f, -0.5f);
-            shadowMapUV += 0.5f;
-
-	        //UV座標を使ってシャドウマップから影情報をサンプリング
-            if (shadowMapUV.x >= 0.0f && shadowMapUV.x <= 1.0f
-	                && shadowMapUV.y >= 0.0f && shadowMapUV.y <= 1.0f)
-            {
-		        //計算したUV座標を使って、シャドウマップから深度値をサンプリング
-                float2 zInshadowMap = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV).xy;
+            // シャドウマップから値をサンプリング
+            float4 shadowValue = shadowMap[cascadeIndex].Sample(Sampler, shadowMapUV);
+            zInLVP -= 0.001f;
+            float pos = exp(INFINITY * zInLVP);
             
-		        //シャドウマップに書き込まれているZ値と比較する
-                if (zInLVP >= zInshadowMap.r + 0.001)
-                {
-			        //遮蔽されている
-                    shadowPow = 0.5f;
-                }
-                break;
-            }
+            // ソフトシャドウ。
+            shadow = Chebyshev(shadowValue.xy, pos);
+                       
+            break;
         }
     }
     
-    return shadowPow;
+    return shadow;
 }
 
 

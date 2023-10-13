@@ -20,6 +20,7 @@ Test::Test()
 	m_model.Update();
 
 	m_bg.Init("Assets/modelData/stage/background.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_bg.SetPosition({ 0.0f,0.0f,-1000.0f });
 	m_bg.Update();
 	Vector3 dir = { 1.0f,0.0f,0.0f };
 	dir.Normalize();

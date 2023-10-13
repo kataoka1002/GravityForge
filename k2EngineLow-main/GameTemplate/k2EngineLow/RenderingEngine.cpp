@@ -124,6 +124,8 @@ namespace nsK2EngineLow
 			clearColor
 		);
 
+		//モデルの無い位置(スカイキューブの位置)のワールド座標を大きくすることで影を落とさない
+		float clearWorld[] = { 10000.0f,10000.0f,10000.0f,1.0f };
 		//ワールド座標用のターゲットを作成
 		m_gBuffer[enGBufferWorldPos].Create(
 			g_graphicsEngine->GetFrameBufferWidth(),
@@ -132,7 +134,7 @@ namespace nsK2EngineLow
 			1,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
 			DXGI_FORMAT_UNKNOWN,
-			clearColor
+			clearWorld
 		);
 
 		//カメラ空間の法線用のターゲットを作成
@@ -174,7 +176,7 @@ namespace nsK2EngineLow
 		int texNum = 5;
 		for (int areaNo = 0; areaNo < NUM_SHADOW_MAP; areaNo++)
 		{
-			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetShadowMap(areaNo);
+			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetBokeShadowMap(areaNo);
 		}
 		//spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
@@ -277,7 +279,7 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::DrawShadowMap(RenderContext& rc)
 	{
-		BeginGPUEvent("CascadeShadowDraw");
+		BeginGPUEvent("CascadeShadow");
 
 		//ライトカメラの方向を設定
 		Vector3 lightCameraDir = { 1.0f, -1.0f, -1.0f };

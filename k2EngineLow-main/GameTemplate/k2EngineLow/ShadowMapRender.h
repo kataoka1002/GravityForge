@@ -30,6 +30,16 @@ namespace nsK2EngineLow
 			}
 
 			/// <summary>
+			/// ぼかしたシャドウマップを取得
+			/// </summary>
+			/// <param name="areaNo">エリア番号(近:0 , 中:1 , 遠:2)</param>
+			/// <returns></returns>
+			Texture& GetBokeShadowMap(int areaNo)
+			{
+				return m_blurShadowMap[areaNo].GetBokeTexture();
+			}
+
+			/// <summary>
 			/// シャドウマップに描画するモデルのコンテナに追加
 			/// </summary>
 			/// <param name="model0">近景用のシャドウマップに描画するモデル</param>
@@ -52,11 +62,11 @@ namespace nsK2EngineLow
 				return m_cascadeShadowMapMatrix.GetLightViewProjectionCropMatrix(areaNo);
 			}
 
-
 		private:
 			CascadeShadowMapMatrix m_cascadeShadowMapMatrix;    // カスケードシャドウマップの行列を扱うオブジェクト
 			RenderTarget m_shadowMaps[NUM_SHADOW_MAP];          // シャドウマップ
 			std::vector<Model*> m_modelsArray[NUM_SHADOW_MAP];  // シャドウマップに描画するモデルの配列
+			GaussianBlur m_blurShadowMap[NUM_SHADOW_MAP];       // シャドウマップにブラーをかける処理
 		};
 	}
 }

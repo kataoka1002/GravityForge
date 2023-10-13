@@ -29,14 +29,10 @@ namespace nsK2EngineLow {
 		// GBuffer描画用のモデルを初期化
 		InitModelOnRenderGBuffer(filePath, enModelUpAxis, isShadowReciever);
 		 
-		// ZPrepass描画用のモデルを初期化
+		// シャドウマップ描画用のモデルを初期化
+		InitShadowDrawModel(filePath, enModelUpAxis);
 		 
-		// 影を受ける側じゃないなら
-		if (isShadowReciever != true)
-		{
-			// シャドウマップ描画用のモデルを初期化
-			InitShadowDrawModel(filePath, enModelUpAxis);
-		}
+		// ZPrepass描画用のモデルを初期化
 
 		// レイトレワールドに追加
 		//g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
@@ -63,6 +59,19 @@ namespace nsK2EngineLow {
 		}
 	}
 
+	void ModelRender::SetupVertexShaderEntryPointFunc(ModelInitData& modelInitData)
+	{
+		//アニメーションがあるなら
+		if (m_animationClips != nullptr)
+		{
+			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+		}
+		else
+		{
+			modelInitData.m_vsEntryPointFunc = "VSMain";
+		}
+	}
+
 	void ModelRender::InitModelOnRenderGBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis, bool isShadowReciever)
 	{
 		ModelInitData modelInitData;
@@ -74,17 +83,17 @@ namespace nsK2EngineLow {
 		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		modelInitData.m_colorBufferFormat[3] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		modelInitData.m_colorBufferFormat[4] = DXGI_FORMAT_R8G8B8A8_UNORM;
-		if (m_animationClips != nullptr) 
+
+		//スケルトンを指定する。
+		if (m_animationClips != nullptr)
 		{
-			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
-			modelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
-		}
-		else
-		{
-			modelInitData.m_vsEntryPointFunc = "VSMain";
 		}
 
+		//頂点シェーダーのエントリーポイントを設定
+		SetupVertexShaderEntryPointFunc(modelInitData);
+
+		//ピクセルシェーダーのエントリーポイントを設定
 		if (isShadowReciever) 
 		{
 			modelInitData.m_psEntryPointFunc = "PSShadowMain";
@@ -93,6 +102,7 @@ namespace nsK2EngineLow {
 		{
 			modelInitData.m_psEntryPointFunc = "PSMain";
 		}
+
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 
@@ -102,19 +112,18 @@ namespace nsK2EngineLow {
 		ModelInitData sadowDrawModelInitData;
 		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
 		sadowDrawModelInitData.m_psEntryPointFunc = "PSMain";
-		if (m_animationClips != nullptr)
-		{
-			//スケルトンを指定する。
-			sadowDrawModelInitData.m_skeleton = &m_skeleton;
-			sadowDrawModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
-		}
-		else
-		{
-			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMain";
-		}
 		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
 		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
-		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+
+		//スケルトンを指定する。
+		if (m_animationClips != nullptr)
+		{
+			sadowDrawModelInitData.m_skeleton = &m_skeleton;
+		}
+
+		//頂点シェーダーのエントリーポイントを設定
+		SetupVertexShaderEntryPointFunc(sadowDrawModelInitData);
 
 		m_shadowDrawModel[0].Init(sadowDrawModelInitData);
 		m_shadowDrawModel[1].Init(sadowDrawModelInitData);

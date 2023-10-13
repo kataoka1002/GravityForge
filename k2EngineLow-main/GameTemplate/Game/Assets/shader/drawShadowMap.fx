@@ -2,6 +2,8 @@
  * @brief シャドウマップ描画用のシェーダー
  */
 
+static const int INFINITY = 40.0f;
+
 // モデル用の定数バッファー
 cbuffer ModelCb : register(b0)
 {
@@ -103,5 +105,10 @@ SPSIn VSSkinMain(SVSIn vsIn)
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
     // シャドウマップにZ値を描き込む
-    return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
+    //return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
+    
+    float depth = psIn.pos.z;
+    float pos = exp(INFINITY * depth);
+    return float4(pos, pos * pos, 0.0f, 1.0f);
+
 }

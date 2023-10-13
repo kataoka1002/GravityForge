@@ -11,36 +11,41 @@ namespace nsK2EngineLow
 
             //近景用のシャドウマップ
             m_shadowMaps[0].Create(
-                2048,
-                2048,
+                5096,
+                5096,
                 1,
                 1,
-                DXGI_FORMAT_R32_FLOAT,
+                DXGI_FORMAT_R32G32_FLOAT,
                 DXGI_FORMAT_D32_FLOAT,
                 clearColor
             );
 
             //中景用のシャドウマップ
             m_shadowMaps[1].Create(
-                1024,
-                1024,
+                2048,
+                2048,
                 1,
                 1,
-                DXGI_FORMAT_R32_FLOAT,
+                DXGI_FORMAT_R32G32_FLOAT,
                 DXGI_FORMAT_D32_FLOAT,
                 clearColor
             );
 
             //遠景用のシャドウマップ
             m_shadowMaps[2].Create(
-                512,
-                512,
+                1024,
+                1024,
                 1,
                 1,
-                DXGI_FORMAT_R32_FLOAT,
+                DXGI_FORMAT_R32G32_FLOAT,
                 DXGI_FORMAT_D32_FLOAT,
                 clearColor
             );
+
+            // ソフトシャドウを行うためのスプライト
+            m_blurShadowMap[0].Init(&m_shadowMaps[0].GetRenderTargetTexture());
+            m_blurShadowMap[1].Init(&m_shadowMaps[1].GetRenderTargetTexture());
+            m_blurShadowMap[2].Init(&m_shadowMaps[2].GetRenderTargetTexture());
 		}
 
 		void ShadowMapRender::Render(RenderContext& rc, Vector3& lightDirection)
@@ -53,6 +58,8 @@ namespace nsK2EngineLow
                 // 行列を定数バッファにセットする
                 g_renderingEngine->SetLVP(GetLVPMatrix(i), i);
             }
+
+            BeginGPUEvent("DrawShadowMap");
 
             int shadowMapNo = 0;
             for (auto& shadowMap : m_shadowMaps)
@@ -78,6 +85,20 @@ namespace nsK2EngineLow
                 rc.WaitUntilFinishDrawingToRenderTarget(shadowMap);
                 shadowMapNo++;
             }
+
+            EndGPUEvent();
+
+
+            BeginGPUEvent("BlurShadowMap");
+
+            // ブラーを実行する。
+            for (auto& blur : m_blurShadowMap)
+            {
+                blur.ExecuteOnGPU(rc, 1.0f);
+            }
+
+            EndGPUEvent();
+
 		}
 	}
 }
