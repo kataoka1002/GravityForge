@@ -9,6 +9,11 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 
+	const Vector3& GetPosition() const
+	{
+		return m_position;
+	}
+
 private:
 	enum EnAnimationClip 
 	{
@@ -18,4 +23,5 @@ private:
 	AnimationClip animationClips[enAnimClip_Num];
 
 	ModelRender m_playerModel;
+	Vector3 m_position = Vector3::Zero;
 };

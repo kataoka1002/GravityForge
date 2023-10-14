@@ -31,6 +31,8 @@ bool Player::Start()
 
 void Player::Update()
 {
+	m_position = Vector3{ 0.0f,50.0f,100.0f };
+	m_playerModel.SetPosition(m_position);
 	m_playerModel.Update();
 }
 

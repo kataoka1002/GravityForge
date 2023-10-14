@@ -149,17 +149,17 @@ float4 PSMain(PSInput In) : SV_Target0
     
     // ポイントライトの強さ設定
     //lig += CalcPointLight(normal, worldPos, metallic);
-    //lig += CalcPBRPointLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
+    lig += CalcPBRPointLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
     // スポットライトの強さ設定
     //lig += CalcSpotLight(normal, worldPos, metallic);
-    //lig += CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
+    lig += CalcPBRSpotLight(normal, toEye, albedo, specColor, metallic, smooth, worldPos);
     
     // リムライトの強さ設定(おかしい)
     //lig += CalcLimPower(normal, normalInView);
     
     // 半球ライトの強さ設定
-    //lig += CalcHemLight(normal);
+    lig += CalcHemLight(normal);
             
     // 環境光による底上げ
     float ambientLight = 1.1f;

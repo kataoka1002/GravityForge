@@ -127,7 +127,7 @@ SPSOut PSMainCore(SPSIn psIn, uniform bool isShadowReceiver)
     //法線マップによる法線情報の抽出
     psOut.normal.xyz = CalcNormal(psIn);
     
-    //影を落とす方か落とされる方かを抽出
+    //影を落とされるだけかを抽出
     if (isShadowReceiver == true)
     {
         psOut.normal.w = 1.0f;
@@ -150,13 +150,13 @@ SPSOut PSMainCore(SPSIn psIn, uniform bool isShadowReceiver)
     return psOut;
 }
 
-//シャドウマップを描画する方のエントリーポイント
+//影を落とすし落とされるほう
 SPSOut PSMain(SPSIn psIn) : SV_Target0
 {
     return PSMainCore(psIn, false);
 }
 
-//シャドウレシーバーのエントリーポイント
+//シャドウレシーバー(影を落とさず受けるだけの方)のエントリーポイント
 SPSOut PSShadowMain(SPSIn psIn) : SV_Target0
 {
     return PSMainCore(psIn, true);

@@ -3,7 +3,7 @@
 
 Game::Game()
 {
-
+	
 }
 
 Game::~Game()
@@ -13,6 +13,7 @@ Game::~Game()
 	DeleteGO(m_player);
 	DeleteGO(m_bg);
 	DeleteGO(m_camera);
+	DeleteGO(m_light);
 }
 
 bool Game::Start()
@@ -28,6 +29,9 @@ bool Game::Start()
 
 	//ゲームカメラの作成
 	m_camera = NewGO<GameCamera>(0, "gamecamera");
+
+	//ライトの作成
+	m_light = NewGO<Lighting>(0, "lighting");
 
 	return true;
 }

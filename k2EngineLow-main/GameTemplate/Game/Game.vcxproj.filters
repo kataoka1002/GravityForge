@@ -26,11 +26,11 @@
     <ClCompile Include="Game.cpp">
       <Filter>MyCode</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp">
-      <Filter>MyCode</Filter>
-    </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>MyCode\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>MyCode</Filter>
     </ClCompile>
     <ClCompile Include="GameCamera.cpp">
       <Filter>MyCode</Filter>
@@ -47,11 +47,11 @@
     <ClInclude Include="Game.h">
       <Filter>MyCode</Filter>
     </ClInclude>
-    <ClInclude Include="Test.h">
-      <Filter>MyCode</Filter>
-    </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>MyCode\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>MyCode</Filter>
     </ClInclude>
     <ClInclude Include="GameCamera.h">
       <Filter>MyCode</Filter>
