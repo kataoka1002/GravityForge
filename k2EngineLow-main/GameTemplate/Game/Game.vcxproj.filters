@@ -4,6 +4,15 @@
     <Filter Include="system">
       <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode">
+      <UniqueIdentifier>{53e3b472-7407-4ed8-9ca9-2d61e738deff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Player">
+      <UniqueIdentifier>{eea88339-ade3-44a9-b38f-ca4ec5dc9fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\BackGround">
+      <UniqueIdentifier>{8034993b-ab3e-4df3-b6d2-74bf46133717}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -11,13 +20,41 @@
     <ClCompile Include="system\system.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>MyCode\BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>MyCode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="Test.h" />
+    <ClInclude Include="Player.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>MyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="Test.h">
+      <Filter>MyCode</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>MyCode\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>MyCode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

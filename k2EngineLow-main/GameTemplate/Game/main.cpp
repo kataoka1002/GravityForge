@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
-#include "Test.h"
+//#include "Test.h"
+#include "Game.h"
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
@@ -20,8 +21,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	g_camera3D->SetTarget(0, 100.0f, 0);
 
 
-	Test* test = nullptr;
-	test = NewGO<Test>(0, "title");
+	//Test* test = nullptr;
+	//test = NewGO<Test>(0, "title");
+
+	Game* m_game = nullptr;
+	m_game = NewGO<Game>(0, "game");
+
 
 
 	// ここからゲームループ。

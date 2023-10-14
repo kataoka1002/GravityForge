@@ -1,0 +1,24 @@
+#pragma once
+#include "SkyCube.h"
+#include "Player.h"
+#include "BackGround.h"
+#include "GameCamera.h"
+
+class Game : public IGameObject, Noncopyable
+{
+public:
+	Game();
+	~Game();
+	bool Start();
+	void Update();
+	void Render(RenderContext& rc);
+
+	void SetSkyCube();
+
+private:
+	SkyCube* m_skyCube = nullptr;
+	Player* m_player = nullptr;
+	BackGround* m_bg = nullptr;
+	GameCamera* m_camera = nullptr;
+};
+
