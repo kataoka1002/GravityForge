@@ -33,7 +33,7 @@ namespace nsK2EngineLow {
 		if (hwnd) {
 			//グラフィックエンジンの初期化。
 			m_graphicsEngine = new GraphicsEngine();
-			m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight,raytracintInitData);
+			m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight, raytracintInitData);
 		}
 		g_gameTime = &m_gameTime;
 		//ゲームパッドの初期化。

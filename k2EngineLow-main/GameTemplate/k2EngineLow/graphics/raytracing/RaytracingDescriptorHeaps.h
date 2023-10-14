@@ -2,6 +2,7 @@
 
 namespace nsK2EngineLow {
 	namespace raytracing {
+		
 		/// <summary>
 		/// レイトレーシングで使用するディスクリプタヒープ
 		/// </summary>
@@ -10,13 +11,18 @@ namespace nsK2EngineLow {
 			/// <summary>
 			/// 各種リソースをディスクリプタヒープに登録していく。
 			/// </summary>
-			/// <param name="world"></param>
-			/// <param name="outputBuffer"></param>
-			/// <param name="rayGeneCB"></param>
+			/// <param name="world">レイトレワールド</param>
+			/// <param name="outputBuffer">レイトレの出力先のバッファ</param>
+			/// <param name="rayGeneCB">レイジェネレーションシェーダーの定数バッファ。</param>
+			/// <param name="skycubeBox">スカイキューブボックス。</param>
+			/// <param name="expandSRV">拡張SRV。</param>
 			void Init(
+				int bufferNo,
 				World& world,
 				GPUBuffer& outputBuffer,
-				ConstantBuffer& rayGeneCB
+				ConstantBuffer& rayGeneCB,
+				Texture& skycubeBox,
+				StructuredBuffer& expandSRV
 			);
 			/// <summary>
 			/// シェーダーリソース、アンオーダーアクセスシェーダーリソース、定数バッファの

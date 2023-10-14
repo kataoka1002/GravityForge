@@ -10,7 +10,7 @@ namespace nsK2EngineLow
 
 	RenderingEngine::~RenderingEngine()
 	{
-
+		
 	}
 
 	bool RenderingEngine::Start()
@@ -178,13 +178,28 @@ namespace nsK2EngineLow
 		{
 			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetBokeShadowMap(areaNo);
 		}
-		//spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
+		spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
 		spriteInitData.m_expandConstantBuffer = &GetLightCB();
 		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
 		
 		// ディファードレンダリング用のスプライトを初期化
 		m_diferredLightingSprite.Init(spriteInitData);
+	}
+
+	void RenderingEngine::ReInitIBL(const wchar_t* iblTexFilePath, float luminance)
+	{
+		// IBLデータを初期化。
+		InitIBLData(iblTexFilePath, luminance);
+
+		InitDefferedLightingSprite();
+	}
+
+	void RenderingEngine::InitIBLData(const wchar_t* iblTexFilePath, float intencity)
+	{
+		m_iblData.m_texture.InitFromDDSFile(iblTexFilePath);
+		m_iblData.m_intencity = intencity;
+		g_graphicsEngine->SetRaytracingSkyCubeBox(m_iblData.m_texture);
 	}
 
 	void RenderingEngine::Execute(RenderContext& rc)
@@ -198,17 +213,24 @@ namespace nsK2EngineLow
 
 		
 		// レイトレ用のライトデータをコピー。
-		//m_raytracingLightData.m_directionalLight = m_sceneLight.GetLight().directionLight[0];
-		//m_raytracingLightData.m_iblIntencity = 1.0f;
-		//m_raytracingLightData.m_ambientLight = { 0.2f,0.2f,0.2f };
-		//m_raytracingLightData.m_enableIBLTexture = 0;
-
-		// レイトレで移りこみ画像を生成
-		//g_graphicsEngine->BuildRaytracingWorld(rc);
-		//g_graphicsEngine->DispatchRaytracing(rc);
+		//m_raytracingLightData.m_directionalLight = m_sceneLight.GetSceneLight().directionalLight[0];
+		//m_raytracingLightData.m_iblIntencity = m_iblData.m_intencity;
+		//m_raytracingLightData.m_ambientLight = Vector3{ 1.1f,1.1f,1.1f };
+		//m_raytracingLightData.m_enableIBLTexture = m_iblData.m_texture.IsValid() ? 1 : 0;
 
 		//EyePosはカメラの位置
 		SetEyePosition(g_camera3D->GetPosition());
+
+		// レイトレで映り込み画像を作成する。
+		//if (IsEnableRaytracing()) 
+		//{
+		//	g_graphicsEngine->DispatchRaytracing(rc);
+
+		//	for (auto& blur : m_giTextureBlur) 
+		//	{
+		//		blur.ExecuteOnGPU(rc, 5);
+		//	}
+		//}
 
 		//ディファードライティング
 		DeferredLighting(rc);

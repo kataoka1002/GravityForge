@@ -57,6 +57,7 @@ namespace nsK2EngineLow {
 			}
 			
 			return m_frameDeltaTime;
+			// return 1.0f / 60.0f;
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace nsK2EngineLow {
 		const char* filePath,
 		AnimationClip* animationClips,
 		int animationClipsNum,
-		EnModelUpAxis enModelUpAxis,	
+		EnModelUpAxis enModelUpAxis,
 		bool isShadowReciever)
 	{
 		// スケルトンを初期化。
@@ -25,18 +25,21 @@ namespace nsK2EngineLow {
 
 		// アニメーションを初期化。
 		InitAnimation(animationClips, animationClipsNum, enModelUpAxis);
-		
+
 		// GBuffer描画用のモデルを初期化
 		InitModelOnRenderGBuffer(filePath, enModelUpAxis, isShadowReciever);
-		 
+
 		// シャドウマップ描画用のモデルを初期化
 		InitShadowDrawModel(filePath, enModelUpAxis);
-		 
+
 		// ZPrepass描画用のモデルを初期化
 
 		// レイトレワールドに追加
-		//g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
-		//m_addRaytracingWorldModel = &m_renderToGBufferModel;
+		if (m_isRaytracingWorld)
+		{
+			g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
+			m_addRaytracingWorldModel = &m_renderToGBufferModel;
+		}
 	}
 
 	void ModelRender::InitSkeleton(const char* filePath)

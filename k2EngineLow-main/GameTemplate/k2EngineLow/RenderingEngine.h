@@ -88,6 +88,14 @@ namespace nsK2EngineLow
 			m_shadowMapRender.Add3DModel(model0, model1, model2);
 		}
 
+		/// <summary>
+		/// レイトレワールドにモデルを追加。
+		/// </summary>
+		/// <param name="model">追加するモデル</param>
+		void AddModelToRaytracingWorld(Model& model)
+		{
+			g_graphicsEngine->RegistModelToRaytracingWorld(model);
+		}
 
 		/// <summary>
 		/// シーンライトの構造体を返す
@@ -175,15 +183,57 @@ namespace nsK2EngineLow
 			m_sceneLight.SetEyePos(pos);
 		}
 
-		/// <summary>
-		/// レイトレワールドにモデルを追加。
-		/// </summary>
-		/// <param name="model">追加するモデル</param>
-		void AddModelToRaytracingWorld(Model& model)
-		{
-			g_graphicsEngine->RegistModelToRaytracingWorld(model);
-		}
 
+		/// <summary>
+		/// IBLを再初期化。
+		/// </summary>
+		void ReInitIBL(const wchar_t* iblTexFilePath, float luminance);
+
+		/// <summary>
+		/// 環境光の計算のためのIBLテクスチャを設定。
+		/// </summary>
+		/// <remark>
+		/// この関数を利用して、IBLテクスチャをセットすると、
+		/// 環境光をIBLテクスチャからサンプリングして、それを利用した
+		/// ライティングが行われます。
+		/// IBLテクスチャを利用した環境光の計算をオフにしたい場合は、DisableIBLForAmbinet()を呼び出して、
+		/// IBLを無効にしてください。
+		/// </remark>
+		/// <param name="textureFilePath">
+		/// IBLテクスチャのファイルパス。
+		/// キューブマップである必要があります。
+		/// </param>
+		/// <param name="luminance">
+		/// IBLテクスチャの明るさ。
+		/// <param>
+		void SetAmbientByIBLTexture(const wchar_t* textureFilePath, float luminance)
+		{
+			ReInitIBL(textureFilePath, luminance);
+		}
+		/// <summary>
+		/// レイトレーシングが有効かどうかを判定する。
+		/// </summary>
+		/// <returns></returns>
+		bool IsEnableRaytracing() const
+		{
+			return m_isEnableRaytracing && g_graphicsEngine->IsPossibleRaytracing();
+		}
+		/// <summary>
+		/// レイトレーシングを有効にします。
+		/// この設定はハードウェアレイトレーシングが無効な場合は無視されます。
+		/// </summary>
+		void EnableRaytracing()
+		{
+			m_isEnableRaytracing = true && IsEnableRaytracing();
+		}
+		/// <summary>
+		/// レイトレーシングを無効にします。
+		/// この設定はハードウェアレイトレーシングが無効な場合は無視されます。
+		/// </summary>
+		void DisableRaytracing()
+		{
+			m_isEnableRaytracing = false && IsEnableRaytracing();
+		}
 		/// <summary>
 		/// レイトレ用のライトデータを取得。
 		/// </summary>
@@ -193,7 +243,13 @@ namespace nsK2EngineLow
 			return m_raytracingLightData;
 		}
 
-
+	private:
+			/// <summary>
+			/// イメージベースドライティング(IBL)のためのデータを初期化する。
+			/// </summary>
+			/// <param name="iblTexFilePath">IBLテクスチャのファイルパス。</param>
+			/// <param name="intencity">IBLの強度。</param>
+			void InitIBLData(const wchar_t* iblTexFilePath, float intencity);
 
 	private:
 		// GBufferの定義
@@ -207,19 +263,44 @@ namespace nsK2EngineLow
 			enGBufferNum,					// G-Bufferの数
 		};
 
-		RaytracingLightData m_raytracingLightData;      // レイトレ用のライトデータ
-		SceneLight m_sceneLight;                        // シーンライト
-		RenderTarget m_mainRenderTarget;				// メインレンダリングターゲット
-		RenderTarget m_gBuffer[enGBufferNum];			// GBuffer
-		RenderTarget m_2DRenderTarget;					// 2D描画用のターゲット
-		RenderTarget m_shadowMap;						// シャドウマップ
-		Sprite m_copyToframeBufferSprite;				// メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
-		Sprite m_diferredLightingSprite;				// ディファードライティング用のスプライト
-		Sprite m_2DSprite;								// 2D描画用のスプライト
-		Sprite m_mainSprite;							// メインスプライト
-		PostEffect m_postEffect;						// ポストエフェクト
-		Camera m_lightCamera;							// ライトカメラ
-		shadow::ShadowMapRender m_shadowMapRender;		// シャドウマップレンダー
+		/// <summary>
+		/// GIテクスチャを作るためのブラー処理。
+		/// </summary>
+		enum EGITextureBlur 
+		{
+			eGITextureBlur_1024x1024,   // 1024×1024
+			eGITextureBlur_512x512,     // 512×512
+			eGITextureBlur_256x256,     // 256×256
+			eGITextureBlur_128x128,     // 128×128
+			eGITextureBlur_Num,
+		};
+
+		/// <summary>
+		/// IBLデータ
+		/// </summary>
+		struct SIBLData 
+		{
+			Texture m_texture;          // IBLテクスチャ
+			float m_intencity = 1.0f;   // 強度。
+		};
+
+
+		RaytracingLightData m_raytracingLightData;			// レイトレ用のライトデータ
+		SceneLight m_sceneLight;							// シーンライト
+		RenderTarget m_mainRenderTarget;					// メインレンダリングターゲット
+		RenderTarget m_gBuffer[enGBufferNum];				// GBuffer
+		RenderTarget m_2DRenderTarget;						// 2D描画用のターゲット
+		RenderTarget m_shadowMap;							// シャドウマップ
+		Sprite m_copyToframeBufferSprite;					// メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
+		Sprite m_diferredLightingSprite;					// ディファードライティング用のスプライト
+		Sprite m_2DSprite;									// 2D描画用のスプライト
+		Sprite m_mainSprite;								// メインスプライト
+		PostEffect m_postEffect;							// ポストエフェクト
+		Camera m_lightCamera;								// ライトカメラ
+		shadow::ShadowMapRender m_shadowMapRender;			// シャドウマップレンダー
+		bool m_isEnableRaytracing = true;					// レイトレーシングが有効？
+		GaussianBlur m_giTextureBlur[eGITextureBlur_Num];   // GIテクスチャにブラーをかける処理
+		SIBLData m_iblData;                                 // IBLデータ。
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー

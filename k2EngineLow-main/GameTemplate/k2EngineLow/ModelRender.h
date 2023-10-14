@@ -216,6 +216,16 @@ namespace nsK2EngineLow
 
 		void InitShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis);
 
+		/// <summary>
+		/// レイトレワールドに登録するかのフラグを設定する
+		/// 頻繁に生成するモデル（弾など）をInitする前に引数falseで実行してください。
+		/// </summary>
+		void SetRaytracingWorld(bool flag) 
+		{
+			m_isRaytracingWorld = flag;
+		}
+
+
 	private:
 		Model m_zprepassModel;								// ZPrepassで描画されるモデル
 		Model m_forwardRenderModel;							// フォワードレンダリングの描画パスで描画されるモデル
@@ -231,7 +241,7 @@ namespace nsK2EngineLow
 		int m_numAnimationClips = 0;						// アニメーションクリップナンバー
 		int m_nowAnimationNumber = -1;						// 今のアニメーションクリップナンバー
 		float m_animationSpeed = 1.0f;						// アニメーションの速さ
-
+		bool m_isRaytracingWorld = true;					//レイトレワールドに登録する？
 	};
 }
 

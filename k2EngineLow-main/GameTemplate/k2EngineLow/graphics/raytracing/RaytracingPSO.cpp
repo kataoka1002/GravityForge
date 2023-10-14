@@ -204,13 +204,14 @@ namespace nsK2EngineLow {
 			desc.desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE;
 			return desc;
 		}
-
+		void PSO::Release()
+		{
+			ReleaseD3D12Object(m_pipelineState);
+			m_pipelineState = nullptr;
+		}
 		void PSO::Init(const DescriptorHeaps& descriptorHeaps)
 		{
-			// ’Ç‰Á‚µ‚Ä‚Ý‚½
-			//ReleaseD3D12Object(m_pipelineState);
-			//m_pipelineState = nullptr;
-
+			Release();
 			m_srvUavCbvHeap = &descriptorHeaps.GetSrvUavCbvDescriptorHeap();
 			using namespace BuildSubObjectHelper;
 
@@ -294,8 +295,8 @@ namespace nsK2EngineLow {
 			struct RayPayload
 			{
 				Vector4 color;
-				Vector4 reflectionColor;
 				Vector4 hit_depth;
+				Vector4 cameraPos;
 			};
 			shaderConfig.Init(sizeof(float) * 2, sizeof(RayPayload));
 			subobjects[index] = shaderConfig.subobject; // 

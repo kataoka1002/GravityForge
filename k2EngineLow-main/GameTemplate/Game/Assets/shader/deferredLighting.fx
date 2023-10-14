@@ -78,7 +78,7 @@ Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
 Texture2D<float4> shadowMap[NUM_SHADOW_MAP] : register(t5); // シャドウマップ(GBufferではない)
 
-//Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
+Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
 
 sampler Sampler : register(s0);                             // サンプラー
 

@@ -33,7 +33,10 @@ namespace nsK2EngineLow {
 		/// </summary>
 		/// <param name="rc">レンダリングコンテキスト</param>
 		/// <param name="hasSkin">スキンがあるかどうかのフラグ</param>
-		void BeginRender(RenderContext& rc, int hasSkin);
+		void BeginRender(
+			RenderContext& rc, 
+			int hasSkin
+		);
 
 		/// <summary>
 		/// アルベドマップを取得。

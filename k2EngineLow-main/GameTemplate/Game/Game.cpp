@@ -48,6 +48,9 @@ void Game::SetSkyCube()
 	m_skyCube->SetScale(1000.0f);
 	m_skyCube->SetPosition({ 0.0f,100.0f,0.0f });
 	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
+
+	// 環境光の計算のためのIBLテクスチャをセットする。
+	g_renderingEngine->SetAmbientByIBLTexture(m_skyCube->GetTextureFilePath(), 0.1f);
 }
 
 void Game::Render(RenderContext& rc)
