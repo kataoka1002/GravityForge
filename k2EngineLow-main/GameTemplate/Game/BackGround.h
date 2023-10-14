@@ -11,4 +11,5 @@ public:
 
 private:
 	ModelRender m_bgModel;
+	PhysicsStaticObject m_phyStaticObject;	//静的物理オブジェクト
 };

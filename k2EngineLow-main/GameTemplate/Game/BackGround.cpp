@@ -23,6 +23,9 @@ bool BackGround::Start()
 	m_bgModel.SetPosition(BG_POSITION);
 	m_bgModel.Update();
 
+	// 静的物理オブジェクトを作成。
+	m_phyStaticObject.CreateFromModel(m_bgModel.GetModel(), m_bgModel.GetModel().GetWorldMatrix());
+
 	return true;
 }
 

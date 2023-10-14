@@ -13,7 +13,6 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-
 	void SetSkyCube();
 
 private:

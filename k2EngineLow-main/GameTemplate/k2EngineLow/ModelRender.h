@@ -175,6 +175,18 @@ namespace nsK2EngineLow
 			m_renderToGBufferModel.Init(initData);
 		}
 
+		/// <summary>
+		/// ƒ‚ƒfƒ‹‚ğæ“¾B
+		/// </summary>
+		/// <returns>ƒ‚ƒfƒ‹</returns>
+		Model& GetModel()
+		{
+			if (m_renderToGBufferModel.IsInited()) 
+			{
+				return m_renderToGBufferModel;
+			}
+		}
+
 
 
 	private:

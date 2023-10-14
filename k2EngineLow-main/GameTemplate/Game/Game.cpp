@@ -38,7 +38,7 @@ bool Game::Start()
 
 void Game::Update()
 {
-
+	
 }
 
 void Game::SetSkyCube()
