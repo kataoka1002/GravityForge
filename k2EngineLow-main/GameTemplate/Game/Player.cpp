@@ -43,9 +43,16 @@ void Player::Update()
 	//移動の処理
 	Move();
 
+	//回転処理
+	Turn();
+
 	//アニメーションの再生
 	PlayAnimation();
 
+	//ステート管理
+	ManageState();
+
+	//更新
 	m_playerModel.Update();
 }
 
@@ -80,6 +87,23 @@ void Player::Move()
 	m_playerModel.SetPosition(m_position);
 }
 
+void Player::Turn()
+{
+	//このフレームではキャラは移動していないので旋回する必要はない
+	if (fabsf(m_moveSpeed.x) < 0.001f && fabsf(m_moveSpeed.z) < 0.001f) 
+	{
+		return;
+	}
+
+	//atan2はtanθの値を角度(ラジアン単位)に変換してくれる関数
+	//回転角度を求めている
+	float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+	m_rotation.SetRotationY(-angle);
+
+	//回転を設定する
+	m_playerModel.SetRotation(m_rotation);
+}
+
 void Player::PlayAnimation()
 {
 	switch (m_playerState) 
@@ -87,17 +111,43 @@ void Player::PlayAnimation()
 	//プレイヤーステートが0(待機)だったら
 	case enPlayerState_Idle:
 		//待機アニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Idle);
+		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.15f);
 		break;
 
 	//プレイヤーステートが歩き中だったら
 	case enPlayerState_Walk:
 		//歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Walk);
+		m_playerModel.PlayAnimation(enAnimClip_Walk, 0.15f);
 		break;
 
 	default:
 		break;
+	}
+}
+
+void Player::ManageState()
+{
+	//地面に付いていなかったら
+	if (m_charaCon.IsOnGround() == false)
+	{
+		//ステートをジャンプ中にする
+		m_playerState = enPlayerState_Jump;
+
+		return;
+	}
+
+	//地面に付いていたら
+	//xかzの移動速度があったら(スティックの入力があったら)
+	if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+	{
+		//ステートを走りにする。
+		m_playerState = enPlayerState_Walk;
+	}
+	//xとzの移動速度が無かったら(スティックの入力が無かったら)
+	else
+	{
+		//ステートを待機にする。
+		m_playerState = enPlayerState_Idle;
 	}
 }
 
