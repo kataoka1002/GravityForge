@@ -1,4 +1,5 @@
 #pragma once
+class Teapot;
 
 class Player : public IGameObject
 {
@@ -8,14 +9,26 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-	void PlayAnimation();
 	void Move();
 	void Turn();
+	void Action();
+	void PlayAnimation();
 	void ManageState();
+
+	void SetStandbyState()
+	{
+		//スタンバイステートにする
+		m_playerState = enPlayerState_Standby;
+	}
 
 	const Vector3& GetPosition() const
 	{
 		return m_position;
+	}
+
+	const Quaternion& GetRotation() const
+	{
+		return m_rotation;
 	}
 
 public:
@@ -24,6 +37,9 @@ public:
 		enPlayerState_Idle,		//待機中
 		enPlayerState_Walk,		//歩き中
 		enPlayerState_Jump,		//ジャンプ中
+		enPlayerState_Attract,	//引き寄せ中
+		enPlayerState_Standby,	//待機中(オブジェクトを持っている時)
+		enPlayerState_Standwalk,//構えて歩く
 		enPlayerState_Num
 	};
 
@@ -32,7 +48,11 @@ private:
 	{
 		enAnimClip_Idle,
 		enAnimClip_Walk,
-		enAnimClip_Num,
+		enAnimClip_Jump,
+		enAnimClip_Attract,
+		enAnimClip_Standby,
+		enAnimClip_Standwalk,
+		enAnimClip_Num
 	};
 
 	AnimationClip		animationClips[enAnimClip_Num];			//アニメーションクリップ
@@ -43,4 +63,8 @@ private:
 	CharacterController m_charaCon;								//キャラクターコントローラー
 	Quaternion			m_rotation;								//クォータニオン
 	EnPlayerState		m_playerState = enPlayerState_Idle;		//プレイヤーのステート(状態)を表す変数
+	bool				m_isHoldingObject = false;				//オブジェクトを持っているかどうか
+	Vector3             m_rotMove = Vector3::Zero;
+
+	Teapot* m_teapot = nullptr;
 };

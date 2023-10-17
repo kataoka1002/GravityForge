@@ -11,8 +11,8 @@ namespace nsK2EngineLow
 
             //近景用のシャドウマップ
             m_shadowMaps[0].Create(
-                5096,
-                5096,
+                6096,
+                6096,
                 1,
                 1,
                 DXGI_FORMAT_R32G32_FLOAT,

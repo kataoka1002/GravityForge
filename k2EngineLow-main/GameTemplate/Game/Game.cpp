@@ -14,10 +14,13 @@ Game::~Game()
 	DeleteGO(m_bg);
 	DeleteGO(m_camera);
 	DeleteGO(m_light);
+	DeleteGO(m_teapot);
 }
 
 bool Game::Start()
 {
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	
 	//スカイキューブの作成
 	SetSkyCube();
 
@@ -26,6 +29,9 @@ bool Game::Start()
 
 	//背景ステージの作成
 	m_bg = NewGO<BackGround>(0, "background");
+
+	//ティーポットの作成
+	m_teapot = NewGO<Teapot>(0, "teapot");
 
 	//ゲームカメラの作成
 	m_camera = NewGO<GameCamera>(0, "gamecamera");

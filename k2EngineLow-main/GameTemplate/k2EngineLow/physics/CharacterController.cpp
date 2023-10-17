@@ -299,4 +299,15 @@ namespace nsK2EngineLow {
 	{
 		PhysicsWorld::GetInstance()->RemoveRigidBody(m_rigidBody);
 	}
+
+	void CharacterController::UpdatePosition()
+	{
+		//移動確定。
+		btRigidBody* btBody = m_rigidBody.GetBody();
+		//剛体を動かす。
+		btBody->setActivationState(DISABLE_DEACTIVATION);
+		btTransform& trans = btBody->getWorldTransform();
+		//剛体の位置を更新。
+		trans.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+	}
 }

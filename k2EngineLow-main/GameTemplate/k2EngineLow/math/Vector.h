@@ -949,6 +949,12 @@ namespace nsK2EngineLow {
 			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
 			DirectX::XMStoreFloat3(&_v.vec, xmv);
 		}
+		void Multiply(Vector3& _v)
+		{
+			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
+			DirectX::XMStoreFloat3(&_v.vec, xmv);
+		}
+
 	};
 	
 	//整数型のベクトルクラス。

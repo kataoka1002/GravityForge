@@ -13,6 +13,9 @@
     <Filter Include="MyCode\BackGround">
       <UniqueIdentifier>{8034993b-ab3e-4df3-b6d2-74bf46133717}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Object">
+      <UniqueIdentifier>{70c689a7-ee8b-4eb3-84ab-5d98ca9ee052}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -35,7 +38,12 @@
     <ClCompile Include="GameCamera.cpp">
       <Filter>MyCode</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectBase.cpp" />
+    <ClCompile Include="ObjectBase.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Teapot.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -57,6 +65,11 @@
     <ClInclude Include="GameCamera.h">
       <Filter>MyCode</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectBase.h" />
+    <ClInclude Include="ObjectBase.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Teapot.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

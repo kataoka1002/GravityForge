@@ -140,6 +140,14 @@ namespace nsK2EngineLow
 		}
 
 		/// <summary>
+		/// アニメーションの再生中？
+		/// </summary>
+		bool IsPlayingAnimation() const
+		{
+			return m_animation.IsPlaying();
+		}
+
+		/// <summary>
 		/// アニメーションナンバーの取得
 		/// </summary>
 		/// <returns></returns>

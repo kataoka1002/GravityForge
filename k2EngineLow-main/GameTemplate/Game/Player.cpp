@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Teapot.h"
 
 namespace
 {
@@ -13,6 +14,12 @@ Player::Player()
 	animationClips[enAnimClip_Idle].SetLoopFlag(true);
 	animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_walk.tka");
 	animationClips[enAnimClip_Walk].SetLoopFlag(true);
+	animationClips[enAnimClip_Attract].Load("Assets/animData/player/player_attract.tka");
+	animationClips[enAnimClip_Attract].SetLoopFlag(false);
+	animationClips[enPlayerState_Standby].Load("Assets/animData/player/player_standby.tka");
+	animationClips[enPlayerState_Standby].SetLoopFlag(true); 
+	animationClips[enAnimClip_Standwalk].Load("Assets/animData/player/player_standwalk.tka");
+	animationClips[enAnimClip_Standwalk].SetLoopFlag(true);
 }
 
 Player::~Player()
@@ -31,7 +38,7 @@ bool Player::Start()
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
 		20.0f,			//半径
-		100.0f,			//高さ
+		120.0f,			//高さ
 		m_position		//座標
 	);
 
@@ -46,11 +53,14 @@ void Player::Update()
 	//回転処理
 	Turn();
 
-	//アニメーションの再生
-	PlayAnimation();
+	//アクションの処理
+	Action();
 
 	//ステート管理
 	ManageState();
+
+	//アニメーションの再生
+	PlayAnimation();
 
 	//更新
 	m_playerModel.Update();
@@ -95,33 +105,28 @@ void Player::Turn()
 		return;
 	}
 
+	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 8.0f, m_rotMove, m_moveSpeed);
+	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+
+
 	//atan2はtanθの値を角度(ラジアン単位)に変換してくれる関数
 	//回転角度を求めている
-	float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-	m_rotation.SetRotationY(-angle);
+	///float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
+	//m_rotation.SetRotationY(-angle);
 
 	//回転を設定する
 	m_playerModel.SetRotation(m_rotation);
 }
 
-void Player::PlayAnimation()
+void Player::Action()
 {
-	switch (m_playerState) 
+	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-	//プレイヤーステートが0(待機)だったら
-	case enPlayerState_Idle:
-		//待機アニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.15f);
-		break;
+		m_teapot = FindGO<Teapot>("teapot");
 
-	//プレイヤーステートが歩き中だったら
-	case enPlayerState_Walk:
-		//歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Walk, 0.15f);
-		break;
+		m_teapot->InitAttract(m_position);
 
-	default:
-		break;
+		m_playerState = enPlayerState_Attract;
 	}
 }
 
@@ -136,18 +141,88 @@ void Player::ManageState()
 		return;
 	}
 
-	//地面に付いていたら
-	//xかzの移動速度があったら(スティックの入力があったら)
-	if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+	//引き寄せ,スタンバイ,ステートなら
+	if (m_playerState == enPlayerState_Attract)
 	{
-		//ステートを走りにする。
-		m_playerState = enPlayerState_Walk;
+		//アニメーションの再生が終わったら。
+		if (m_playerModel.IsPlayingAnimation() == false)
+		{
+			//スタンバイにする
+			m_playerState = enPlayerState_Standby;
+			m_isHoldingObject = true;
+		}
+
+		return;
 	}
-	//xとzの移動速度が無かったら(スティックの入力が無かったら)
+
+	//オブジェクトを持っていないとき
+	if (m_isHoldingObject == false)
+	{
+		//地面に着いてxかzの移動速度があったら(スティックの入力があったら)
+		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+		{
+			//ステートを走りにする。
+			m_playerState = enPlayerState_Walk;
+		}
+		//xとzの移動速度が無かったら(スティックの入力が無かったら)
+		else
+		{
+			//ステートを待機にする。
+			m_playerState = enPlayerState_Idle;
+		}
+	}
+	//持っているとき
 	else
 	{
-		//ステートを待機にする。
-		m_playerState = enPlayerState_Idle;
+		//xかzの移動速度があったら(スティックの入力があったら)
+		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+		{
+			//ステートを構え歩きにする。
+			m_playerState = enPlayerState_Standwalk;
+		}
+		else
+		{
+			//スタンバイにする
+			m_playerState = enPlayerState_Standby;
+		}
+	}
+}
+
+void Player::PlayAnimation()
+{
+	switch (m_playerState) 
+	{
+	//プレイヤーステートが待機だったら
+	case enPlayerState_Idle:
+		//待機アニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.2f);
+		break;
+
+	//プレイヤーステートが歩き中だったら
+	case enPlayerState_Walk:
+		//歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_Walk, 0.2f);
+		break;
+		
+	//プレイヤーステートが引き寄せだったら
+	case enAnimClip_Attract:
+		//引き寄せアニメーションを再生
+		m_playerModel.PlayAnimation(enPlayerState_Attract, 0.5f);
+		break;
+		
+	//プレイヤーステートがスタンバイだったら
+	case enPlayerState_Standby:
+		//引き寄せアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_Standby, 0.5f);
+		break; 
+			
+	//プレイヤーステートが構え歩きだったら
+	case enPlayerState_Standwalk:
+		//構え歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_Standwalk, 0.2f);
+
+	default:
+		break;
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "BackGround.h"
 #include "GameCamera.h"
 #include "Lighting.h"
+#include "Teapot.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -21,5 +22,6 @@ private:
 	BackGround* m_bg = nullptr;
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
+	Teapot* m_teapot = nullptr;
 };
 
