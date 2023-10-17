@@ -5,14 +5,25 @@
 
 namespace
 {
+	//π
 	const float PI = 3.141592;
+
+	//引き寄せられる速さ
 	const float OBJECT_SPPED = 20.0f;
 	const float OBJECT_VELOCITY = 10.0f;
-	const float CURVATURE_RADIUS = 30.0f;
+
+	//カーブの角度
+	const float CURVATURE_RADIUS = 10.0f;
 	const float DAMPING = 0.1f;
 
-	const float UP_DOWN_SPEED = 15.0f;
+	//上下にフワフワする速さ
+	const float UP_DOWN_SPEED = 30.0f;
+
+	//オブジェクトのローカルポジション
 	const Vector3 OBJECT_LOCAL_POSITION = { 50.0f,200.0f,0.0f };
+
+	//吹っ飛ぶ速さ
+	const float BLOW_AWAY_SPEED = 2000.0f;
 }
 
 bool ObjectBase::Start()
@@ -26,23 +37,41 @@ bool ObjectBase::Start()
 	return true;
 }
 
-void ObjectBase::ManageState()
+void ObjectBase::Move()
 {
-	//初期の静止した状態の時
-	if (m_objectState == enObjectState_Quiescence)
+	switch (m_objectState)
 	{
-		return;
-	}
-	//引き寄せ中
-	if (m_objectState == enObjectState_Attract)
-	{
-		AttractedToPlayer();
-	}
+	//静止中
+	case enObjectState_Quiescence:
+		break;
+
 	//待機中
-	if (m_objectState == enObjectState_Idle)
-	{
+	case enObjectState_Idle:
+		//フワフワ
 		IdleMove();
+		break;
+
+	//引き寄せ中
+	case enObjectState_Attract:
+		//ターゲットの設定
+		CalcTargetPosition();
+
+		//引き寄せる
+		AttractedToPlayer();
+		break;
+
+	//吹っ飛び中
+	case enObjectState_Blow:
+		BlowAway();
+		break;
+
+	default:
+		break;
 	}
+
+	//更新
+	m_charaCon.SetPosition(m_position);
+	m_model.SetPosition(m_position);
 }
 
 void ObjectBase::IdleMove()
@@ -95,26 +124,52 @@ void ObjectBase::UpDown()
 
 void ObjectBase::AttractedToPlayer()
 {
-	//移動量を計算する
-	CalcVelocity(OBJECT_SPPED, CURVATURE_RADIUS, DAMPING);
-	m_position += m_velocity;
-
-	//ターゲットまでの距離を計算
+	//ターゲットまでの方向、距離を計算
 	Vector3 toTarget = m_targetPosition - m_position;
+	Vector3 toTargetDir = toTarget;
+	toTargetDir.Normalize();
+
+	//ターゲットに少し近づいたら
+	if (toTarget.Length() <= 200.0f)
+	{
+		//移動量を計算する
+		Vector3 speed = toTargetDir * 10.0f;
+		m_position += speed;
+
+		//回転
+		Turn(speed);
+	}
+	else
+	{
+		//移動量を計算する
+		CalcVelocity(OBJECT_SPPED, CURVATURE_RADIUS, DAMPING);
+		m_position += m_velocity;
+
+		//回転
+		Turn(m_velocity);
+	}
 
 	//ターゲットに近づいたら
-	if (toTarget.Length() <= 10.0f)
+	if (toTarget.Length() <= 5.0f)
 	{
 		//待機中のステートに変更
 		m_objectState = enObjectState_Idle;
 	}
 }
 
-void ObjectBase::InitAttract(Vector3 targetPos)
+void ObjectBase::InitAttract()
 {
+	//ターゲットの設定
+	CalcTargetPosition();
+
+	//ターゲットまでの距離,方向を計算
+	Vector3 toTarget = m_targetPosition - m_position;
+	Vector3 toTargetDir = toTarget;
+	toTargetDir.Normalize();
+
 	//飛び出す方向をランダムで決める
 	Quaternion rotation;
-	rotation.SetRotationDeg(Vector3{ 0.0f,0.0f,1.0f }, rand() % 180);
+	rotation.SetRotationDeg(Vector3{0.0f,0.0f,1.0f}, rand() % 180);
 
 	//右方向の設定
 	Vector3 m_right = Vector3::AxisX;
@@ -124,12 +179,6 @@ void ObjectBase::InitAttract(Vector3 targetPos)
 
 	//初速
 	SetVelocity(m_right * OBJECT_VELOCITY);
-
-	//ターゲットを頭の上にする
-	targetPos.y += 200.0f;
-
-	//ターゲットの設定
-	SetTargetPos(targetPos);
 
 	//引き寄せステートに変更
 	m_objectState = enObjectState_Attract;
@@ -180,4 +229,44 @@ void ObjectBase::CalcVelocity(const float speed, const float curvatureRadius, co
 
 	//速度積分
 	m_velocity += force * g_gameTime->GetFrameDeltaTime();
+}
+
+void ObjectBase::CalcTargetPosition()
+{
+	//プレイヤーの回転を渡す
+	Quaternion rot = m_player->GetRotation();
+
+	//プレイヤーの回転に合わせたローカルポジションを計算
+	Vector3 localPos = OBJECT_LOCAL_POSITION;
+	rot.Multiply(localPos);
+
+	//プレイヤーのポジションを渡す	
+	m_targetPosition = m_player->GetPosition();
+
+	//プレイヤーのポジションに計算したローカルポジションを足す
+	m_targetPosition += localPos;
+}
+
+void ObjectBase::Turn(Vector3 speed)
+{
+	//滑らかに回転させる
+	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_rotMove, speed);
+	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+
+	m_model.SetRotation(m_rotation);
+}
+
+void ObjectBase::InitBlowAway()
+{
+	//飛んでいく方向の決定(カメラが向いている方向に飛んでいく)
+	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
+
+	//吹っ飛びステートに変更
+	m_objectState = enObjectState_Blow;
+}
+
+void ObjectBase::BlowAway()
+{	
+	//吹っ飛び中のキャラコンの更新
+	m_position = m_charaCon.Execute(m_flightSpeed, g_gameTime->GetFrameDeltaTime());
 }

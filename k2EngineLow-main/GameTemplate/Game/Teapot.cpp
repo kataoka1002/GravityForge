@@ -13,11 +13,9 @@ Teapot::~Teapot()
 
 void Teapot::Update()
 {
-	ManageState();
+	//ìÆÇ´
+	Move();
 
-	m_charaCon.SetPosition(m_position);
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
 	m_model.Update();
 }
 
@@ -36,7 +34,6 @@ void Teapot::InitModel()
 		10.0f,			//çÇÇ≥
 		m_position		//ç¿ïW
 	);
-
 }
 
 void Teapot::Render(RenderContext& rc)

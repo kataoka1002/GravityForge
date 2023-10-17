@@ -4,6 +4,19 @@ class Teapot;
 class Player : public IGameObject
 {
 public:
+	enum EnPlayerState
+	{
+		enPlayerState_Idle,		//待機中
+		enPlayerState_Walk,		//歩き中
+		enPlayerState_Jump,		//ジャンプ中
+		enPlayerState_Attract,	//引き寄せ中
+		enPlayerState_Standby,	//待機中(オブジェクトを持っている時)
+		enPlayerState_Standwalk,//構えて歩く
+		enPlayerState_Attack,	//攻撃
+		enPlayerState_Num
+	};
+
+public:
 	Player();
 	~Player();
 	bool Start();
@@ -31,17 +44,10 @@ public:
 		return m_rotation;
 	}
 
-public:
-	enum EnPlayerState
+	const EnPlayerState& GetPlayerState()const
 	{
-		enPlayerState_Idle,		//待機中
-		enPlayerState_Walk,		//歩き中
-		enPlayerState_Jump,		//ジャンプ中
-		enPlayerState_Attract,	//引き寄せ中
-		enPlayerState_Standby,	//待機中(オブジェクトを持っている時)
-		enPlayerState_Standwalk,//構えて歩く
-		enPlayerState_Num
-	};
+		return m_playerState;
+	}
 
 private:
 	enum EnAnimationClip 
@@ -52,6 +58,7 @@ private:
 		enAnimClip_Attract,
 		enAnimClip_Standby,
 		enAnimClip_Standwalk,
+		enAnimClip_Attack,	
 		enAnimClip_Num
 	};
 

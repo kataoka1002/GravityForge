@@ -4,7 +4,7 @@
 
 namespace
 {
-	
+	const float MOVE_SPEED = 250.0f;
 }
 
 Player::Player()
@@ -20,6 +20,8 @@ Player::Player()
 	animationClips[enPlayerState_Standby].SetLoopFlag(true); 
 	animationClips[enAnimClip_Standwalk].Load("Assets/animData/player/player_standwalk.tka");
 	animationClips[enAnimClip_Standwalk].SetLoopFlag(true);
+	animationClips[enAnimClip_Attack].Load("Assets/animData/player/player_attack.tka");
+	animationClips[enAnimClip_Attack].SetLoopFlag(false);
 }
 
 Player::~Player()
@@ -68,6 +70,12 @@ void Player::Update()
 
 void Player::Move()
 {
+	//引き寄せ中,攻撃中は動けない
+	if (m_playerState == enAnimClip_Attract || m_playerState == enAnimClip_Attack)
+	{
+		return;
+	}
+
 	//移動速度の初期化
 	m_moveSpeed.x = 0.0f;
 	m_moveSpeed.z = 0.0f;
@@ -87,8 +95,8 @@ void Player::Move()
 	cameraRight.Normalize();
 
 	//XZ成分の移動速度をクリア
-	m_moveSpeed += cameraForward * LStick_y * 500.0f;	//奥方向への移動速度を加算
-	m_moveSpeed += cameraRight * LStick_x * 500.0f;		//右方向への移動速度を加算
+	m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
+	m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
 
 	//キャラクターコントローラーを使用して座標を更新
 	m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
@@ -105,14 +113,9 @@ void Player::Turn()
 		return;
 	}
 
+	//滑らかに回るようにする
 	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 8.0f, m_rotMove, m_moveSpeed);
 	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
-
-
-	//atan2はtanθの値を角度(ラジアン単位)に変換してくれる関数
-	//回転角度を求めている
-	///float angle = atan2(-m_moveSpeed.x, m_moveSpeed.z);
-	//m_rotation.SetRotationY(-angle);
 
 	//回転を設定する
 	m_playerModel.SetRotation(m_rotation);
@@ -124,9 +127,18 @@ void Player::Action()
 	{
 		m_teapot = FindGO<Teapot>("teapot");
 
-		m_teapot->InitAttract(m_position);
+		m_teapot->InitAttract();
 
 		m_playerState = enPlayerState_Attract;
+	}
+
+	if (g_pad[0]->IsTrigger(enButtonB))
+	{
+		m_playerState = enPlayerState_Attack;
+
+		m_teapot = FindGO<Teapot>("teapot");
+
+		m_teapot->InitBlowAway();
 	}
 }
 
@@ -141,7 +153,7 @@ void Player::ManageState()
 		return;
 	}
 
-	//引き寄せ,スタンバイ,ステートなら
+	//引き寄せステートなら
 	if (m_playerState == enPlayerState_Attract)
 	{
 		//アニメーションの再生が終わったら。
@@ -155,36 +167,31 @@ void Player::ManageState()
 		return;
 	}
 
-	//オブジェクトを持っていないとき
-	if (m_isHoldingObject == false)
+	//攻撃ステートなら
+	if (m_playerState == enPlayerState_Attack)
 	{
-		//地面に着いてxかzの移動速度があったら(スティックの入力があったら)
-		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+		//アニメーションの再生が終わったら。
+		if (m_playerModel.IsPlayingAnimation() == false)
 		{
-			//ステートを走りにする。
-			m_playerState = enPlayerState_Walk;
-		}
-		//xとzの移動速度が無かったら(スティックの入力が無かったら)
-		else
-		{
-			//ステートを待機にする。
+			//アイドルにする
 			m_playerState = enPlayerState_Idle;
+			m_isHoldingObject = false;
 		}
+
+		return;
 	}
-	//持っているとき
-	else
+
+	//オブジェクトを持っているとき
+	if (m_isHoldingObject) 
 	{
-		//xかzの移動速度があったら(スティックの入力があったら)
-		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
-		{
-			//ステートを構え歩きにする。
-			m_playerState = enPlayerState_Standwalk;
-		}
-		else
-		{
-			//スタンバイにする
-			m_playerState = enPlayerState_Standby;
-		}
+		//スティックの入力量によってステートを変更
+		m_playerState = (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f) ? enPlayerState_Standwalk : enPlayerState_Standby;
+	}
+	//持っていないとき
+	else 
+	{
+		//スティックの入力量によってステートを変更
+		m_playerState = (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f) ? enPlayerState_Walk : enPlayerState_Idle;
 	}
 }
 
@@ -195,7 +202,7 @@ void Player::PlayAnimation()
 	//プレイヤーステートが待機だったら
 	case enPlayerState_Idle:
 		//待機アニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.2f);
+		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.5f);
 		break;
 
 	//プレイヤーステートが歩き中だったら
@@ -220,6 +227,13 @@ void Player::PlayAnimation()
 	case enPlayerState_Standwalk:
 		//構え歩きアニメーションを再生
 		m_playerModel.PlayAnimation(enAnimClip_Standwalk, 0.2f);
+		break;
+
+	//プレイヤーステートが構え歩きだったら
+	case enPlayerState_Attack:
+		//構え歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_Attack, 0.2f);
+		break;
 
 	default:
 		break;
