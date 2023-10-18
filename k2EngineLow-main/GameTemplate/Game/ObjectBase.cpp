@@ -17,10 +17,10 @@ namespace
 	const float DAMPING = 0.1f;
 
 	//上下にフワフワする速さ
-	const float UP_DOWN_SPEED = 30.0f;
+	const float UP_DOWN_SPEED = 1.5f;
 
 	//オブジェクトのローカルポジション
-	const Vector3 OBJECT_LOCAL_POSITION = { 50.0f,200.0f,0.0f };
+	const Vector3 OBJECT_LOCAL_POSITION = { 100.0f,150.0f,0.0f };
 
 	//吹っ飛ぶ速さ
 	const float BLOW_AWAY_SPEED = 2000.0f;
@@ -92,11 +92,11 @@ void ObjectBase::FollowPlayer()
 	Vector3 localPos = OBJECT_LOCAL_POSITION;
 	m_rotation.Multiply(localPos);
 
-	//プレイヤーのポジションを渡す	
-	m_position = m_player->GetPosition();
+	//プレイヤーのポジションにローカルポジションを足した場所をターゲットにする
+	Vector3 target = m_player->GetPosition() + localPos;
 
-	//プレイヤーのポジションに計算したローカルポジションを足す
-	m_position += localPos;
+	//滑らかに移動させる
+	m_position = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_position, target);
 }
 
 void ObjectBase::UpDown()

@@ -67,6 +67,8 @@ protected:
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float degree = 0.0f;
 
+	Vector3 m_followSpeed = Vector3::Zero;
+
 	Player* m_player = nullptr;
 };
 
