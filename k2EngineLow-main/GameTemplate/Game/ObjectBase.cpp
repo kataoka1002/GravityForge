@@ -23,7 +23,7 @@ namespace
 	const Vector3 OBJECT_LOCAL_POSITION = { 100.0f,150.0f,0.0f };
 
 	//êÅÇ¡îÚÇ‘ë¨Ç≥
-	const float BLOW_AWAY_SPEED = 2000.0f;
+	const float BLOW_AWAY_SPEED = 3000.0f;
 }
 
 bool ObjectBase::Start()

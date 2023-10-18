@@ -134,12 +134,17 @@ void Player::Action()
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
+		//m_rotation.SetRotationYFromDirectionXZ(g_camera3D->GetForward());
+		//m_playerModel.SetRotation(m_rotation);
+		//m_playerModel.Update();
+
 		m_teapot = FindGO<Teapot>("teapot");
 
 		m_teapot->InitAttract();
 
 		m_playerState = enPlayerState_Attract;
 
+		//カメラを近距離にする
 		m_camera->SetNearCamera(true);
 	}
 
@@ -150,9 +155,6 @@ void Player::Action()
 		m_teapot = FindGO<Teapot>("teapot");
 
 		m_teapot->InitBlowAway();
-
-		m_camera->SetNearCamera(false);
-
 	}
 }
 
@@ -190,6 +192,9 @@ void Player::ManageState()
 			//アイドルにする
 			m_playerState = enPlayerState_Idle;
 			m_isHoldingObject = false;
+
+			//カメラを遠距離に戻す
+			m_camera->SetNearCamera(false);
 		}
 
 		return;
