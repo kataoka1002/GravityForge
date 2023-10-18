@@ -7,6 +7,9 @@ namespace
 	//注視点から視点までのベクトル
 	const Vector3 TO_CAMERA_POSITION = { 0.0f, 200.0f, 400.0f };
 
+	//視点のローカルポジション
+	const Vector3 TARGET_LOCAL_POSITION = { 70.0f,150.0f,0.0f };
+
 	//カメラの最大移動速度
 	const float MAX_CAMERA_SPEED = 1000.0f;
 
@@ -55,12 +58,7 @@ bool GameCamera::Start()
 
 void GameCamera::UpdatePositionAndTarget()
 {
-	//注視点を計算する。
-	Vector3 target = m_player->GetPosition();
-
-	//プレイヤの足元からちょっと上を注視点とする。
-	target.y += 80.0f;
-	target += g_camera3D->GetForward() * 20.0f;
+	Vector3 target = CalcTargetPosition();
 
 	Vector3 toCameraPosOld = m_toCameraPos;
 
@@ -103,6 +101,62 @@ void GameCamera::UpdatePositionAndTarget()
 	m_springCamera.SetTarget(target);
 }
 
+void GameCamera::SetNearCamera(bool isNear)
+{
+	//プレイヤーがスタンバイ中なら
+	if (isNear == true)
+	{
+		Vector3 nearTarget = { 0.0f,100.0f,140.0f };
+
+		//プレイヤーの回転を渡す
+		Matrix rot = m_springCamera.GetCameraRotation();
+
+		//プレイヤーの回転に合わせたローカルポジションを計算
+		Vector3 localPos = nearTarget;
+		rot.Apply3x3(localPos);
+
+		//プレイヤーのポジションに計算したローカルポジションを足す
+		//Vector3 target = localPos;
+
+		m_toCameraPos.Set(localPos);
+
+		m_isNearCamera = true;
+	}
+	else
+	{
+		m_toCameraPos.Set(TO_CAMERA_POSITION);
+		m_isNearCamera = false;
+	}
+}
+
+Vector3 GameCamera::CalcTargetPosition()
+{
+	//注視点を計算する。
+	Vector3 target = m_player->GetPosition();
+
+	//近距離カメラのときなら
+	if (m_isNearCamera)
+	{
+		//プレイヤーの回転を渡す
+		Quaternion rot = m_player->GetRotation();
+
+		//プレイヤーの回転に合わせたローカルポジションを計算
+		Vector3 localPos = TARGET_LOCAL_POSITION;
+		rot.Multiply(localPos);
+
+		//プレイヤーのポジションに計算したローカルポジションを足す
+		target += localPos;
+	}
+	else
+	{
+		//プレイヤの足元からちょっと上を注視点とする。
+		target.y += 80.0f;
+		target += g_camera3D->GetForward() * 20.0f;		
+	}
+
+	return target;
+}
+
 void GameCamera::Update()
 {
 	//カメラの視点と注視点の設定
@@ -111,3 +165,4 @@ void GameCamera::Update()
 	//カメラの更新。
 	m_springCamera.Update();
 }
+

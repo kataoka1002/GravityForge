@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "Teapot.h"
+#include "GameCamera.h"
 
 namespace
 {
@@ -31,6 +32,8 @@ Player::~Player()
 
 bool Player::Start()
 {
+	m_camera = FindGO<GameCamera>("gamecamera");
+
 	//プレイヤーモデルの初期化
 	m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
 	m_playerModel.SetScale(3.0f);
@@ -107,17 +110,23 @@ void Player::Move()
 
 void Player::Turn()
 {
-	//このフレームではキャラは移動していないので旋回する必要はない
-	if (fabsf(m_moveSpeed.x) < 0.001f && fabsf(m_moveSpeed.z) < 0.001f) 
+	//滑らかに回るようにする
+	
+	//オブジェクトを持っている時
+	if (m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk || m_playerState == enPlayerState_Attract)
+	{	
+		//カメラの向きから回転を求める
+		Vector3 rotSpeed = g_camera3D->GetForward();
+		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_rotMove, rotSpeed);
+	}
+	else
 	{
-		return;
+		//移動速度から回転を求める
+		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 8.0f, m_rotMove, m_moveSpeed);
 	}
 
-	//滑らかに回るようにする
-	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 8.0f, m_rotMove, m_moveSpeed);
-	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
-
 	//回転を設定する
+	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
 	m_playerModel.SetRotation(m_rotation);
 }
 
@@ -130,6 +139,8 @@ void Player::Action()
 		m_teapot->InitAttract();
 
 		m_playerState = enPlayerState_Attract;
+
+		m_camera->SetNearCamera(true);
 	}
 
 	if (g_pad[0]->IsTrigger(enButtonB))
@@ -139,6 +150,9 @@ void Player::Action()
 		m_teapot = FindGO<Teapot>("teapot");
 
 		m_teapot->InitBlowAway();
+
+		m_camera->SetNearCamera(false);
+
 	}
 }
 
@@ -244,3 +258,4 @@ void Player::Render(RenderContext& rc)
 {
 	m_playerModel.Draw(rc);
 }
+

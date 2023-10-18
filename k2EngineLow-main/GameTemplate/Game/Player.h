@@ -1,5 +1,6 @@
 #pragma once
 class Teapot;
+class GameCamera;
 
 class Player : public IGameObject
 {
@@ -74,4 +75,5 @@ private:
 	Vector3             m_rotMove = Vector3::Zero;
 
 	Teapot* m_teapot = nullptr;
+	GameCamera* m_camera = nullptr;
 };
