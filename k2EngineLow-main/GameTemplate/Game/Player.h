@@ -32,12 +32,6 @@ public:
 	void PlayAnimation();
 	void ManageState();
 
-	void SetStandbyState()
-	{
-		//スタンバイステートにする
-		m_playerState = enPlayerState_Standby;
-	}
-
 	const Vector3& GetPosition() const
 	{
 		return m_position;
@@ -56,6 +50,11 @@ public:
 	const Vector3& GetPlayerSpeed()const
 	{
 		return m_moveSpeed;
+	}
+
+	const bool& GetIsHoldingObject()const
+	{
+		return m_isHoldingObject;
 	}
 
 private:

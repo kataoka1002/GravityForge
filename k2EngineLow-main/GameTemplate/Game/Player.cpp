@@ -29,7 +29,6 @@ Player::Player()
 	animationClips[enAnimClip_WalkLeft].SetLoopFlag(true);
 	animationClips[enAnimClip_WalkBack].Load("Assets/animData/player/player_walk_back.tka");
 	animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
-
 }
 
 Player::~Player()
@@ -125,9 +124,10 @@ void Player::Turn()
 
 	//滑らかに回るようにする
 	//オブジェクトを持っている時
-	if (m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk
+	if (/*m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk
 		|| m_playerState == enPlayerState_Attract || m_playerState == enPlayerState_WalkLeft 
-		|| m_playerState == enPlayerState_WalkRight || m_playerState == enPlayerState_WalkBack)
+		|| m_playerState == enPlayerState_WalkRight || m_playerState == enPlayerState_WalkBack*/
+		m_isHoldingObject)
 	{	
 		//カメラの向きから回転を求める
 		Vector3 rotSpeed = g_camera3D->GetForward();
@@ -136,7 +136,7 @@ void Player::Turn()
 	else
 	{
 		//移動速度から回転を求める
-		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 8.0f, m_rotMove, m_moveSpeed);
+		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 3.5f, m_rotMove, m_moveSpeed);
 	}
 
 	//回転を設定する
@@ -186,9 +186,10 @@ void Player::ManageState()
 		if (m_playerModel.IsPlayingAnimation() == false)
 		{
 			//スタンバイにする
-			m_playerState = enPlayerState_Standby;
-			m_isHoldingObject = true;
+			m_playerState = enPlayerState_Standby;		
 		}
+
+		m_isHoldingObject = true;
 
 		return;
 	}

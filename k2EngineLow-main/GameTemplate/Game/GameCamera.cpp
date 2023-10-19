@@ -5,16 +5,16 @@
 namespace
 {
 	//注視点から視点までのベクトル
-	const Vector3 TO_CAMERA_POSITION = { 0.0f, 200.0f, -400.0f };
+	const Vector3 TO_CAMERA_POSITION = { 0.0f, 150.0f, -300.0f };
 
 	//注視点から視点までのベクトル(近距離時)
 	const Vector3 TO_CAMERA_POSITION_NEAR = { 0.0f,100.0f,-270.0f };
 
 	//注視点のローカルポジション
-	const Vector3 TARGET_LOCAL_POSITION = { 0.0f,80.0f,0.0f };
+	const Vector3 TARGET_LOCAL_POSITION = { 0.0f,180.0f,0.0f };
 
 	//注視点のローカルポジション(近距離時)
-	const Vector3 TARGET_LOCAL_POSITION_NEAR = { 70.0f,150.0f,0.0f };
+	const Vector3 TARGET_LOCAL_POSITION_NEAR = { 60.0f,150.0f,0.0f };
 
 	//カメラの最大移動速度
 	const float MAX_CAMERA_SPEED = 800.0f;

@@ -44,6 +44,9 @@
     <ClCompile Include="Teapot.cpp">
       <Filter>MyCode\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Reticle.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Teapot.h">
       <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Reticle.h">
+      <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

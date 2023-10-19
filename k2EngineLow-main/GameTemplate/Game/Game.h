@@ -5,6 +5,7 @@
 #include "GameCamera.h"
 #include "Lighting.h"
 #include "Teapot.h"
+#include "Reticle.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -23,5 +24,6 @@ private:
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
 	Teapot* m_teapot = nullptr;
+	Reticle* m_reticle = nullptr;
 };
 

@@ -25,7 +25,7 @@ void Teapot::InitModel()
 
 	m_model.Init("Assets/modelData/object/teapot.tkm");
 	m_model.SetPosition(m_position);
-	m_model.SetScale(0.8f);
+	m_model.SetScale(0.6f);
 	m_model.Update();
 
 	//キャラクターコントローラーを初期化

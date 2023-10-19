@@ -15,6 +15,7 @@ Game::~Game()
 	DeleteGO(m_camera);
 	DeleteGO(m_light);
 	DeleteGO(m_teapot);
+	DeleteGO(m_reticle);
 }
 
 bool Game::Start()
@@ -26,6 +27,9 @@ bool Game::Start()
 
 	//プレイヤーの作成
 	m_player = NewGO<Player>(0, "player");
+
+	//レティクルの作成
+	m_reticle = NewGO<Reticle>(0, "reticle");
 
 	//背景ステージの作成
 	m_bg = NewGO<BackGround>(0, "background");
