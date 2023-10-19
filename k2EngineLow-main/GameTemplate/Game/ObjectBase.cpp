@@ -49,6 +49,10 @@ void ObjectBase::Move()
 	case enObjectState_Idle:
 		//ƒtƒƒtƒ
 		IdleMove();
+
+		//‰ñ“]
+		Turn(g_camera3D->GetForward());
+
 		break;
 
 	//ˆø‚«Šñ‚¹’†
@@ -58,11 +62,17 @@ void ObjectBase::Move()
 
 		//ˆø‚«Šñ‚¹‚é
 		AttractedToPlayer();
+
+		//‰ñ“]
+		Turn(g_camera3D->GetForward());
+
 		break;
 
 	//‚Á”ò‚Ñ’†
 	case enObjectState_Blow:
+		//‚Á”ò‚Ôˆ—
 		BlowAway();
+
 		break;
 
 	default:
@@ -135,18 +145,12 @@ void ObjectBase::AttractedToPlayer()
 		//ˆÚ“®—Ê‚ðŒvŽZ‚·‚é
 		Vector3 speed = toTargetDir * 10.0f;
 		m_position += speed;
-
-		//‰ñ“]
-		Turn(speed);
 	}
 	else
 	{
 		//ˆÚ“®—Ê‚ðŒvŽZ‚·‚é
 		CalcVelocity(OBJECT_SPPED, CURVATURE_RADIUS, DAMPING);
 		m_position += m_velocity;
-
-		//‰ñ“]
-		Turn(m_velocity);
 	}
 
 	//ƒ^[ƒQƒbƒg‚É‹ß‚Ã‚¢‚½‚ç
@@ -250,7 +254,7 @@ void ObjectBase::CalcTargetPosition()
 void ObjectBase::Turn(Vector3 speed)
 {
 	//ŠŠ‚ç‚©‚É‰ñ“]‚³‚¹‚é
-	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_rotMove, speed);
+	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_rotMove, speed);
 	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
 
 	m_model.SetRotation(m_rotation);
