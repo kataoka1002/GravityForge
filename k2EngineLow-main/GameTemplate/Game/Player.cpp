@@ -23,6 +23,13 @@ Player::Player()
 	animationClips[enAnimClip_Standwalk].SetLoopFlag(true);
 	animationClips[enAnimClip_Attack].Load("Assets/animData/player/player_attack.tka");
 	animationClips[enAnimClip_Attack].SetLoopFlag(false);
+	animationClips[enAnimClip_WalkRight].Load("Assets/animData/player/player_walk_right.tka");
+	animationClips[enAnimClip_WalkRight].SetLoopFlag(true);
+	animationClips[enAnimClip_WalkLeft].Load("Assets/animData/player/player_walk_left.tka");
+	animationClips[enAnimClip_WalkLeft].SetLoopFlag(true);
+	animationClips[enAnimClip_WalkBack].Load("Assets/animData/player/player_walk_back.tka");
+	animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
+
 }
 
 Player::~Player()
@@ -74,7 +81,7 @@ void Player::Update()
 void Player::Move()
 {
 	//引き寄せ中,攻撃中は動けない
-	if (m_playerState == enAnimClip_Attract || m_playerState == enAnimClip_Attack)
+	if (m_playerState == enPlayerState_Attract || m_playerState == enPlayerState_Attack)
 	{
 		return;
 	}
@@ -84,8 +91,8 @@ void Player::Move()
 	m_moveSpeed.z = 0.0f;
 
 	//左スティックの入力量を受け取る
-	float LStick_x = g_pad[0]->GetLStickXF();
-	float LStick_y = g_pad[0]->GetLStickYF();
+	LStick_x = g_pad[0]->GetLStickXF();
+	LStick_y = g_pad[0]->GetLStickYF();
 
 	//カメラの前方方向と右方向を取得
 	Vector3 cameraForward = g_camera3D->GetForward();
@@ -110,10 +117,17 @@ void Player::Move()
 
 void Player::Turn()
 {
+	//攻撃中は回れない
+	if (m_playerState == enPlayerState_Attack)
+	{
+		return;
+	}
+
 	//滑らかに回るようにする
-	
 	//オブジェクトを持っている時
-	if (m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk || m_playerState == enPlayerState_Attract)
+	if (m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk
+		|| m_playerState == enPlayerState_Attract || m_playerState == enPlayerState_WalkLeft 
+		|| m_playerState == enPlayerState_WalkRight || m_playerState == enPlayerState_WalkBack)
 	{	
 		//カメラの向きから回転を求める
 		Vector3 rotSpeed = g_camera3D->GetForward();
@@ -134,10 +148,6 @@ void Player::Action()
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		//m_rotation.SetRotationYFromDirectionXZ(g_camera3D->GetForward());
-		//m_playerModel.SetRotation(m_rotation);
-		//m_playerModel.Update();
-
 		m_teapot = FindGO<Teapot>("teapot");
 
 		m_teapot->InitAttract();
@@ -204,6 +214,26 @@ void Player::ManageState()
 	if (m_isHoldingObject) 
 	{
 		//スティックの入力量によってステートを変更
+		if (LStick_x <= -0.5f)
+		{
+			//左歩きステートにする
+			m_playerState = enPlayerState_WalkLeft;
+			return;
+		}
+		else if (LStick_x >= 0.5f)
+		{
+			//右歩きステートにする
+			m_playerState = enPlayerState_WalkRight;
+			return;
+		}
+
+		if (LStick_y <= -0.5f)
+		{
+			//後ろ歩きステートにする
+			m_playerState = enPlayerState_WalkBack;
+			return;
+		}
+		
 		m_playerState = (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f) ? enPlayerState_Standwalk : enPlayerState_Standby;
 	}
 	//持っていないとき
@@ -252,6 +282,24 @@ void Player::PlayAnimation()
 	case enPlayerState_Attack:
 		//構え歩きアニメーションを再生
 		m_playerModel.PlayAnimation(enAnimClip_Attack, 0.2f);
+		break;
+
+	//プレイヤーステートが右歩きだったら
+	case enPlayerState_WalkRight:
+		//右歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_WalkRight, 0.3f);
+		break;
+
+	//プレイヤーステートが左歩きだったら
+	case enPlayerState_WalkLeft:
+		//左歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_WalkLeft, 0.3f);
+		break;
+
+	//プレイヤーステートが後ろ歩きだったら
+	case enPlayerState_WalkBack:
+		//後ろ歩きアニメーションを再生
+		m_playerModel.PlayAnimation(enAnimClip_WalkBack, 0.3f);
 		break;
 
 	default:

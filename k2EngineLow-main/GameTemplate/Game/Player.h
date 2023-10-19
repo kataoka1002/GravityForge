@@ -14,6 +14,9 @@ public:
 		enPlayerState_Standby,	//待機中(オブジェクトを持っている時)
 		enPlayerState_Standwalk,//構えて歩く
 		enPlayerState_Attack,	//攻撃
+		enPlayerState_WalkRight,//右に歩く
+		enPlayerState_WalkLeft,	//左に歩く
+		enPlayerState_WalkBack,	//後ろに歩く
 		enPlayerState_Num
 	};
 
@@ -50,6 +53,11 @@ public:
 		return m_playerState;
 	}
 
+	const Vector3& GetPlayerSpeed()const
+	{
+		return m_moveSpeed;
+	}
+
 private:
 	enum EnAnimationClip 
 	{
@@ -60,6 +68,9 @@ private:
 		enAnimClip_Standby,
 		enAnimClip_Standwalk,
 		enAnimClip_Attack,	
+		enAnimClip_WalkRight,
+		enAnimClip_WalkLeft,
+		enAnimClip_WalkBack,
 		enAnimClip_Num
 	};
 
@@ -73,6 +84,8 @@ private:
 	EnPlayerState		m_playerState = enPlayerState_Idle;		//プレイヤーのステート(状態)を表す変数
 	bool				m_isHoldingObject = false;				//オブジェクトを持っているかどうか
 	Vector3             m_rotMove = Vector3::Zero;
+	float LStick_x = 0.0f;
+	float LStick_y = 0.0f;
 
 	Teapot* m_teapot = nullptr;
 	GameCamera* m_camera = nullptr;
