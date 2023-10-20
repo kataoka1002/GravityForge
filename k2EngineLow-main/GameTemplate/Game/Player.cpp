@@ -124,10 +124,7 @@ void Player::Turn()
 
 	//滑らかに回るようにする
 	//オブジェクトを持っている時
-	if (/*m_playerState == enPlayerState_Standby || m_playerState == enPlayerState_Standwalk
-		|| m_playerState == enPlayerState_Attract || m_playerState == enPlayerState_WalkLeft 
-		|| m_playerState == enPlayerState_WalkRight || m_playerState == enPlayerState_WalkBack*/
-		m_isHoldingObject)
+	if (m_isHoldingObject)
 	{	
 		//カメラの向きから回転を求める
 		Vector3 rotSpeed = g_camera3D->GetForward();
@@ -149,6 +146,10 @@ void Player::Action()
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
 		m_teapot = FindGO<Teapot>("teapot");
+		if (m_teapot->GetCanAttract() != true)
+		{
+			return;
+		}
 
 		m_teapot->InitAttract();
 

@@ -78,14 +78,14 @@ private:
 	Vector3				m_position = Vector3::Zero;				//座標
 	Vector3				m_startPosition = Vector3::Zero;		//初期座標
 	Vector3				m_moveSpeed = Vector3::Zero;			//移動速度
+	Vector3             m_rotMove = Vector3::Zero;				//回転速度
 	CharacterController m_charaCon;								//キャラクターコントローラー
 	Quaternion			m_rotation;								//クォータニオン
 	EnPlayerState		m_playerState = enPlayerState_Idle;		//プレイヤーのステート(状態)を表す変数
 	bool				m_isHoldingObject = false;				//オブジェクトを持っているかどうか
-	Vector3             m_rotMove = Vector3::Zero;
-	float LStick_x = 0.0f;
-	float LStick_y = 0.0f;
+	float				LStick_x = 0.0f;						//Lスティック入力量(横)
+	float				LStick_y = 0.0f;						//Lスティック入力量(縦)
 
-	Teapot* m_teapot = nullptr;
-	GameCamera* m_camera = nullptr;
+	Teapot*				m_teapot = nullptr;
+	GameCamera*			m_camera = nullptr;
 };

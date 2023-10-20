@@ -26,6 +26,9 @@ bool BackGround::Start()
 	// 静的物理オブジェクトを作成。
 	m_phyStaticObject.CreateFromModel(m_bgModel.GetModel(), m_bgModel.GetModel().GetWorldMatrix());
 
+	//遮蔽物という属性を付与する
+	m_phyStaticObject.GetbtCollisionObject()->setUserIndex(enCollisionAttr_Wall);
+
 	return true;
 }
 

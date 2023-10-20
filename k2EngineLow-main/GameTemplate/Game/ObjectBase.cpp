@@ -34,6 +34,8 @@ bool ObjectBase::Start()
 	//モデルの初期化
 	InitModel();
 
+	m_sphereCollider.Create(1.0f);
+
 	return true;
 }
 
@@ -43,6 +45,8 @@ void ObjectBase::Move()
 	{
 	//静止中
 	case enObjectState_Quiescence:
+		//引き寄せれるかどうかを判定
+		CalcAimingDirection();
 		break;
 
 	//待機中
@@ -52,7 +56,6 @@ void ObjectBase::Move()
 
 		//回転
 		Turn(g_camera3D->GetForward());
-
 		break;
 
 	//引き寄せ中
@@ -65,14 +68,12 @@ void ObjectBase::Move()
 
 		//回転
 		Turn(g_camera3D->GetForward());
-
 		break;
 
 	//吹っ飛び中
 	case enObjectState_Blow:
 		//吹っ飛ぶ処理
 		BlowAway();
-
 		break;
 
 	default:
@@ -113,16 +114,16 @@ void ObjectBase::UpDown()
 {
 	//sin波を使って滑らかに上下させる
 	//角度を大きくしていく
-	degree += 1.0f;
+	m_degree += 1.0f;
 
 	//360度で-1～1を一周するので0度に戻す
-	if (degree >= 360.0f)
+	if (m_degree >= 360.0f)
 	{
-		degree = 0.0f;
+		m_degree = 0.0f;
 	}
 
 	//角度をラジアンに変換
-	float rad = degree * PI / 180.0f;
+	float rad = m_degree * PI / 180.0f;
 
 	//sinの値を求める
 	float sinValue = sin(rad);
@@ -264,7 +265,7 @@ void ObjectBase::InitBlowAway()
 {
 	//飛んでいく方向の決定(レティクルの方向)
 	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
-	m_flightSpeed += g_camera3D->GetRight() * -100.0f;
+	m_flightSpeed += g_camera3D->GetRight() * -90.0f;
 
 	//吹っ飛びステートに変更
 	m_objectState = enObjectState_Blow;
@@ -274,4 +275,69 @@ void ObjectBase::BlowAway()
 {	
 	//吹っ飛び中のキャラコンの更新
 	m_position = m_charaCon.Execute(m_flightSpeed, g_gameTime->GetFrameDeltaTime());
+}
+
+//衝突したときに呼ばれる関数オブジェクト(壁用)
+struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
+{
+	//衝突フラグ。
+	bool isHit = false;			
+
+	virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		//壁とぶつかってなかったら。
+		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
+			//衝突したのは壁ではない。
+			return 0.0f;
+		}
+
+		//壁とぶつかったらフラグをtrueに。
+		isHit = true;
+		return 0.0f;
+	}
+};
+
+void ObjectBase::CalcAimingDirection()
+{
+	//デフォルトは引き寄せれない
+	m_canAttract = false;
+
+	//カメラまでの方向を求める
+	Vector3 toCameraDir = g_camera3D->GetPosition() - m_position;
+	toCameraDir.Normalize();
+
+	//ベクトルを逆向きにする
+	toCameraDir *= -1.0f;
+
+	//内積を求める
+	float innerProduct = toCameraDir.Dot(g_camera3D->GetForward());
+
+	//内積が１より小さいなら(2つのベクトルが別の方向を向いている)なら
+	if (innerProduct < 0.9999f)
+	{
+		return;
+	}
+
+	//コライダーの始点と終点
+	btTransform start, end;
+	start.setIdentity();
+	end.setIdentity();
+
+	//始点はオブジェクトの座標
+	start.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	//終点はカメラの座標
+	end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
+
+	//コライダーを始点から終点まで動かして,衝突するかどうかを調べる
+	SweepResultWall callback;
+	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+
+	//壁と衝突したら
+	if (callback.isHit == true)
+	{
+		return;
+	}
+
+	//引き寄せ可能にする
+	m_canAttract = true;
 }

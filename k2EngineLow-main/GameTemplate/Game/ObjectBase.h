@@ -9,19 +9,16 @@ public:
 	ObjectBase() {}
 	//デストラクタはバーチャルにしておく
 	virtual ~ObjectBase() {}
-
 	bool Start();
-	void AttractedToPlayer();						//プレイヤーまで引き寄せられる処理
-	void CalcVelocity(const float speed, const float curvatureRadius, const float damping);
+	/// <summary>
+	/// 引き寄せ処理の初期化
+	/// </summary>
 	void InitAttract();
-	void Move();
-	void IdleMove();
-	void FollowPlayer();
-	void UpDown();
-	void Turn(Vector3 speed);
-	void CalcTargetPosition();
+
+	/// <summary>
+	/// ぶっ飛び処理の初期化
+	/// </summary>
 	void InitBlowAway();
-	void BlowAway();
 
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
@@ -44,7 +41,70 @@ public:
 		m_velocity = vel;
 	}
 
+	/// <summary>
+	/// 引き寄せれるかどうかの取得
+	/// </summary>
+	/// <returns></returns>
+	const bool& GetCanAttract() const
+	{
+		return m_canAttract;
+	}
 	
+protected:
+
+	/// <summary>
+	/// プレイヤーまで引き寄せられる処理
+	/// </summary>
+	void AttractedToPlayer();
+
+	/// <summary>
+	/// 引き寄せ中の速度計算
+	/// </summary>
+	/// <param name="speed"></param>
+	/// <param name="curvatureRadius"></param>
+	/// <param name="damping"></param>
+	void CalcVelocity(const float speed, const float curvatureRadius, const float damping);
+
+	/// <summary>
+	/// 動きの処理
+	/// </summary>
+	void Move();
+
+	/// <summary>
+	/// アイドル中の処理
+	/// </summary>
+	void IdleMove();
+
+	/// <summary>
+	/// 追尾中の処理
+	/// </summary>
+	void FollowPlayer();
+
+	/// <summary>
+	/// フワフワ処理
+	/// </summary>
+	void UpDown();
+
+	/// <summary>
+	/// 回転処理
+	/// </summary>
+	/// <param name="speed"></param>
+	void Turn(Vector3 speed);
+
+	/// <summary>
+	/// アイドル中の目的地の計算
+	/// </summary>
+	void CalcTargetPosition();
+
+	/// <summary>
+	/// 吹っ飛ぶ処理
+	/// </summary>
+	void BlowAway();
+
+	/// <summary>
+	/// レティクルに合わさっているかの処理
+	/// </summary>
+	void CalcAimingDirection();
 
 protected:
 	enum EnObjectState
@@ -58,17 +118,18 @@ protected:
 
 	ModelRender				m_model;									//モデル
 	CharacterController		m_charaCon;									//キャラクターコントローラー
+	SphereCollider			m_sphereCollider;							//遮蔽物確認用のコライダー
 	Vector3					m_position = Vector3::Zero;					//ポジション
 	Vector3					m_targetPosition = Vector3::Zero;			//目的地
 	Vector3					m_velocity = Vector3::Zero;					//速度
-	Vector3					m_rotMove = Vector3::Zero;
-	Vector3					m_flightSpeed = Vector3::Zero;
+	Vector3					m_rotMove = Vector3::Zero;					//回転速度
+	Vector3					m_flightSpeed = Vector3::Zero;				//飛んでく速さ
+	Vector3					m_followSpeed = Vector3::Zero;				//追尾の速さ
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
-	float degree = 0.0f;
+	float					m_degree = 0.0f;							//フワフワ用の角度
+	bool					m_canAttract = false;						//引き寄せれるかどうか
 
-	Vector3 m_followSpeed = Vector3::Zero;
-
-	Player* m_player = nullptr;
+	Player*					m_player = nullptr;
 };
 

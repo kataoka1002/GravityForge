@@ -21,7 +21,7 @@ void Teapot::Update()
 
 void Teapot::InitModel()
 {
-	m_position = { 0.0f,50.0f,240.0f };
+	m_position = { 0.0f,50.0f,900.0f };
 
 	m_model.Init("Assets/modelData/object/teapot.tkm");
 	m_model.SetPosition(m_position);
