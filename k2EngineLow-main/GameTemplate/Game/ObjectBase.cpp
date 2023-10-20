@@ -262,8 +262,9 @@ void ObjectBase::Turn(Vector3 speed)
 
 void ObjectBase::InitBlowAway()
 {
-	//飛んでいく方向の決定(カメラが向いている方向に飛んでいく)
+	//飛んでいく方向の決定(レティクルの方向)
 	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
+	m_flightSpeed += g_camera3D->GetRight() * -100.0f;
 
 	//吹っ飛びステートに変更
 	m_objectState = enObjectState_Blow;

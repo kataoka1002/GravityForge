@@ -114,7 +114,7 @@ void GameCamera::SetNearCamera(bool isNear)
 	Matrix rot = m_springCamera.GetCameraRotation();
 
 	Vector3 toCameraPos;
-
+	
 	//プレイヤーがスタンバイ中なら
 	if (isNear == true)
 	{
