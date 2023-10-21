@@ -95,7 +95,7 @@ void GameCamera::UpdatePositionAndTarget()
 		m_toCameraPos = toCameraPosOld;
 	}
 	//ƒJƒƒ‰‚ª‰ºŒü‚«‚·‚¬
-	else if (toPosDir.y > 0.8f)
+	else if (toPosDir.y > 0.5f)
 	{
 		m_toCameraPos = toCameraPosOld;
 	}

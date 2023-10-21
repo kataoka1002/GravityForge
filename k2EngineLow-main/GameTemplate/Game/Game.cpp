@@ -58,14 +58,8 @@ bool Game::Start()
 	//スカイキューブの作成
 	SetSkyCube();
 
-	//プレイヤーの作成
-	//m_player = NewGO<Player>(0, "player");
-
 	//レティクルの作成
 	m_reticle = NewGO<Reticle>(0, "reticle");
-
-	//背景ステージの作成
-	//m_bg = NewGO<BackGround>(0, "background");
 
 	//ティーポットの作成
 	m_teapot = NewGO<Teapot>(0, "teapot");

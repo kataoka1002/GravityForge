@@ -216,20 +216,20 @@ namespace nsK2EngineLow
 		
 		// レイトレ用のライトデータをコピー。
 		//m_raytracingLightData.m_directionalLight = m_sceneLight.GetSceneLight().directionalLight[0];
-		//m_raytracingLightData.m_iblIntencity = m_iblData.m_intencity;
-		//m_raytracingLightData.m_ambientLight = Vector3{ 1.1f,1.1f,1.1f };
-		//m_raytracingLightData.m_enableIBLTexture = m_iblData.m_texture.IsValid() ? 1 : 0;
+		m_raytracingLightData.m_iblIntencity = m_iblData.m_intencity;
+		m_raytracingLightData.m_ambientLight = Vector3{ 1.1f,1.1f,1.1f };
+		m_raytracingLightData.m_enableIBLTexture = m_iblData.m_texture.IsValid() ? 1 : 0;
 
-		//// レイトレで映り込み画像を作成する。
-		//if (IsEnableRaytracing()) 
-		//{
-		//	g_graphicsEngine->DispatchRaytracing(rc);
+		// レイトレで映り込み画像を作成する。
+		if (IsEnableRaytracing()) 
+		{
+			g_graphicsEngine->DispatchRaytracing(rc);
 
-		//	for (auto& blur : m_giTextureBlur) 
-		//	{
-		//		blur.ExecuteOnGPU(rc, 5);
-		//	}
-		//}
+			/*for (auto& blur : m_giTextureBlur) 
+			{
+				blur.ExecuteOnGPU(rc, 5);
+			}*/
+		}
 
 		//ディファードライティング
 		DeferredLighting(rc);
