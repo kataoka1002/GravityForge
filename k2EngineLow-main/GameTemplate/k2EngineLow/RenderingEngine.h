@@ -285,7 +285,6 @@ namespace nsK2EngineLow
 		};
 
 
-		RaytracingLightData m_raytracingLightData;			// レイトレ用のライトデータ
 		SceneLight m_sceneLight;							// シーンライト
 		RenderTarget m_mainRenderTarget;					// メインレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];				// GBuffer
@@ -300,6 +299,7 @@ namespace nsK2EngineLow
 		shadow::ShadowMapRender m_shadowMapRender;			// シャドウマップレンダー
 		bool m_isEnableRaytracing = true;					// レイトレーシングが有効？
 		GaussianBlur m_giTextureBlur[eGITextureBlur_Num];   // GIテクスチャにブラーをかける処理
+		RaytracingLightData m_raytracingLightData;			// レイトレ用のライトデータ
 		SIBLData m_iblData;                                 // IBLデータ。
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー

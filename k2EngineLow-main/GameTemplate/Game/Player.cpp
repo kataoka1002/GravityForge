@@ -42,8 +42,9 @@ bool Player::Start()
 
 	//プレイヤーモデルの初期化
 	m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
-	//m_playerModel.SetScale(3.0f);
-	//m_playerModel.SetPosition(Vector3{ 0.0f,50.0f,100.0f });
+	m_playerModel.SetPosition(m_position);
+	m_playerModel.SetRotation(m_rotation);
+	m_playerModel.SetScale(m_scale);
 	m_playerModel.Update();
 
 	//キャラクターコントローラーを初期化

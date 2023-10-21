@@ -5,7 +5,7 @@ namespace nsK2EngineLow
 {
 	RenderingEngine::RenderingEngine()
 	{
-		Init();
+		//Init();
 	}
 
 	RenderingEngine::~RenderingEngine()
@@ -211,6 +211,8 @@ namespace nsK2EngineLow
 		//シャドウマップに影を描画
 		DrawShadowMap(rc);
 
+		//EyePosはカメラの位置
+		SetEyePosition(g_camera3D->GetPosition());
 		
 		// レイトレ用のライトデータをコピー。
 		//m_raytracingLightData.m_directionalLight = m_sceneLight.GetSceneLight().directionalLight[0];
@@ -218,19 +220,16 @@ namespace nsK2EngineLow
 		//m_raytracingLightData.m_ambientLight = Vector3{ 1.1f,1.1f,1.1f };
 		//m_raytracingLightData.m_enableIBLTexture = m_iblData.m_texture.IsValid() ? 1 : 0;
 
-		//EyePosはカメラの位置
-		SetEyePosition(g_camera3D->GetPosition());
+		//// レイトレで映り込み画像を作成する。
+		//if (IsEnableRaytracing()) 
+		//{
+		//	g_graphicsEngine->DispatchRaytracing(rc);
 
-		// レイトレで映り込み画像を作成する。
-		/*if (IsEnableRaytracing()) 
-		{
-			g_graphicsEngine->DispatchRaytracing(rc);
-
-			for (auto& blur : m_giTextureBlur) 
-			{
-				blur.ExecuteOnGPU(rc, 5);
-			}
-		}*/
+		//	for (auto& blur : m_giTextureBlur) 
+		//	{
+		//		blur.ExecuteOnGPU(rc, 5);
+		//	}
+		//}
 
 		//ディファードライティング
 		DeferredLighting(rc);

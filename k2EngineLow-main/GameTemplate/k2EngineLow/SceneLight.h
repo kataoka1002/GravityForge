@@ -64,6 +64,7 @@ namespace nsK2EngineLow
 	public:
 		//コンストラクタ
 		SceneLight();
+		bool Start();
 
 		//ディレクションライトの設定
 		void SetDirectionLight(int lightNum, Vector3 direction, Vector3 color)

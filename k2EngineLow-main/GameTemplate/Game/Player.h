@@ -34,17 +34,17 @@ public:
 
 	void SetPosition(const Vector3 pos)
 	{
-		m_playerModel.SetPosition(pos);
+		m_position = pos;
 	}
 
 	void SetScale(const Vector3 scale)
 	{
-		m_playerModel.SetScale(scale);
+		m_scale = scale;
 	}
 
 	void SetRotation(const Quaternion rot)
 	{
-		m_playerModel.SetRotation(rot);
+		m_rotation = rot;
 	}
 
 	const Vector3& GetPosition() const

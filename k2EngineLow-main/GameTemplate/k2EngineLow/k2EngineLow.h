@@ -18,6 +18,7 @@ namespace nsK2EngineLow {
 
 	class K2EngineLow {
 	public:
+
 		/// <summary>
 		/// フレームレートモード
 		/// </summary>

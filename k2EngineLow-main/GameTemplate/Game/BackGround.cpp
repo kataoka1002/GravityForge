@@ -20,7 +20,9 @@ bool BackGround::Start()
 {
 	//背景モデルの初期化
 	m_bgModel.Init("Assets/modelData/stage/background.tkm", nullptr, 0, enModelUpAxisZ, true);
-	//m_bgModel.SetPosition(BG_POSITION);
+	m_bgModel.SetPosition(m_position);
+	m_bgModel.SetScale(m_scale);
+	m_bgModel.SetRotation(m_rotation);
 	m_bgModel.Update();
 
 	// 静的物理オブジェクトを作成。

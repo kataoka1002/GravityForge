@@ -39,6 +39,7 @@ namespace nsK2EngineLow {
 	/// </summary>
 	class GraphicsEngine : public Noncopyable {
 	public:
+
 		/// <summary>
 		/// デストラクタ。
 		/// </summary>
@@ -291,6 +292,7 @@ namespace nsK2EngineLow {
 		{
 			return m_isPossibleRaytracing;
 		}
+
 #ifdef K2_DEBUG
 		void BeginGPUEvent(const char* eventName)
 		{
@@ -406,6 +408,7 @@ namespace nsK2EngineLow {
 		bool m_isExecuteCommandList = false;											//コマンドリストをGPUに流した？
 		std::list< RequestDelayReleaseD3D12Object > m_reqDelayRelease3d12ObjectList;	// D3D12オブジェクトの遅延解放リクエストのリスト。
 		bool m_isPossibleRaytracing = false;		// レイトレーシングを行うことが可能？
+
 	};
 	extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 	extern Camera* g_camera2D;					//2Dカメラ。
