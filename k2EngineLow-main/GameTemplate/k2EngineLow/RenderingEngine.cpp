@@ -222,15 +222,15 @@ namespace nsK2EngineLow
 		SetEyePosition(g_camera3D->GetPosition());
 
 		// レイトレで映り込み画像を作成する。
-		//if (IsEnableRaytracing()) 
-		//{
-		//	g_graphicsEngine->DispatchRaytracing(rc);
+		/*if (IsEnableRaytracing()) 
+		{
+			g_graphicsEngine->DispatchRaytracing(rc);
 
-		//	for (auto& blur : m_giTextureBlur) 
-		//	{
-		//		blur.ExecuteOnGPU(rc, 5);
-		//	}
-		//}
+			for (auto& blur : m_giTextureBlur) 
+			{
+				blur.ExecuteOnGPU(rc, 5);
+			}
+		}*/
 
 		//ディファードライティング
 		DeferredLighting(rc);

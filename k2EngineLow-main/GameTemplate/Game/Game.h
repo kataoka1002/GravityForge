@@ -6,6 +6,7 @@
 #include "Lighting.h"
 #include "Teapot.h"
 #include "Reticle.h"
+#include "level3D/Level.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -18,6 +19,7 @@ public:
 	void SetSkyCube();
 
 private:
+	Level m_levelRender;
 	SkyCube* m_skyCube = nullptr;
 	Player* m_player = nullptr;
 	BackGround* m_bg = nullptr;

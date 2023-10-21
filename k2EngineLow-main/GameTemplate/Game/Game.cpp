@@ -21,18 +21,51 @@ Game::~Game()
 bool Game::Start()
 {
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+
+	m_levelRender.Init("Assets/modelData/level/level.tkl",
+		[&](LevelObjectData& objData)
+		{
+			//名前がhumanだったら。
+			if (objData.EqualObjectName(L"player") == true)
+			{
+				//プレイヤーのオブジェクトを作成する。
+				m_player = NewGO<Player>(0, "player");
+				//座標を設定する。
+				m_player->SetPosition(objData.position);
+				//大きさを設定する。
+				m_player->SetScale(objData.scale);
+				//回転を設定する。
+				m_player->SetRotation(objData.rotation);
+				//trueにすると、レベルの方でモデルが読み込まれます。
+				return true;
+			}
+			//名前がbackgroundだったら。
+			else if (objData.EqualObjectName(L"background") == true)
+			{
+				//背景オブジェクトを作成する。
+				m_bg = NewGO<BackGround>(0, "background");
+				//座標を設定する。
+				m_bg->SetPosition(objData.position);
+				//大きさを設定する。
+				m_bg->SetScale(objData.scale);
+				//回転を設定する。
+				m_bg->SetRotation(objData.rotation);
+				return true;
+			}
+			return true;
+		});
 	
 	//スカイキューブの作成
 	SetSkyCube();
 
 	//プレイヤーの作成
-	m_player = NewGO<Player>(0, "player");
+	//m_player = NewGO<Player>(0, "player");
 
 	//レティクルの作成
 	m_reticle = NewGO<Reticle>(0, "reticle");
 
 	//背景ステージの作成
-	m_bg = NewGO<BackGround>(0, "background");
+	//m_bg = NewGO<BackGround>(0, "background");
 
 	//ティーポットの作成
 	m_teapot = NewGO<Teapot>(0, "teapot");

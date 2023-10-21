@@ -32,6 +32,21 @@ public:
 	void PlayAnimation();
 	void ManageState();
 
+	void SetPosition(const Vector3 pos)
+	{
+		m_playerModel.SetPosition(pos);
+	}
+
+	void SetScale(const Vector3 scale)
+	{
+		m_playerModel.SetScale(scale);
+	}
+
+	void SetRotation(const Quaternion rot)
+	{
+		m_playerModel.SetRotation(rot);
+	}
+
 	const Vector3& GetPosition() const
 	{
 		return m_position;
@@ -76,6 +91,7 @@ private:
 	AnimationClip		animationClips[enAnimClip_Num];			//アニメーションクリップ
 	ModelRender			m_playerModel;							//プレイヤーモデル
 	Vector3				m_position = Vector3::Zero;				//座標
+	Vector3				m_scale = Vector3::Zero;				//スケール
 	Vector3				m_startPosition = Vector3::Zero;		//初期座標
 	Vector3				m_moveSpeed = Vector3::Zero;			//移動速度
 	Vector3             m_rotMove = Vector3::Zero;				//回転速度
