@@ -194,9 +194,11 @@ namespace nsK2EngineLow
 			spriteInitData.m_expandShaderResoruceView[4] = &m_giTextureBlur[eGITextureBlur_128x128].GetBokeTexture();
 		}
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
-		spriteInitData.m_expandConstantBuffer = &m_deferredLightingCB;
-		spriteInitData.m_expandConstantBufferSize = sizeof(m_deferredLightingCB);
-		
+		//spriteInitData.m_expandConstantBuffer = &m_deferredLightingCB;
+		spriteInitData.m_expandConstantBuffer = &m_sceneLight.GetLight();
+		//spriteInitData.m_expandConstantBufferSize = sizeof(m_deferredLightingCB);
+		spriteInitData.m_expandConstantBufferSize = sizeof(m_sceneLight.GetLight());
+
 		if (m_iblData.m_texture.IsValid()) 
 		{
 			spriteInitData.m_textures[texNum++] = &m_iblData.m_texture;
