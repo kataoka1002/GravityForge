@@ -1,6 +1,7 @@
 /*!
  * @brief	スプライト用のシェーダー
  */
+#include "IBL.h"
 
 
 static const int MAX_DIRECTION_LIGHT = 4;
@@ -9,6 +10,7 @@ static const int MAX_SPOT_LIGHT = 4;
 static const float PI = 3.1415926f;
 static const int NUM_SHADOW_MAP = 3;
 static const int INFINITY = 40.0f;
+static const int NUM_REFLECTION_TEXTURE = 5;
 
 
 // 構造体
@@ -56,6 +58,9 @@ cbuffer LightCb : register(b1)
     SpotLight spotLight[MAX_SPOT_LIGHT];
     HemLight hemLight;
     float4x4 mLVP[NUM_SHADOW_MAP];				//ライトビュープロプロジェクション行列
+    float iblIntencity;                         // IBLの強度
+    int isIBL;                                  // IBLを行う
+    int isEnableRaytracing;                     // レイトレが有効
 }
 
 struct VSInput
@@ -77,10 +82,11 @@ Texture2D<float4> worldPosTexture : register(t2);           // ワールド座標
 Texture2D<float4> normalInViewTexture : register(t3);       // カメラ空間の法線
 Texture2D<float4> metallicSmoothTexture : register(t4);     // メタリックスムース(スペキュラ)
 Texture2D<float4> shadowMap[NUM_SHADOW_MAP] : register(t5); // シャドウマップ(GBufferではない)
+TextureCube<float4> g_skyCubeMap : register(t8);           // スカイキューブ
 
-Texture2D<float4> g_raytracingTexture : register(t20);      //レイトレの画像
+Texture2D<float4> g_raytracingTexture[NUM_REFLECTION_TEXTURE] : register(t20); //レイトレの画像
 
-sampler Sampler : register(s0);                             // サンプラー
+//sampler Sampler : register(s0);                           // サンプラー
 
 // 関数定義
 float3 CalcLambertDiffuse(float3 direction, float3 color, float3 normal);
@@ -100,6 +106,7 @@ float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth);
 float3 CalcPBR(float3 normal, float3 toEye, float4 albedo, float3 specColor, float metallic, float smooth, float3 direction, float3 color);
 float CalcShadowPow(float isShadowReceiver, float3 worldPos);
 float Chebyshev(float2 moments, float depth);
+float4 SampleReflectionColor(float2 uv, float level);
 
 // 頂点シェーダー
 PSInput VSMain(VSInput vsIn)
@@ -160,10 +167,52 @@ float4 PSMain(PSInput In) : SV_Target0
     
     // 半球ライトの強さ設定
     lig += CalcHemLight(normal);
-            
-    // 環境光による底上げ
-    float ambientLight = 1.1f;
-    lig += albedo * ambientLight;
+    
+    //if (isEnableRaytracing)
+    //{
+    //    // レイトレを行う場合はレイトレで作った反射テクスチャとIBLテクスチャを合成する。
+    //    // GLテクスチャ
+    //    float reflectionRate = 1.0f - ((smooth - 0.5f) * 2.0f);
+    //    float level = lerp(0.0f, (float) (NUM_REFLECTION_TEXTURE - 1), pow(reflectionRate, 3.0f));
+    //    if (level < NUM_REFLECTION_TEXTURE - 1)
+    //    {
+    //        lig += albedo * SampleReflectionColor(In.uv, level);
+    //    }
+    //    else if (isIBL == 1)
+    //    {
+    //        // IBLがあるなら。
+    //        lig += albedo * SampleIBLColorFromSkyCube(
+    //            g_skyCubeMap,
+    //            toEye,
+    //            normal,
+    //            smooth,
+    //            iblIntencity
+    //        );
+    //    }
+    //    else
+    //    {
+    //        // 環境光による底上げ
+    //        float ambientLight = 1.1f;
+    //        lig += albedo * ambientLight;
+    //    }
+    //}
+    //else if (isIBL == 1)
+    //{
+    //    // 視線からの反射ベクトルを求める。
+    //    lig += albedo * SampleIBLColorFromSkyCube(
+    //        g_skyCubeMap,
+    //        toEye,
+    //        normal,
+    //        smooth,
+    //        iblIntencity
+    //    );
+    //}
+    //else
+    {
+        // 環境光による底上げ
+        float ambientLight = 1.1f;
+        lig += albedo * ambientLight;
+    }
     
     // 影の落ち具合を計算する。
     float shadow = CalcShadowPow(normalTexture.Sample(Sampler, In.uv).w, worldPos) * normalTexture.Sample(Sampler, In.uv).w;
@@ -653,6 +702,40 @@ float CalcShadowPow(float isShadowReceiver, float3 worldPos)
     }
     
     return shadow;
+}
+
+/*!
+ *@brief	GIライトをサンプリング
+ *@param[in]	uv				uv座標
+ *@param[in]	level           反射レベル
+ */
+float4 SampleReflectionColor(float2 uv, float level)
+{
+    int iLevel = (int) level;
+    float4 col_0;
+    float4 col_1;
+    if (iLevel == 0)
+    {
+        col_0 = g_raytracingTexture[0].Sample(Sampler, uv);
+        col_1 = g_raytracingTexture[1].Sample(Sampler, uv);
+    }
+    else if (iLevel == 1)
+    {
+        col_0 = g_raytracingTexture[1].Sample(Sampler, uv);
+        col_1 = g_raytracingTexture[2].Sample(Sampler, uv);
+    }
+    else if (iLevel == 2)
+    {
+        col_0 = g_raytracingTexture[2].Sample(Sampler, uv);
+        col_1 = g_raytracingTexture[3].Sample(Sampler, uv);
+    }
+    else if (iLevel == 3)
+    {
+        col_0 = g_raytracingTexture[3].Sample(Sampler, uv);
+        col_1 = g_raytracingTexture[4].Sample(Sampler, uv);
+    }
+
+    return lerp(col_0, col_1, frac(level));
 }
 
 

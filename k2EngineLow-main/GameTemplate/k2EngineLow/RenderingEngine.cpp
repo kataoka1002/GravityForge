@@ -162,6 +162,12 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::InitDefferedLightingSprite()
 	{
+		// GIテクスチャを作成するためのブラー処理を初期化する。
+		m_giTextureBlur[eGITextureBlur_1024x1024].Init(&g_graphicsEngine->GetRaytracingOutputTexture(), 1024, 1024);
+		m_giTextureBlur[eGITextureBlur_512x512].Init(&m_giTextureBlur[eGITextureBlur_1024x1024].GetBokeTexture(), 512, 512);
+		m_giTextureBlur[eGITextureBlur_256x256].Init(&m_giTextureBlur[eGITextureBlur_512x512].GetBokeTexture(), 256, 256);
+		m_giTextureBlur[eGITextureBlur_128x128].Init(&m_giTextureBlur[eGITextureBlur_256x256].GetBokeTexture(), 128, 128);
+
 		// ポストエフェクト的にディファードライティングを行うためのスプライトを初期化
 		SpriteInitData spriteInitData;
 		spriteInitData.m_width = FRAME_BUFFER_W;
@@ -178,11 +184,26 @@ namespace nsK2EngineLow
 		{
 			spriteInitData.m_textures[texNum++] = &m_shadowMapRender.GetBokeShadowMap(areaNo);
 		}
-		spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
+		//レイトレが可能なら
+		if (g_graphicsEngine->IsPossibleRaytracing()) 
+		{
+			spriteInitData.m_expandShaderResoruceView[0] = &g_graphicsEngine->GetRaytracingOutputTexture();
+			spriteInitData.m_expandShaderResoruceView[1] = &m_giTextureBlur[eGITextureBlur_1024x1024].GetBokeTexture();
+			spriteInitData.m_expandShaderResoruceView[2] = &m_giTextureBlur[eGITextureBlur_512x512].GetBokeTexture();
+			spriteInitData.m_expandShaderResoruceView[3] = &m_giTextureBlur[eGITextureBlur_256x256].GetBokeTexture();
+			spriteInitData.m_expandShaderResoruceView[4] = &m_giTextureBlur[eGITextureBlur_128x128].GetBokeTexture();
+		}
 		spriteInitData.m_fxFilePath = "Assets/shader/deferredLighting.fx";
-		spriteInitData.m_expandConstantBuffer = &GetLightCB();
-		spriteInitData.m_expandConstantBufferSize = sizeof(GetLightCB());
+		spriteInitData.m_expandConstantBuffer = &m_deferredLightingCB;
+		spriteInitData.m_expandConstantBufferSize = sizeof(m_deferredLightingCB);
 		
+		if (m_iblData.m_texture.IsValid()) 
+		{
+			spriteInitData.m_textures[texNum++] = &m_iblData.m_texture;
+			m_deferredLightingCB.m_isIBL = 1;
+			m_deferredLightingCB.m_iblLuminance = m_iblData.m_intencity;
+		}
+		spriteInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R16G16B16A16_FLOAT;
 		// ディファードレンダリング用のスプライトを初期化
 		m_diferredLightingSprite.Init(spriteInitData);
 	}
@@ -204,6 +225,9 @@ namespace nsK2EngineLow
 
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
+		// シーンライトのデータをコピー。
+		m_deferredLightingCB.m_light = m_sceneLight.GetLight();
+		m_deferredLightingCB.m_isEnableRaytracing = IsEnableRaytracing() ? 1 : 0;
 
 		//GBufferへのレンダリング
 		RenderToGBuffer(rc);
@@ -221,15 +245,15 @@ namespace nsK2EngineLow
 		m_raytracingLightData.m_enableIBLTexture = m_iblData.m_texture.IsValid() ? 1 : 0;
 
 		// レイトレで映り込み画像を作成する。
-		if (IsEnableRaytracing()) 
+		/*if (IsEnableRaytracing()) 
 		{
 			g_graphicsEngine->DispatchRaytracing(rc);
 
-			/*for (auto& blur : m_giTextureBlur) 
+			for (auto& blur : m_giTextureBlur) 
 			{
 				blur.ExecuteOnGPU(rc, 5);
-			}*/
-		}
+			}
+		}*/
 
 		//ディファードライティング
 		DeferredLighting(rc);

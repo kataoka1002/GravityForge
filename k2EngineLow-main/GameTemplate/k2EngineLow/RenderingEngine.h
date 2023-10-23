@@ -31,6 +31,16 @@ namespace nsK2EngineLow
 			int m_enableIBLTexture;               // IBLテクスチャが指定されている。
 		};
 
+		// ディファードライティング用の定数バッファ
+		struct SDeferredLightingCB
+		{
+			Light m_light;              // ライト
+			float m_iblLuminance;       // IBLの明るさ。
+			int m_isIBL;                // IBLを行う。
+			int m_isEnableRaytracing;   // レイトレが行われている。
+		};
+
+
 		RenderingEngine();
 		~RenderingEngine();
 
@@ -301,6 +311,7 @@ namespace nsK2EngineLow
 		GaussianBlur m_giTextureBlur[eGITextureBlur_Num];   // GIテクスチャにブラーをかける処理
 		RaytracingLightData m_raytracingLightData;			// レイトレ用のライトデータ
 		SIBLData m_iblData;                                 // IBLデータ。
+		SDeferredLightingCB m_deferredLightingCB;           // ディファードライティング用の定数バッファ
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
