@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Teapot.h"
 #include "GameCamera.h"
+#include "Game.h"
+#include "ObjectBase.h"
 
 namespace
 {
@@ -39,6 +41,8 @@ Player::~Player()
 bool Player::Start()
 {
 	m_camera = FindGO<GameCamera>("gamecamera");
+
+	m_game = FindGO<Game>("game");
 
 	//プレイヤーモデルの初期化
 	m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
@@ -146,27 +150,46 @@ void Player::Action()
 {
 	if (g_pad[0]->IsTrigger(enButtonA))
 	{
-		m_teapot = FindGO<Teapot>("teapot");
-		if (m_teapot->GetCanAttract() != true)
+		if (m_holdingObject != nullptr)
 		{
 			return;
 		}
 
-		m_teapot->InitAttract();
+		for (auto object : m_game->GetObjectList())
+		{
+			if (object->GetCanAttract() == true)
+			{
+				//引き寄せの初期化
+				object->InitAttract();
 
-		m_playerState = enPlayerState_Attract;
+				//ステートを引き寄せに変更中
+				m_playerState = enPlayerState_Attract;
 
-		//カメラを近距離にする
-		m_camera->SetNearCamera(true);
+				//カメラを近距離にする
+				m_camera->SetNearCamera(true);
+
+				//持っているオブジェクトの設定
+				m_holdingObject = object;
+				break;
+			}
+		}
 	}
 
 	if (g_pad[0]->IsTrigger(enButtonB))
 	{
+		if (m_holdingObject == nullptr)
+		{
+			return;
+		}
+
+		//ステートを攻撃中に変更
 		m_playerState = enPlayerState_Attack;
 
-		m_teapot = FindGO<Teapot>("teapot");
+		//ぶっ飛ばす処理
+		m_holdingObject->InitBlowAway();
 
-		m_teapot->InitBlowAway();
+		//持っているオブジェクトは無しにする
+		m_holdingObject = nullptr;
 	}
 }
 
@@ -204,10 +227,11 @@ void Player::ManageState()
 		{
 			//アイドルにする
 			m_playerState = enPlayerState_Idle;
-			m_isHoldingObject = false;
 
 			//カメラを遠距離に戻す
 			m_camera->SetNearCamera(false);
+
+			m_isHoldingObject = false;
 		}
 
 		return;

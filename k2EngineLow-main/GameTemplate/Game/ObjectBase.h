@@ -24,6 +24,33 @@ public:
 	virtual void InitModel()				= 0;	//モデルの初期化
 
 	/// <summary>
+	/// ポジションの設定
+	/// </summary>
+	/// <param name="pos"></param>
+	void SetPosition(const Vector3 pos)
+	{
+		m_position = pos;
+	}
+
+	/// <summary>
+	/// 大きさの設定
+	/// </summary>
+	/// <param name="scale"></param>
+	void SetScale(const Vector3 scale)
+	{
+		m_scale = scale;
+	}
+
+	/// <summary>
+	/// 回転の設定
+	/// </summary>
+	/// <param name="rot"></param>
+	void SetRotation(const Quaternion rot)
+	{
+		m_rotation = rot;
+	}
+
+	/// <summary>
 	/// 目的地の設定
 	/// </summary>
 	/// <param name="pos"></param>
@@ -125,6 +152,7 @@ protected:
 	Vector3					m_rotMove = Vector3::Zero;					//回転速度
 	Vector3					m_flightSpeed = Vector3::Zero;				//飛んでく速さ
 	Vector3					m_followSpeed = Vector3::Zero;				//追尾の速さ
+	Vector3					m_scale = Vector3::Zero;					//大きさ
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float					m_degree = 0.0f;							//フワフワ用の角度

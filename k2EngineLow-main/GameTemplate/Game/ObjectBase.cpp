@@ -269,6 +269,8 @@ void ObjectBase::InitBlowAway()
 
 	//吹っ飛びステートに変更
 	m_objectState = enObjectState_Blow;
+
+	m_canAttract = false;
 }
 
 void ObjectBase::BlowAway()

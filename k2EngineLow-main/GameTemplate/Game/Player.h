@@ -1,6 +1,8 @@
 #pragma once
 class Teapot;
 class GameCamera;
+class Game;
+class ObjectBase;
 
 class Player : public IGameObject
 {
@@ -88,20 +90,21 @@ private:
 		enAnimClip_Num
 	};
 
-	AnimationClip		animationClips[enAnimClip_Num];			//アニメーションクリップ
-	ModelRender			m_playerModel;							//プレイヤーモデル
-	Vector3				m_position = Vector3::Zero;				//座標
-	Vector3				m_scale = Vector3::One;					//スケール
-	Vector3				m_startPosition = Vector3::Zero;		//初期座標
-	Vector3				m_moveSpeed = Vector3::Zero;			//移動速度
-	Vector3             m_rotMove = Vector3::Zero;				//回転速度
-	CharacterController m_charaCon;								//キャラクターコントローラー
-	Quaternion			m_rotation;								//クォータニオン
-	EnPlayerState		m_playerState = enPlayerState_Idle;		//プレイヤーのステート(状態)を表す変数
-	bool				m_isHoldingObject = false;				//オブジェクトを持っているかどうか
-	float				LStick_x = 0.0f;						//Lスティック入力量(横)
-	float				LStick_y = 0.0f;						//Lスティック入力量(縦)
+	AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
+	ModelRender			m_playerModel;							// プレイヤーモデル
+	Vector3				m_position = Vector3::Zero;				// 座標
+	Vector3				m_scale = Vector3::One;					// スケール
+	Vector3				m_startPosition = Vector3::Zero;		// 初期座標
+	Vector3				m_moveSpeed = Vector3::Zero;			// 移動速度
+	Vector3             m_rotMove = Vector3::Zero;				// 回転速度
+	CharacterController m_charaCon;								// キャラクターコントローラー
+	Quaternion			m_rotation;								// クォータニオン
+	EnPlayerState		m_playerState = enPlayerState_Idle;		// プレイヤーのステート(状態)を表す変数
+	bool				m_isHoldingObject = false;				// オブジェクトを持っているかどうか
+	float				LStick_x = 0.0f;						// Lスティック入力量(横)
+	float				LStick_y = 0.0f;						// Lスティック入力量(縦)
 
-	Teapot*				m_teapot = nullptr;
 	GameCamera*			m_camera = nullptr;
+	Game*				m_game = nullptr;
+	ObjectBase*			m_holdingObject = nullptr;
 };

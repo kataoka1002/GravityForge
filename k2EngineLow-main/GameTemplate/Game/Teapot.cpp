@@ -21,11 +21,12 @@ void Teapot::Update()
 
 void Teapot::InitModel()
 {
-	m_position = { 0.0f,50.0f,900.0f };
+	//m_position = { 0.0f,50.0f,900.0f };
 
 	m_model.Init("Assets/modelData/object/teapot.tkm");
 	m_model.SetPosition(m_position);
-	m_model.SetScale(0.6f);
+	m_model.SetRotation(m_rotation);
+	m_model.SetScale(m_scale);
 	m_model.Update();
 
 	//キャラクターコントローラーを初期化

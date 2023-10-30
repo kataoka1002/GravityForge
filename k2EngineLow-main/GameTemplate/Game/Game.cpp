@@ -52,6 +52,21 @@ bool Game::Start()
 				m_bg->SetRotation(objData.rotation);
 				return true;
 			}
+			//名前がteapotだったら。
+			else if (objData.EqualObjectName(L"teapot") == true)
+			{
+				//ティーポットオブジェクトを作成する。
+				m_teapot = NewGO<Teapot>(0, "teapot");
+				//座標を設定する。
+				m_teapot->SetPosition(objData.position);
+				//大きさを設定する。
+				m_teapot->SetScale(objData.scale);
+				//回転を設定する。
+				m_teapot->SetRotation(objData.rotation);
+
+				m_objectList.push_back(m_teapot);
+				return true;
+			}
 			return true;
 		});
 	
@@ -62,7 +77,7 @@ bool Game::Start()
 	m_reticle = NewGO<Reticle>(0, "reticle");
 
 	//ティーポットの作成
-	m_teapot = NewGO<Teapot>(0, "teapot");
+	//m_teapot = NewGO<Teapot>(0, "teapot");
 
 	//ゲームカメラの作成
 	m_camera = NewGO<GameCamera>(0, "gamecamera");
