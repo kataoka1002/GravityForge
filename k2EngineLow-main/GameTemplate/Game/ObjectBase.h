@@ -129,6 +129,11 @@ protected:
 	void BlowAway();
 
 	/// <summary>
+	/// •¨‚É“–‚½‚Á‚Ä‚¢‚é‚©‚Ìˆ—
+	/// </summary>
+	void CalcCollision();
+
+	/// <summary>
 	/// ƒŒƒeƒBƒNƒ‹‚É‡‚í‚³‚Á‚Ä‚¢‚é‚©‚Ìˆ—
 	/// </summary>
 	void CalcAimingDirection();
@@ -159,5 +164,6 @@ protected:
 	bool					m_canAttract = false;						//ˆø‚«Šñ‚¹‚ê‚é‚©‚Ç‚¤‚©
 
 	Player*					m_player = nullptr;
+	CollisionObject*		m_collisionObject = nullptr;
 };
 

@@ -121,4 +121,6 @@ const int NUM_SHADOW_MAP = 3;
 #include "SpriteRender.h"
 #include "FontRender.h"
 //#include "LevelRender.h"
+#include "collision/CollisionObject.h"
+
 

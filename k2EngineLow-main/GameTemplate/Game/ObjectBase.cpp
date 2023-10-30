@@ -2,6 +2,7 @@
 #include "ObjectBase.h"
 #include "Player.h"
 #include <math.h>
+#include "collision/CollisionObject.h"
 
 namespace
 {
@@ -74,6 +75,8 @@ void ObjectBase::Move()
 	case enObjectState_Blow:
 		//吹っ飛ぶ処理
 		BlowAway();
+
+		CalcCollision();
 		break;
 
 	default:
@@ -263,6 +266,20 @@ void ObjectBase::Turn(Vector3 speed)
 
 void ObjectBase::InitBlowAway()
 {
+	//コリジョンオブジェクトを作成する。
+	m_collisionObject = NewGO<CollisionObject>(0);
+	//球状のコリジョンを作成する。
+	m_collisionObject->CreateSphere(
+		m_position,				//座標。
+		Quaternion::Identity,	//回転。
+		30.0f					//半径。
+	);
+	m_collisionObject->SetName("teapot");
+	//コリジョンオブジェクトが自動で削除されないようにする
+	m_collisionObject->SetIsEnableAutoDelete(false);
+	//コリジョンのポジションのセット
+	//m_collisionObject->SetPosition(m_position);
+
 	//飛んでいく方向の決定(レティクルの方向)
 	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
 	m_flightSpeed += g_camera3D->GetRight() * -90.0f;
@@ -277,6 +294,14 @@ void ObjectBase::BlowAway()
 {	
 	//吹っ飛び中のキャラコンの更新
 	m_position = m_charaCon.Execute(m_flightSpeed, g_gameTime->GetFrameDeltaTime());
+
+	//コリジョンのポジションのセット
+	m_collisionObject->SetPosition(m_position);
+}
+
+void ObjectBase::CalcCollision()
+{
+
 }
 
 //衝突したときに呼ばれる関数オブジェクト(壁用)

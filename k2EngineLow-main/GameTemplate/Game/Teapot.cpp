@@ -8,13 +8,14 @@ Teapot::Teapot()
 
 Teapot::~Teapot()
 {
-
+	DeleteGO(m_collisionObject);
 }
 
 void Teapot::Update()
 {
 	//“®‚«
 	Move();
+
 
 	m_model.Update();
 }
