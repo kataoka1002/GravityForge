@@ -30,7 +30,7 @@ namespace
 bool ObjectBase::Start()
 {
 	//プレイヤーを探す
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<nsPlayer::Player>("player");
 
 	//モデルの初期化
 	InitModel();

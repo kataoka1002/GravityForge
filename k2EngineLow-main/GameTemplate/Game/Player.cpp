@@ -4,151 +4,157 @@
 #include "GameCamera.h"
 #include "Game.h"
 #include "ObjectBase.h"
+#include "IPlayerState.h"
+#include "PlayerIdleState.h"
 
 namespace
 {
 	const float MOVE_SPEED = 250.0f;
 }
 
-Player::Player()
+/// <summary>
+/// プレイヤーの名前空間
+/// </summary>
+namespace nsPlayer
 {
-	//アニメーションの初期化
-	animationClips[enAnimClip_Idle].Load("Assets/animData/player/player_idle.tka");
-	animationClips[enAnimClip_Idle].SetLoopFlag(true);
-	animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_walk.tka");
-	animationClips[enAnimClip_Walk].SetLoopFlag(true);
-	animationClips[enAnimClip_Attract].Load("Assets/animData/player/player_attract.tka");
-	animationClips[enAnimClip_Attract].SetLoopFlag(false);
-	animationClips[enPlayerState_Standby].Load("Assets/animData/player/player_standby.tka");
-	animationClips[enPlayerState_Standby].SetLoopFlag(true); 
-	animationClips[enAnimClip_Standwalk].Load("Assets/animData/player/player_standwalk.tka");
-	animationClips[enAnimClip_Standwalk].SetLoopFlag(true);
-	animationClips[enAnimClip_Attack].Load("Assets/animData/player/player_attack.tka");
-	animationClips[enAnimClip_Attack].SetLoopFlag(false);
-	animationClips[enAnimClip_WalkRight].Load("Assets/animData/player/player_walk_right.tka");
-	animationClips[enAnimClip_WalkRight].SetLoopFlag(true);
-	animationClips[enAnimClip_WalkLeft].Load("Assets/animData/player/player_walk_left.tka");
-	animationClips[enAnimClip_WalkLeft].SetLoopFlag(true);
-	animationClips[enAnimClip_WalkBack].Load("Assets/animData/player/player_walk_back.tka");
-	animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
-}
-
-Player::~Player()
-{
-
-}
-
-bool Player::Start()
-{
-	m_camera = FindGO<GameCamera>("gamecamera");
-
-	m_game = FindGO<Game>("game");
-
-	//プレイヤーモデルの初期化
-	m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
-	m_playerModel.SetPosition(m_position);
-	m_playerModel.SetRotation(m_rotation);
-	m_playerModel.SetScale(m_scale);
-	m_playerModel.Update();
-
-	//キャラクターコントローラーを初期化
-	m_charaCon.Init(
-		20.0f,			//半径
-		120.0f,			//高さ
-		m_position		//座標
-	);
-
-	return true;
-}
-
-void Player::Update()
-{
-	//移動の処理
-	Move();
-
-	//回転処理
-	Turn();
-
-	//アクションの処理
-	Action();
-
-	//ステート管理
-	ManageState();
-
-	//アニメーションの再生
-	PlayAnimation();
-
-	//更新
-	m_playerModel.Update();
-}
-
-void Player::Move()
-{
-	//引き寄せ中,攻撃中は動けない
-	if (m_playerState == enPlayerState_Attract || m_playerState == enPlayerState_Attack)
+	Player::Player()
 	{
-		return;
+		//アニメーションの初期化
+		animationClips[enAnimClip_Idle].Load("Assets/animData/player/player_idle.tka");
+		animationClips[enAnimClip_Idle].SetLoopFlag(true);
+		animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_walk.tka");
+		animationClips[enAnimClip_Walk].SetLoopFlag(true);
+		animationClips[enAnimClip_Attract].Load("Assets/animData/player/player_attract.tka");
+		animationClips[enAnimClip_Attract].SetLoopFlag(false);
+		animationClips[enAnimClip_Standby].Load("Assets/animData/player/player_standby.tka");
+		animationClips[enAnimClip_Standby].SetLoopFlag(true);
+		animationClips[enAnimClip_Standwalk].Load("Assets/animData/player/player_standwalk.tka");
+		animationClips[enAnimClip_Standwalk].SetLoopFlag(true);
+		animationClips[enAnimClip_Attack].Load("Assets/animData/player/player_attack.tka");
+		animationClips[enAnimClip_Attack].SetLoopFlag(false);
+		animationClips[enAnimClip_WalkRight].Load("Assets/animData/player/player_walk_right.tka");
+		animationClips[enAnimClip_WalkRight].SetLoopFlag(true);
+		animationClips[enAnimClip_WalkLeft].Load("Assets/animData/player/player_walk_left.tka");
+		animationClips[enAnimClip_WalkLeft].SetLoopFlag(true);
+		animationClips[enAnimClip_WalkBack].Load("Assets/animData/player/player_walk_back.tka");
+		animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
 	}
 
-	//移動速度の初期化
-	m_moveSpeed.x = 0.0f;
-	m_moveSpeed.z = 0.0f;
-
-	//左スティックの入力量を受け取る
-	LStick_x = g_pad[0]->GetLStickXF();
-	LStick_y = g_pad[0]->GetLStickYF();
-
-	//カメラの前方方向と右方向を取得
-	Vector3 cameraForward = g_camera3D->GetForward();
-	Vector3 cameraRight = g_camera3D->GetRight();
-
-	//XZ平面での前方方向、右方向に変換する
-	cameraForward.y = 0.0f;
-	cameraForward.Normalize();
-	cameraRight.y = 0.0f;
-	cameraRight.Normalize();
-
-	//XZ成分の移動速度をクリア
-	m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
-	m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
-
-	//キャラクターコントローラーを使用して座標を更新
-	m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
-
-	//座標を設定
-	m_playerModel.SetPosition(m_position);
-}
-
-void Player::Turn()
-{
-	//攻撃中は回れない
-	if (m_playerState == enPlayerState_Attack)
+	Player::~Player()
 	{
-		return;
+
 	}
 
-	//滑らかに回るようにする
-	//オブジェクトを持っている時
-	if (m_isHoldingObject)
+	bool Player::Start()
+	{
+		m_camera = FindGO<GameCamera>("gamecamera");
+
+		m_game = FindGO<Game>("game");
+
+		//プレイヤーモデルの初期化
+		m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		m_playerModel.SetPosition(m_position);
+		m_playerModel.SetRotation(m_rotation);
+		m_playerModel.SetScale(m_scale);
+		m_playerModel.Update();
+
+		//キャラクターコントローラーを初期化
+		m_charaCon.Init(
+			20.0f,			//半径
+			120.0f,			//高さ
+			m_position		//座標
+		);
+
+		// 初期ステートを設定
+		m_playerState = new PlayerIdleState(this);
+		m_playerState->Enter();
+
+		return true;
+	}
+
+	void Player::Update()
+	{
+		// ステートを変更するか
+		IPlayerState* playerState = m_playerState->StateChange();
+
+		// 変更先のステートが設定されているならば
+		if (playerState != nullptr)
+		{
+			// ステートを変更する。
+			delete m_playerState;
+			m_playerState = playerState;
+			m_playerState->Enter();
+		}
+
+		// 各ステートの更新処理を実行。
+		m_playerState->Update();
+
+		// アニメーションを再生する。
+		PlayAnimation(m_currentAnimationClip);
+
+		// モデルを更新する。
+		m_playerModel.Update();
+	}
+
+	void Player::PlayAnimation(EnAnimationClip currentAnimationClip)
+	{
+		// アニメーションを再生
+		m_playerModel.PlayAnimation(currentAnimationClip, m_complementTime);
+	}
+
+	void Player::Move()
+	{
+		//移動速度の初期化
+		m_moveSpeed.x = 0.0f;
+		m_moveSpeed.z = 0.0f;
+	
+		//左スティックの入力量を受け取る
+		LStick_x = g_pad[0]->GetLStickXF();
+		LStick_y = g_pad[0]->GetLStickYF();
+	
+		//カメラの前方方向と右方向を取得
+		Vector3 cameraForward = g_camera3D->GetForward();
+		Vector3 cameraRight = g_camera3D->GetRight();
+	
+		//XZ平面での前方方向、右方向に変換する
+		cameraForward.y = 0.0f;
+		cameraForward.Normalize();
+		cameraRight.y = 0.0f;
+		cameraRight.Normalize();
+	
+		//XZ成分の移動速度をクリア
+		m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
+		m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
+	
+		//キャラクターコントローラーを使用して座標を更新
+		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+	
+		//座標を設定
+		m_playerModel.SetPosition(m_position);
+	}
+	
+	void Player::Turn()
 	{	
-		//カメラの向きから回転を求める
-		Vector3 rotSpeed = g_camera3D->GetForward();
-		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_rotMove, rotSpeed);
-	}
-	else
-	{
-		//移動速度から回転を求める
-		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 3.5f, m_rotMove, m_moveSpeed);
+		//滑らかに回るようにする
+		//オブジェクトを持っている時
+		if (m_isHoldingObject)
+		{	
+			//カメラの向きから回転を求める
+			Vector3 rotSpeed = g_camera3D->GetForward();
+			m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 5.0f, m_rotMove, rotSpeed);
+		}
+		else
+		{
+			//移動速度から回転を求める
+			m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 3.5f, m_rotMove, m_moveSpeed);
+		}
+	
+		//回転を設定する
+		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+		m_playerModel.SetRotation(m_rotation);
 	}
 
-	//回転を設定する
-	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
-	m_playerModel.SetRotation(m_rotation);
-}
-
-void Player::Action()
-{
-	if (g_pad[0]->IsTrigger(enButtonA))
+	void Player::Attract()
 	{
 		if (m_holdingObject != nullptr)
 		{
@@ -162,8 +168,8 @@ void Player::Action()
 				//引き寄せの初期化
 				object->InitAttract();
 
-				//ステートを引き寄せに変更中
-				m_playerState = enPlayerState_Attract;
+				//引き寄せ可能状態に変更
+				m_canAttract = true;
 
 				//カメラを近距離にする
 				m_camera->SetNearCamera(true);
@@ -175,7 +181,7 @@ void Player::Action()
 		}
 	}
 
-	if (g_pad[0]->IsTrigger(enButtonB))
+	void Player::Attack()
 	{
 		if (m_holdingObject == nullptr)
 		{
@@ -183,7 +189,7 @@ void Player::Action()
 		}
 
 		//ステートを攻撃中に変更
-		m_playerState = enPlayerState_Attack;
+		m_canAttack = true;
 
 		//ぶっ飛ばす処理
 		m_holdingObject->InitBlowAway();
@@ -191,151 +197,53 @@ void Player::Action()
 		//持っているオブジェクトは無しにする
 		m_holdingObject = nullptr;
 	}
-}
 
-void Player::ManageState()
-{
-	//地面に付いていなかったら
-	if (m_charaCon.IsOnGround() == false)
+	void Player::ResetAttack()
 	{
-		//ステートをジャンプ中にする
-		m_playerState = enPlayerState_Jump;
+		//カメラを遠距離に戻す
+		m_camera->SetNearCamera(false);
 
-		return;
+		//オブジェクト保持状態を解除
+		m_isHoldingObject = false;
 	}
 
-	//引き寄せステートなら
-	if (m_playerState == enPlayerState_Attract)
+	void Player::ChangeWalkingStyle()
 	{
-		//アニメーションの再生が終わったら。
-		if (m_playerModel.IsPlayingAnimation() == false)
-		{
-			//スタンバイにする
-			m_playerState = enPlayerState_Standby;		
-		}
-
-		m_isHoldingObject = true;
-
-		return;
-	}
-
-	//攻撃ステートなら
-	if (m_playerState == enPlayerState_Attack)
-	{
-		//アニメーションの再生が終わったら。
-		if (m_playerModel.IsPlayingAnimation() == false)
-		{
-			//アイドルにする
-			m_playerState = enPlayerState_Idle;
-
-			//カメラを遠距離に戻す
-			m_camera->SetNearCamera(false);
-
-			m_isHoldingObject = false;
-		}
-
-		return;
-	}
-
-	//オブジェクトを持っているとき
-	if (m_isHoldingObject) 
-	{
-		//スティックの入力量によってステートを変更
+		//スティックの入力量によって歩き方を変える
 		if (LStick_x <= -0.5f)
 		{
-			//左歩きステートにする
-			m_playerState = enPlayerState_WalkLeft;
+			//左歩きアニメーション
+			SetAnimation(enAnimClip_WalkLeft, 0.3f);
 			return;
 		}
 		else if (LStick_x >= 0.5f)
 		{
-			//右歩きステートにする
-			m_playerState = enPlayerState_WalkRight;
+			//右歩きアニメーション
+			SetAnimation(enAnimClip_WalkRight, 0.3f);
 			return;
 		}
 
 		if (LStick_y <= -0.5f)
 		{
-			//後ろ歩きステートにする
-			m_playerState = enPlayerState_WalkBack;
+			//後ろ歩きアニメーション
+			SetAnimation(enAnimClip_WalkBack, 0.3f);
 			return;
 		}
-		
-		m_playerState = (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f) ? enPlayerState_Standwalk : enPlayerState_Standby;
+
+		if (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f)
+		{
+			//スタンド歩きアニメーション
+			SetAnimation(enAnimClip_Standwalk, 0.2f);
+		}
+		else
+		{
+			//スタンバイアニメーション
+			SetAnimation(enAnimClip_Standby, 0.2f);
+		}
 	}
-	//持っていないとき
-	else 
+
+	void Player::Render(RenderContext& rc)
 	{
-		//スティックの入力量によってステートを変更
-		m_playerState = (fabsf(m_moveSpeed.x) >= 0.001f || fabsf(m_moveSpeed.z) >= 0.001f) ? enPlayerState_Walk : enPlayerState_Idle;
+		m_playerModel.Draw(rc);
 	}
 }
-
-void Player::PlayAnimation()
-{
-	switch (m_playerState) 
-	{
-	//プレイヤーステートが待機だったら
-	case enPlayerState_Idle:
-		//待機アニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Idle, 0.5f);
-		break;
-
-	//プレイヤーステートが歩き中だったら
-	case enPlayerState_Walk:
-		//歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Walk, 0.2f);
-		break;
-		
-	//プレイヤーステートが引き寄せだったら
-	case enAnimClip_Attract:
-		//引き寄せアニメーションを再生
-		m_playerModel.PlayAnimation(enPlayerState_Attract, 0.5f);
-		break;
-		
-	//プレイヤーステートがスタンバイだったら
-	case enPlayerState_Standby:
-		//引き寄せアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Standby, 0.5f);
-		break; 
-			
-	//プレイヤーステートが構え歩きだったら
-	case enPlayerState_Standwalk:
-		//構え歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Standwalk, 0.2f);
-		break;
-
-	//プレイヤーステートが構え歩きだったら
-	case enPlayerState_Attack:
-		//構え歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_Attack, 0.2f);
-		break;
-
-	//プレイヤーステートが右歩きだったら
-	case enPlayerState_WalkRight:
-		//右歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_WalkRight, 0.3f);
-		break;
-
-	//プレイヤーステートが左歩きだったら
-	case enPlayerState_WalkLeft:
-		//左歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_WalkLeft, 0.3f);
-		break;
-
-	//プレイヤーステートが後ろ歩きだったら
-	case enPlayerState_WalkBack:
-		//後ろ歩きアニメーションを再生
-		m_playerModel.PlayAnimation(enAnimClip_WalkBack, 0.3f);
-		break;
-
-	default:
-		break;
-	}
-}
-
-void Player::Render(RenderContext& rc)
-{
-	m_playerModel.Draw(rc);
-}
-

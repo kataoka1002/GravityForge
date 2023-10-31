@@ -29,7 +29,7 @@ bool Game::Start()
 			if (objData.EqualObjectName(L"player") == true)
 			{
 				//プレイヤーのオブジェクトを作成する。
-				m_player = NewGO<Player>(0, "player");
+				m_player = NewGO<nsPlayer::Player>(0, "player");
 				//座標を設定する。
 				m_player->SetPosition(objData.position);
 				//大きさを設定する。
@@ -76,7 +76,7 @@ bool Game::Start()
 	SetSkyCube();
 
 	//レティクルの作成
-	m_reticle = NewGO<Reticle>(0, "reticle");
+	m_reticle = NewGO<nsPlayer::Reticle>(0, "reticle");
 
 	//ティーポットの作成
 	//m_teapot = NewGO<Teapot>(0, "teapot");

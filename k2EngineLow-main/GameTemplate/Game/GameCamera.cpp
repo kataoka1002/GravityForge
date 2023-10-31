@@ -43,7 +43,7 @@ GameCamera::~GameCamera()
 bool GameCamera::Start()
 {
 	//プレイヤーのインスタンスを探す。
-	m_player = FindGO<Player>("player");
+	m_player = FindGO<nsPlayer::Player>("player");
 
 	//注視点から視点までのベクトルを求める
 	SetNearCamera(false);

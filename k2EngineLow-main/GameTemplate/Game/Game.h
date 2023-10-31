@@ -46,12 +46,12 @@ public:
 private:
 	Level m_levelRender;
 	SkyCube* m_skyCube = nullptr;
-	Player* m_player = nullptr;
+	nsPlayer::Player* m_player = nullptr;
+	nsPlayer::Reticle* m_reticle = nullptr;
 	BackGround* m_bg = nullptr;
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
 	Teapot* m_teapot = nullptr;
-	Reticle* m_reticle = nullptr;
 	HumanEnemy* m_humanEnemy = nullptr;
 
 	//std::vector<Teapot*> m_teapotList;			//ティーポットのリスト
