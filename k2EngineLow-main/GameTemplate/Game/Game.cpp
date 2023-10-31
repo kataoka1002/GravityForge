@@ -69,6 +69,8 @@ bool Game::Start()
 			}
 			return true;
 		});
+
+	m_humanEnemy = NewGO<HumanEnemy>(0, "humanenemy");
 	
 	//スカイキューブの作成
 	SetSkyCube();

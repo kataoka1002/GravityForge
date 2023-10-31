@@ -8,6 +8,7 @@
 #include "Reticle.h"
 #include "level3D/Level.h"
 #include "ObjectBase.h"
+#include "HumanEnemy.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -51,6 +52,7 @@ private:
 	Lighting* m_light = nullptr;
 	Teapot* m_teapot = nullptr;
 	Reticle* m_reticle = nullptr;
+	HumanEnemy* m_humanEnemy = nullptr;
 
 	//std::vector<Teapot*> m_teapotList;			//ティーポットのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

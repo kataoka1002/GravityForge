@@ -224,8 +224,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="HumanEnemy.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
@@ -241,8 +243,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="Player.h" />

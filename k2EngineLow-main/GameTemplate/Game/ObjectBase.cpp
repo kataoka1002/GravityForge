@@ -270,9 +270,9 @@ void ObjectBase::InitBlowAway()
 	m_collisionObject = NewGO<CollisionObject>(0);
 	//球状のコリジョンを作成する。
 	m_collisionObject->CreateSphere(
-		m_position,				//座標。
-		Quaternion::Identity,	//回転。
-		30.0f					//半径。
+		m_position,				//座標
+		Quaternion::Identity,	//回転
+		20.0f					//半径
 	);
 	m_collisionObject->SetName("teapot");
 	//コリジョンオブジェクトが自動で削除されないようにする

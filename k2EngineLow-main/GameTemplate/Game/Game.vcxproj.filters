@@ -16,6 +16,9 @@
     <Filter Include="MyCode\Object">
       <UniqueIdentifier>{70c689a7-ee8b-4eb3-84ab-5d98ca9ee052}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Enemy">
+      <UniqueIdentifier>{2cd1eef1-143e-448f-b13b-89b08a987eca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -47,6 +50,12 @@
     <ClCompile Include="Reticle.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemy.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -76,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="Reticle.h">
       <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemy.h">
+      <Filter>MyCode\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
