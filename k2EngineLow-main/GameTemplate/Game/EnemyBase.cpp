@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "EnemyBase.h"
+#include "Game.h"
 
 bool EnemyBase::Start()
 {
+	m_game = FindGO<Game>("game");
+
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	InitModel();
 

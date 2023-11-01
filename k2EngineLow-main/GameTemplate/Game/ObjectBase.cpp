@@ -82,7 +82,7 @@ void ObjectBase::Move()
 	case enObjectState_Blow:
 		//吹っ飛ぶ処理
 		BlowAway();
-
+		//衝突したかどうかの処理
 		CalcCollision();
 		break;
 
@@ -306,9 +306,6 @@ void ObjectBase::BlowAway()
 
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_position);
-
-	//ぶつかったかどうかの処理
-	CalcCollision();
 }
 
 void ObjectBase::CalcCollision()
@@ -318,11 +315,11 @@ void ObjectBase::CalcCollision()
 	{
 		if (m_collisionObject->IsHit(enemy->GetCharaCon()))
 		{
-			//ダメージを受けた時の処理を行う
-			enemy->HandleDamageEvent(1.0f);
+			//エネミーはダメージを受けた時の処理を行う
+			enemy->HandleDamageEvent(50.0f);
 
-			//自分自身の削除
-			DeleteGO(this);
+			//自分が消えるときの処理
+			OnDestroy();
 
 			return;
 		}

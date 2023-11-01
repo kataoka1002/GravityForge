@@ -1,4 +1,6 @@
 #pragma once
+class Game;
+
 class EnemyBase : public IGameObject, Noncopyable
 {
 public:
@@ -9,6 +11,7 @@ public:
 
 	bool Start();
 	void HandleDamageEvent(float damage);			//ダメージを受けた時の処理
+	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 
@@ -55,5 +58,7 @@ protected:
 	Quaternion				m_rotation;									//クォータニオン
 	CharacterController		m_charaCon;									//キャラクターコントローラー
 	float					m_hp = 0.0f;								//HP
+
+	Game*					m_game = nullptr;
 };
 

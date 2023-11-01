@@ -63,15 +63,27 @@ bool Game::Start()
 				m_teapot->SetScale(objData.scale);
 				//回転を設定する。
 				m_teapot->SetRotation(objData.rotation);
-
+				//リストに追加
 				m_objectList.push_back(m_teapot);
+				return true;
+			}
+			//名前がhumanEnemyだったら。
+			else if (objData.EqualObjectName(L"humanEnemy") == true)
+			{
+				//ティーポットオブジェクトを作成する。
+				m_humanEnemy = NewGO<HumanEnemy>(0, "humanenemy");
+				//座標を設定する。
+				m_humanEnemy->SetPosition(objData.position);
+				//大きさを設定する。
+				m_humanEnemy->SetScale(objData.scale);
+				//回転を設定する。
+				m_humanEnemy->SetRotation(objData.rotation);
+				//リストに追加
+				m_enemyList.push_back(m_humanEnemy);
 				return true;
 			}
 			return true;
 		});
-
-	m_humanEnemy = NewGO<HumanEnemy>(0, "humanenemy");
-	m_enemyList.push_back(m_humanEnemy);
 	
 	//スカイキューブの作成
 	SetSkyCube();

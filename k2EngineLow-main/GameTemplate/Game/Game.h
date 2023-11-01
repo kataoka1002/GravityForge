@@ -24,7 +24,7 @@ public:
 	/// オブジェクトをリストから削除する
 	/// </summary>
 	/// <param name="teapot"></param>
-	void RemoveTeapotFromList(ObjectBase* object)
+	void RemoveObjectFromList(ObjectBase* object)
 	{
 		std::vector<ObjectBase*>::iterator it = std::find(
 			m_objectList.begin(), 	//オブジェクトのリストの最初

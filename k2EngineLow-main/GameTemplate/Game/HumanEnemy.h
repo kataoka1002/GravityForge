@@ -15,8 +15,9 @@ public:
 	~HumanEnemy();
 
 	void Update();								//XVˆ—
-	void Render(RenderContext& rc)	override;	//•`‰æˆ—
+	void OnDestroy()				override;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—
 	void InitModel()				override;	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
+	void Render(RenderContext& rc)	override;	//•`‰æˆ—
 
 protected:
 	enum EnAnimationClip

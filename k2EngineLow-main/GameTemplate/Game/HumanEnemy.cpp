@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "HumanEnemy.h"
+#include "Game.h"
 
 namespace
 {
@@ -29,8 +30,8 @@ void HumanEnemy::InitModel()
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
-		20.0f,			//半径
-		40.0f,			//高さ
+		30.0f,			//半径
+		150.0f,			//高さ
 		m_position		//座標
 	);
 
@@ -40,6 +41,11 @@ void HumanEnemy::InitModel()
 
 void HumanEnemy::Update()
 {
+	if (m_hp <= 0.0f)
+	{
+		OnDestroy();
+	}
+
 	switch (m_humanEnemyState)
 	{
 		//プレイヤーステートが待機だったら
@@ -52,6 +58,12 @@ void HumanEnemy::Update()
 		break;
 	}
 	m_model.Update();
+}
+
+void HumanEnemy::OnDestroy()
+{
+	m_game->RemoveEnemyFromList(this);
+	DeleteGO(this);
 }
 
 void HumanEnemy::Render(RenderContext& rc)

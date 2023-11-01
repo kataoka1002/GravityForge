@@ -24,6 +24,7 @@ public:
 
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
+	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
 
 	/// <summary>
 	/// ポジションの設定
