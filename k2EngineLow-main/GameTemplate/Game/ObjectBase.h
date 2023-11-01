@@ -1,6 +1,7 @@
 #pragma once
 // 前方宣言。
 namespace nsPlayer { class Player; }
+class Game;
 
 class ObjectBase : public IGameObject, Noncopyable
 {
@@ -164,7 +165,8 @@ protected:
 	float					m_degree = 0.0f;							//フワフワ用の角度
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 
-	nsPlayer::Player*					m_player = nullptr;
+	nsPlayer::Player*		m_player = nullptr;
+	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;
 };
 

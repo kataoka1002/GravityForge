@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "HumanEnemy.h"
 
+namespace
+{
+	//体力の最大値
+	const float MAX_HP = 100.0f;
+}
+
 HumanEnemy::HumanEnemy()
 {
 	//アニメーションの初期化
@@ -20,6 +26,16 @@ void HumanEnemy::InitModel()
 	m_model.SetRotation(m_rotation);
 	m_model.SetScale(m_scale);
 	m_model.Update();
+
+	//キャラクターコントローラーを初期化
+	m_charaCon.Init(
+		20.0f,			//半径
+		40.0f,			//高さ
+		m_position		//座標
+	);
+
+	//HPの設定
+	m_hp = MAX_HP;
 }
 
 void HumanEnemy::Update()

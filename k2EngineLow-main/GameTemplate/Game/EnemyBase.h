@@ -8,6 +8,7 @@ public:
 	virtual ~EnemyBase() {}
 
 	bool Start();
+	void HandleDamageEvent(float damage);			//ダメージを受けた時の処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 
@@ -38,10 +39,21 @@ public:
 		m_rotation = rot;
 	}
 
+	/// <summary>
+	/// キャラコンを返す
+	/// </summary>
+	/// <returns></returns>
+	CharacterController& GetCharaCon()
+	{
+		return m_charaCon;
+	}
+
 protected:
 	ModelRender				m_model;
 	Vector3					m_position = Vector3::Zero;					//ポジション
 	Vector3					m_scale = Vector3::One;						//大きさ
 	Quaternion				m_rotation;									//クォータニオン
+	CharacterController		m_charaCon;									//キャラクターコントローラー
+	float					m_hp = 0.0f;								//HP
 };
 

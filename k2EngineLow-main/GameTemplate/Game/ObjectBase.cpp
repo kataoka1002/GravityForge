@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjectBase.h"
 #include "Player.h"
+#include "Game.h"
 #include <math.h>
 #include "collision/CollisionObject.h"
 
@@ -25,12 +26,18 @@ namespace
 
 	//吹っ飛ぶ速さ
 	const float BLOW_AWAY_SPEED = 3000.0f;
+
+	//コリジョンの大きさ
+	const float COLLISION_SCALE = 30.0f;
 }
 
 bool ObjectBase::Start()
 {
 	//プレイヤーを探す
 	m_player = FindGO<nsPlayer::Player>("player");
+
+	//ゲームを探す
+	m_game = FindGO<Game>("game");
 
 	//モデルの初期化
 	InitModel();
@@ -268,17 +275,19 @@ void ObjectBase::InitBlowAway()
 {
 	//コリジョンオブジェクトを作成する。
 	m_collisionObject = NewGO<CollisionObject>(0);
+
 	//球状のコリジョンを作成する。
 	m_collisionObject->CreateSphere(
 		m_position,				//座標
 		Quaternion::Identity,	//回転
-		20.0f					//半径
+		COLLISION_SCALE			//半径
 	);
+
+	//コリジョンに名前を付ける
 	m_collisionObject->SetName("teapot");
+
 	//コリジョンオブジェクトが自動で削除されないようにする
 	m_collisionObject->SetIsEnableAutoDelete(false);
-	//コリジョンのポジションのセット
-	//m_collisionObject->SetPosition(m_position);
 
 	//飛んでいく方向の決定(レティクルの方向)
 	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
@@ -297,11 +306,27 @@ void ObjectBase::BlowAway()
 
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_position);
+
+	//ぶつかったかどうかの処理
+	CalcCollision();
 }
 
 void ObjectBase::CalcCollision()
-{
+{	
+	//エネミーとぶつかったかを判定
+	for (auto enemy : m_game->GetEnemyList())
+	{
+		if (m_collisionObject->IsHit(enemy->GetCharaCon()))
+		{
+			//ダメージを受けた時の処理を行う
+			enemy->HandleDamageEvent(1.0f);
 
+			//自分自身の削除
+			DeleteGO(this);
+
+			return;
+		}
+	}
 }
 
 //衝突したときに呼ばれる関数オブジェクト(壁用)

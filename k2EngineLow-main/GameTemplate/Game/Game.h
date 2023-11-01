@@ -37,9 +37,39 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// エネミーをリストから削除する
+	/// </summary>
+	/// <param name="teapot"></param>
+	void RemoveEnemyFromList(EnemyBase* enemy)
+	{
+		std::vector<EnemyBase*>::iterator it = std::find(
+			m_enemyList.begin(), 	//オブジェクトのリストの最初
+			m_enemyList.end(), 		//オブジェクトのリストの最後
+			enemy);					//探しているオブジェクト
+
+		if (it != m_enemyList.end())
+		{
+			m_enemyList.erase(it);
+		}
+	}
+
+	/// <summary>
+	/// オブジェクトのリストを返す
+	/// </summary>
+	/// <returns></returns>
 	const std::vector<ObjectBase*>& GetObjectList() const
 	{
 		return m_objectList;
+	}
+
+	/// <summary>
+	/// エネミーのリストを返す
+	/// </summary>
+	/// <returns></returns>
+	const std::vector<EnemyBase*>& GetEnemyList() const
+	{
+		return m_enemyList;
 	}
 
 
@@ -54,7 +84,7 @@ private:
 	Teapot* m_teapot = nullptr;
 	HumanEnemy* m_humanEnemy = nullptr;
 
-	//std::vector<Teapot*> m_teapotList;			//ティーポットのリスト
+	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト
 };
 

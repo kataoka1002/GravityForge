@@ -8,3 +8,10 @@ bool EnemyBase::Start()
 
 	return true;
 }
+
+void EnemyBase::HandleDamageEvent(float damage)
+{
+	//ƒ_ƒ[ƒW‚ğ—^‚¦‚é
+	m_hp -= damage;
+	m_hp = max(0.0f, m_hp);
+}

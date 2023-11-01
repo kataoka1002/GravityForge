@@ -71,15 +71,13 @@ bool Game::Start()
 		});
 
 	m_humanEnemy = NewGO<HumanEnemy>(0, "humanenemy");
+	m_enemyList.push_back(m_humanEnemy);
 	
 	//スカイキューブの作成
 	SetSkyCube();
 
 	//レティクルの作成
 	m_reticle = NewGO<nsPlayer::Reticle>(0, "reticle");
-
-	//ティーポットの作成
-	//m_teapot = NewGO<Teapot>(0, "teapot");
 
 	//ゲームカメラの作成
 	m_camera = NewGO<GameCamera>(0, "gamecamera");
