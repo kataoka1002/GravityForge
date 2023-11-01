@@ -13,6 +13,7 @@ public:
 	void Render(RenderContext& rc)	override;	//•`‰æˆ—
 	void InitModel()				override;	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	void OnDestroy()				override;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—
+	void InitCollision()			override;	//ƒRƒŠƒWƒ‡ƒ“‚Ì‰Šú‰»
 
 private:
 

@@ -25,6 +25,7 @@ public:
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
+	virtual void InitCollision()			= 0;	//コリジョンの初期化
 
 	/// <summary>
 	/// ポジションの設定
@@ -164,6 +165,7 @@ protected:
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float					m_degree = 0.0f;							//フワフワ用の角度
+	float					m_damage = 0.0f;							//与えるダメージ
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 
 	nsPlayer::Player*		m_player = nullptr;
