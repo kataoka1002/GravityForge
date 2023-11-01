@@ -29,6 +29,7 @@ namespace nsPlayer
 			enAnimClip_WalkRight,
 			enAnimClip_WalkLeft,
 			enAnimClip_WalkBack,
+			enAnimClip_WalkJump,
 			enAnimClip_Num
 		};
 
@@ -40,6 +41,7 @@ namespace nsPlayer
 		void Render(RenderContext& rc);
 		void Move();
 		void Turn();
+		void Jump();
 		void Attract();
 		void Attack();
 		void ResetAttack();
@@ -112,6 +114,23 @@ namespace nsPlayer
 		}
 
 		/// <summary>
+		/// Y方向に力を加えてジャンプする
+		/// </summary>
+		void SetJump()
+		{
+			m_moveSpeed.y = 400.0f;
+		}
+
+		/// <summary>
+		/// ジャンプ中かどうかをセットする
+		/// </summary>
+		/// <param name="junping"></param>
+		void SetIsJumping(bool junping)
+		{
+			m_isJumping = junping;
+		}
+
+		/// <summary>
 		/// ポジションの取得
 		/// </summary>
 		/// <returns></returns>
@@ -174,6 +193,15 @@ namespace nsPlayer
 			return m_canAttack;
 		}
 
+		/// <summary>
+		/// 地面に着いているかを判定
+		/// </summary>
+		/// <returns></returns>
+		const bool& GetOnGround()const
+		{
+			return m_charaCon.IsOnGround();
+		}
+
 	private:
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
@@ -191,6 +219,7 @@ namespace nsPlayer
 		bool				m_isHoldingObject = false;				// オブジェクトを持っているかどうか
 		bool				m_canAttract = false;					// 引き寄せられるかどうか
 		bool				m_canAttack = false;					// 攻撃できるかどうか
+		bool				m_isJumping = false;					// その場ジャンプ中かどうか
 
 		Game* m_game = nullptr;
 		GameCamera* m_camera = nullptr;

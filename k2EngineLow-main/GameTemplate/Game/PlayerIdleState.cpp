@@ -2,6 +2,7 @@
 #include "PlayerIdleState.h"
 #include "PlayerAttractState.h"
 #include "PlayerWalkState.h"
+#include "PlayerJumpState.h"
 
 namespace
 {
@@ -40,6 +41,15 @@ namespace nsPlayer
 		{
 			// 歩きステートに遷移する
 			return new PlayerWalkState(m_player);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonX))
+		{		
+			//ジャンプする
+			m_player->SetJump();
+			
+			// ジャンプステートに遷移する
+			return new PlayerJumpState(m_player);
 		}
 
 		// ここまで来たらステートを遷移しない。

@@ -76,6 +76,12 @@
     <ClCompile Include="PlayerStandbyState.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerJumpState.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWalkJumpState.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -128,6 +134,12 @@
       <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerStandbyState.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerJumpState.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerWalkJumpState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>

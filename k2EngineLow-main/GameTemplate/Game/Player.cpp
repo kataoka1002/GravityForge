@@ -6,6 +6,7 @@
 #include "ObjectBase.h"
 #include "IPlayerState.h"
 #include "PlayerIdleState.h"
+#include "PlayerJumpState.h"
 
 namespace
 {
@@ -24,6 +25,8 @@ namespace nsPlayer
 		animationClips[enAnimClip_Idle].SetLoopFlag(true);
 		animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_walk.tka");
 		animationClips[enAnimClip_Walk].SetLoopFlag(true);
+		animationClips[enAnimClip_Jump].Load("Assets/animData/player/player_jump.tka");
+		animationClips[enAnimClip_Jump].SetLoopFlag(false);
 		animationClips[enAnimClip_Attract].Load("Assets/animData/player/player_attract.tka");
 		animationClips[enAnimClip_Attract].SetLoopFlag(false);
 		animationClips[enAnimClip_Standby].Load("Assets/animData/player/player_standby.tka");
@@ -38,6 +41,9 @@ namespace nsPlayer
 		animationClips[enAnimClip_WalkLeft].SetLoopFlag(true);
 		animationClips[enAnimClip_WalkBack].Load("Assets/animData/player/player_walk_back.tka");
 		animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
+		animationClips[enAnimClip_WalkJump].Load("Assets/animData/player/player_walk_jump.tka");
+		animationClips[enAnimClip_WalkJump].SetLoopFlag(false);
+
 	}
 
 	Player::~Player()
@@ -108,27 +114,68 @@ namespace nsPlayer
 		m_moveSpeed.x = 0.0f;
 		m_moveSpeed.z = 0.0f;
 	
-		//左スティックの入力量を受け取る
-		LStick_x = g_pad[0]->GetLStickXF();
-		LStick_y = g_pad[0]->GetLStickYF();
-	
-		//カメラの前方方向と右方向を取得
-		Vector3 cameraForward = g_camera3D->GetForward();
-		Vector3 cameraRight = g_camera3D->GetRight();
-	
-		//XZ平面での前方方向、右方向に変換する
-		cameraForward.y = 0.0f;
-		cameraForward.Normalize();
-		cameraRight.y = 0.0f;
-		cameraRight.Normalize();
-	
-		//XZ成分の移動速度をクリア
-		m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
-		m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
-	
+		//その場ジャンプじゃないなら
+		if (m_isJumping != true)
+		{
+			//左スティックの入力量を受け取る
+			LStick_x = g_pad[0]->GetLStickXF();
+			LStick_y = g_pad[0]->GetLStickYF();
+
+			//カメラの前方方向と右方向を取得
+			Vector3 cameraForward = g_camera3D->GetForward();
+			Vector3 cameraRight = g_camera3D->GetRight();
+
+			//XZ平面での前方方向、右方向に変換する
+			cameraForward.y = 0.0f;
+			cameraForward.Normalize();
+			cameraRight.y = 0.0f;
+			cameraRight.Normalize();
+
+			//XZ成分の移動速度をクリア
+			m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
+			m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
+		}
+
+		//重力の設定
+		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime();
+
 		//キャラクターコントローラーを使用して座標を更新
 		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+
+		if (m_charaCon.IsOnGround()) 
+		{
+			//地面についた
+			m_moveSpeed.y = 0.0f;
+
+			//その場ジャンプ中じゃない
+			SetIsJumping(false);
+		}
 	
+		//座標を設定
+		m_playerModel.SetPosition(m_position);
+	}
+
+	void Player::Jump()
+	{
+		//移動速度の初期化
+		m_moveSpeed.x = 0.0f;
+		m_moveSpeed.z = 0.0f;
+
+		//重力の設定
+		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime();
+
+		//キャラクターコントローラーを使用して座標を更新
+		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+
+		if (m_charaCon.IsOnGround())
+		{
+			//地面についた
+			m_moveSpeed.y = 0.0f;
+
+			//ジャンプ中じゃない
+			//m_nowJump = false;
+		}
+
 		//座標を設定
 		m_playerModel.SetPosition(m_position);
 	}

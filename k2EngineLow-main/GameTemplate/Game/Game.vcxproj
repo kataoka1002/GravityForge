@@ -235,7 +235,9 @@
     <ClCompile Include="PlayerAttackState.cpp" />
     <ClCompile Include="PlayerAttractState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
+    <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="PlayerStandbyState.cpp" />
+    <ClCompile Include="PlayerWalkJumpState.cpp" />
     <ClCompile Include="PlayerWalkState.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -259,7 +261,9 @@
     <ClInclude Include="PlayerAttackState.h" />
     <ClInclude Include="PlayerAttractState.h" />
     <ClInclude Include="PlayerIdleState.h" />
+    <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="PlayerStandbyState.h" />
+    <ClInclude Include="PlayerWalkJumpState.h" />
     <ClInclude Include="PlayerWalkState.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="stdafx.h" />
