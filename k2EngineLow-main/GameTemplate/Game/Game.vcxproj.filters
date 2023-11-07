@@ -82,6 +82,18 @@
     <ClCompile Include="PlayerWalkJumpState.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HumanEnemyIdleState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyDeadState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyCrawlState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyTrembleState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -141,6 +153,21 @@
     </ClInclude>
     <ClInclude Include="PlayerWalkJumpState.h">
       <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="IHumanEnemyState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyIdleState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyDeadState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyCrawlState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyTrembleState.h">
+      <Filter>MyCode\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

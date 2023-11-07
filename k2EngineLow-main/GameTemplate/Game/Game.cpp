@@ -71,7 +71,7 @@ bool Game::Start()
 			else if (objData.EqualObjectName(L"humanEnemy") == true)
 			{
 				//ティーポットオブジェクトを作成する。
-				m_humanEnemy = NewGO<HumanEnemy>(0, "humanenemy");
+				m_humanEnemy = NewGO<nsHumanEnemy::HumanEnemy>(0, "humanenemy");
 				//座標を設定する。
 				m_humanEnemy->SetPosition(objData.position);
 				//大きさを設定する。

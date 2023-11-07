@@ -82,7 +82,7 @@ private:
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
 	Teapot* m_teapot = nullptr;
-	HumanEnemy* m_humanEnemy = nullptr;
+	nsHumanEnemy::HumanEnemy* m_humanEnemy = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト
