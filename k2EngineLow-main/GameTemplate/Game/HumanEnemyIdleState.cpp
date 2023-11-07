@@ -20,8 +20,8 @@ namespace nsHumanEnemy
 
 	IHumanEnemyState* HumanEnemyIdleState::StateChange()
 	{
-		// ‘Ì—Í‚ª0ˆÈ‰º‚ÅŽ€–S
-		if (m_enemy->GetHP() <= 0.0f)
+		// ‘Ì—Í‚ª50ˆÈ‰º‚ÅŽl‚Â‚ñ”‡‚¢
+		if (m_enemy->GetHP() <= 50.0f)
 		{
 			return new HumanEnemyDeadState(m_enemy);
 		}

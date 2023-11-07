@@ -230,6 +230,7 @@
     <ClCompile Include="HumanEnemy.cpp" />
     <ClCompile Include="HumanEnemyCrawlState.cpp" />
     <ClCompile Include="HumanEnemyDeadState.cpp" />
+    <ClCompile Include="HumanEnemyDieState.cpp" />
     <ClCompile Include="HumanEnemyIdleState.cpp" />
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
     <ClCompile Include="Lighting.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="HumanEnemyCrawlState.h" />
     <ClInclude Include="HumanEnemyDeadState.h" />
+    <ClInclude Include="HumanEnemyDieState.h" />
     <ClInclude Include="HumanEnemyIdleState.h" />
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="IHumanEnemyState.h" />

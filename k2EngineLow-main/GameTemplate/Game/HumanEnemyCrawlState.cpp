@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "HumanEnemyCrawlState.h"
+#include "HumanEnemyDieState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -19,6 +20,12 @@ namespace nsHumanEnemy
 
 	IHumanEnemyState* HumanEnemyCrawlState::StateChange()
 	{
+		// 体力が0以下で死亡
+		if (m_enemy->GetHP() <= 0.0f)
+		{
+			return new HumanEnemyDieState(m_enemy);
+		}
+
 		// ここまで来たらステートを遷移しない。
 		return nullptr;
 	}

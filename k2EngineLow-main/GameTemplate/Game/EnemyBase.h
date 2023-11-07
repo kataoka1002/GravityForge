@@ -51,6 +51,15 @@ public:
 		return m_charaCon;
 	}
 
+	/// <summary>
+	/// コリジョンを返す
+	/// </summary>
+	/// <returns></returns>
+	CollisionObject* GetCollision()
+	{
+		return m_collisionObject;
+	}
+
 protected:
 	ModelRender				m_model;
 	Vector3					m_position = Vector3::Zero;					//ポジション
@@ -60,5 +69,6 @@ protected:
 	float					m_hp = 0.0f;								//HP
 
 	Game*					m_game = nullptr;
+	CollisionObject*		m_collisionObject = nullptr;			// コリジョン
 };
 

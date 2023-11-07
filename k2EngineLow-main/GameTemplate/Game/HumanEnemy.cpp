@@ -24,11 +24,15 @@ namespace nsHumanEnemy
 		animationClips[enAnimClip_Dead].SetLoopFlag(false);
 		animationClips[enAnimClip_Crawl].Load("Assets/animData/enemy/humanEnemy_Crawl.tka");
 		animationClips[enAnimClip_Crawl].SetLoopFlag(true);
+		animationClips[enAnimClip_Tremble].Load("Assets/animData/enemy/humanEnemy_Tremble.tka");
+		animationClips[enAnimClip_Tremble].SetLoopFlag(true);
+		animationClips[enAnimClip_Die].Load("Assets/animData/enemy/humanEnemy_die.tka");
+		animationClips[enAnimClip_Die].SetLoopFlag(false); 
 	}
 
 	HumanEnemy::~HumanEnemy()
 	{
-
+		DeleteGO(m_collisionObject);
 	}
 
 	void HumanEnemy::InitModel()
@@ -91,6 +95,28 @@ namespace nsHumanEnemy
 	{
 		// アニメーションを再生
 		m_model.PlayAnimation(currentAnimationClip, m_complementTime);
+	}
+
+	void HumanEnemy::SetCollision()
+	{
+		//コリジョンオブジェクトを作成する。
+		m_collisionObject = NewGO<CollisionObject>(0);
+		Quaternion rot;
+		rot.SetRotationDegX(90.0f);
+
+		//カプセルのコリジョンを作成する。
+		m_collisionObject->CreateCapsule(
+			m_position,
+			rot,
+			30.0f,
+			180.0f
+		);
+
+		//コリジョンに名前を付ける
+		m_collisionObject->SetName("humanEnemy");
+
+		//コリジョンオブジェクトが自動で削除されないようにする
+		m_collisionObject->SetIsEnableAutoDelete(false);
 	}
 
 	void HumanEnemy::Render(RenderContext& rc)

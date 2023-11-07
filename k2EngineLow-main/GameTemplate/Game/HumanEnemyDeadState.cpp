@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "HumanEnemyDeadState.h"
-#include "HumanEnemyCrawlState.h"
+#include "HumanEnemyTrembleState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -26,7 +26,10 @@ namespace nsHumanEnemy
 			//キャラコンの再設定を行う
 			m_enemy->ResetCharaCon();
 
-			return new HumanEnemyCrawlState(m_enemy);
+			//コリジョンの設定
+			m_enemy->SetCollision();
+
+			return new HumanEnemyTrembleState(m_enemy);
 		}
 
 		// ここまで来たらステートを遷移しない。

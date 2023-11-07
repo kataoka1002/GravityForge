@@ -18,6 +18,7 @@ namespace nsHumanEnemy
 			enAnimClip_Dead,
 			enAnimClip_Crawl,
 			enAnimClip_Tremble,
+			enAnimClip_Die,
 			enAnimClip_Num
 		};
 
@@ -27,6 +28,7 @@ namespace nsHumanEnemy
 
 		void Update();								//更新処理
 		void PlayAnimation(EnAnimationClip currentAnimationClip);
+		void SetCollision();
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
 		void InitModel()				override;	//モデルの初期化
 		void Render(RenderContext& rc)	override;	//描画処理
@@ -75,6 +77,5 @@ namespace nsHumanEnemy
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IHumanEnemyState*	m_humanEnemyState = nullptr;			// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
-
 	};
 }

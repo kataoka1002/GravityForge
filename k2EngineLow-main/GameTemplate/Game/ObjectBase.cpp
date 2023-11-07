@@ -307,6 +307,20 @@ void ObjectBase::CalcCollision()
 
 			return;
 		}
+
+		if (enemy->GetCollision() != nullptr)
+		{
+			if (m_collisionObject->IsHit(enemy->GetCollision()))
+			{
+				//エネミーはダメージを受けた時の処理を行う
+				enemy->HandleDamageEvent(m_damage);
+
+				//自分が消えるときの処理
+				OnDestroy();
+
+				return;
+			}
+		}	
 	}
 }
 

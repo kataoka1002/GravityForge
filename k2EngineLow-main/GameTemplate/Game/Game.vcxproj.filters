@@ -94,6 +94,9 @@
     <ClCompile Include="HumanEnemyTrembleState.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="HumanEnemyDieState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -167,6 +170,9 @@
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="HumanEnemyTrembleState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyDieState.h">
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
