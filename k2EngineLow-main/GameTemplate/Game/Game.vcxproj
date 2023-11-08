@@ -233,6 +233,7 @@
     <ClCompile Include="HumanEnemyDieState.cpp" />
     <ClCompile Include="HumanEnemyIdleState.cpp" />
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
+    <ClCompile Include="HumanEnemyWalkState.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="HumanEnemyDieState.h" />
     <ClInclude Include="HumanEnemyIdleState.h" />
     <ClInclude Include="HumanEnemyTrembleState.h" />
+    <ClInclude Include="HumanEnemyWalkState.h" />
     <ClInclude Include="IHumanEnemyState.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />

@@ -1,4 +1,5 @@
 #pragma once
+#include "Player.h"
 class Game;
 
 class EnemyBase : public IGameObject, Noncopyable
@@ -11,9 +12,11 @@ public:
 
 	bool Start();
 	void HandleDamageEvent(float damage);			//ダメージを受けた時の処理
-	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
-	virtual void InitModel()				= 0;	//モデルの初期化
-	virtual void Render(RenderContext& rc)	= 0;	//描画処理
+	virtual void FollowPlayer() = 0;	//移動処理
+	virtual void Turn() = 0;			//回転処理
+	virtual void OnDestroy() = 0;		//消えるときに呼ばれる処理
+	virtual void InitModel() = 0;		//モデルの初期化
+	virtual void Render(RenderContext& rc) = 0;	//描画処理
 
 	/// <summary>
 	/// ポジションの設定
@@ -62,13 +65,17 @@ public:
 
 protected:
 	ModelRender				m_model;
-	Vector3					m_position = Vector3::Zero;					//ポジション
-	Vector3					m_scale = Vector3::One;						//大きさ
-	Quaternion				m_rotation;									//クォータニオン
-	CharacterController		m_charaCon;									//キャラクターコントローラー
-	float					m_hp = 0.0f;								//HP
+	Vector3					m_position = Vector3::Zero;				// ポジション
+	Vector3					m_scale = Vector3::One;					// 大きさ
+	Quaternion				m_rotation;								// クォータニオン
+	CharacterController		m_charaCon;								// キャラクターコントローラー
+	float					m_hp = 0.0f;							// HP
+	Vector3					m_forward = Vector3::Zero;				// 前方向
+	Vector3					m_moveSpeed = Vector3::Zero;			// 移動速度
+	Vector3					m_rotMove = Vector3::Zero;				// 回転速度
 
 	Game*					m_game = nullptr;
+	nsPlayer::Player*		m_player = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;			// コリジョン
 };
 

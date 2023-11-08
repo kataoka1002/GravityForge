@@ -19,6 +19,7 @@ namespace nsHumanEnemy
 			enAnimClip_Crawl,
 			enAnimClip_Tremble,
 			enAnimClip_Die,
+			enAnimClip_Walk,
 			enAnimClip_Num
 		};
 
@@ -27,8 +28,10 @@ namespace nsHumanEnemy
 		~HumanEnemy();
 
 		void Update();								//更新処理
-		void PlayAnimation(EnAnimationClip currentAnimationClip);
-		void SetCollision();
+		void PlayAnimation(EnAnimationClip currentAnimationClip);	//アニメーションの再生
+		void SetCollision();						//コリジョンの設定
+		void FollowPlayer()				override;	//動きの処理
+		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
 		void InitModel()				override;	//モデルの初期化
 		void Render(RenderContext& rc)	override;	//描画処理

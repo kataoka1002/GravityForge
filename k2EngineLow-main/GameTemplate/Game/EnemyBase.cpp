@@ -5,6 +5,7 @@
 bool EnemyBase::Start()
 {
 	m_game = FindGO<Game>("game");
+	m_player = FindGO<nsPlayer::Player>("player");
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	InitModel();

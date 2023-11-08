@@ -41,7 +41,6 @@ namespace nsPlayer
 		void Render(RenderContext& rc);
 		void Move();
 		void Turn();
-		void Jump();
 		void Attract();
 		void Attack();
 		void ResetAttack();

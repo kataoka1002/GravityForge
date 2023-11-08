@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "HumanEnemyIdleState.h"
 #include "HumanEnemyDeadState.h"
+#include "HumanEnemyWalkState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -24,6 +25,11 @@ namespace nsHumanEnemy
 		if (m_enemy->GetHP() <= 50.0f)
 		{
 			return new HumanEnemyDeadState(m_enemy);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonLB1))
+		{
+			return new HumanEnemyWalkState(m_enemy);
 		}
 			
 		// ここまで来たらステートを遷移しない。

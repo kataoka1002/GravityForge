@@ -28,6 +28,8 @@ namespace nsHumanEnemy
 		animationClips[enAnimClip_Tremble].SetLoopFlag(true);
 		animationClips[enAnimClip_Die].Load("Assets/animData/enemy/humanEnemy_die.tka");
 		animationClips[enAnimClip_Die].SetLoopFlag(false); 
+		animationClips[enAnimClip_Walk].Load("Assets/animData/enemy/humanEnemy_walk.tka");
+		animationClips[enAnimClip_Walk].SetLoopFlag(true);
 	}
 
 	HumanEnemy::~HumanEnemy()
@@ -80,6 +82,40 @@ namespace nsHumanEnemy
 
 		// モデルを更新する。
 		m_model.Update();
+	}
+
+	void HumanEnemy::FollowPlayer()
+	{
+		//移動速度の初期化
+		m_moveSpeed.x = 0.0f;
+		m_moveSpeed.z = 0.0f;
+
+		//プレイヤーの方向を求める
+		Vector3 toPlayerDir = m_player->GetPosition() - m_position;
+		toPlayerDir.Normalize();
+
+		//最終的な移動速度の計算
+		m_moveSpeed += toPlayerDir * 50.0f;
+		m_moveSpeed.y = 0.0f;
+
+		//重力の設定
+		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime();
+
+		//キャラクターコントローラーを使用して座標を更新
+		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+
+		//座標を設定
+		m_model.SetPosition(m_position);
+	}
+
+	void HumanEnemy::Turn()
+	{
+		//移動速度から回転を求める
+		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_rotMove, m_moveSpeed);
+
+		//回転を設定する
+		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+		m_model.SetRotation(m_rotation);
 	}
 
 	void HumanEnemy::OnDestroy()

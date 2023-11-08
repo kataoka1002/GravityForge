@@ -155,31 +155,6 @@ namespace nsPlayer
 		m_playerModel.SetPosition(m_position);
 	}
 
-	void Player::Jump()
-	{
-		//移動速度の初期化
-		m_moveSpeed.x = 0.0f;
-		m_moveSpeed.z = 0.0f;
-
-		//重力の設定
-		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime();
-
-		//キャラクターコントローラーを使用して座標を更新
-		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
-
-		if (m_charaCon.IsOnGround())
-		{
-			//地面についた
-			m_moveSpeed.y = 0.0f;
-
-			//ジャンプ中じゃない
-			//m_nowJump = false;
-		}
-
-		//座標を設定
-		m_playerModel.SetPosition(m_position);
-	}
-	
 	void Player::Turn()
 	{	
 		//滑らかに回るようにする

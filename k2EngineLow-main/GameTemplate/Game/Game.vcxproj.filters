@@ -97,6 +97,9 @@
     <ClCompile Include="HumanEnemyDieState.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="HumanEnemyWalkState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -173,6 +176,9 @@
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="HumanEnemyDieState.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyWalkState.h">
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
