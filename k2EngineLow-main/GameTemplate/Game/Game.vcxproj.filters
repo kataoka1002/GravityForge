@@ -100,6 +100,12 @@
     <ClCompile Include="HumanEnemyWalkState.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerDeadState.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerReactionState.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -180,6 +186,12 @@
     </ClInclude>
     <ClInclude Include="HumanEnemyWalkState.h">
       <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDeadState.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerReactionState.h">
+      <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

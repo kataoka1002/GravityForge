@@ -30,6 +30,8 @@ namespace nsPlayer
 			enAnimClip_WalkLeft,
 			enAnimClip_WalkBack,
 			enAnimClip_WalkJump,
+			enAnimClip_Reaction,
+			enAnimClip_Dead,
 			enAnimClip_Num
 		};
 
@@ -201,6 +203,20 @@ namespace nsPlayer
 			return m_charaCon.IsOnGround();
 		}
 
+		/// <summary>
+		/// プレイヤーのHPの取得
+		/// </summary>
+		/// <returns></returns>
+		const float& GetHP()const
+		{
+			return m_hp;
+		}
+
+		void PlayerKill()
+		{
+			m_hp = 0.0f;
+		}
+
 	private:
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
@@ -215,6 +231,7 @@ namespace nsPlayer
 		float				LStick_x = 0.0f;						// Lスティック入力量(横)
 		float				LStick_y = 0.0f;						// Lスティック入力量(縦)
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		float				m_hp = 0.0f;							// HP
 		bool				m_isHoldingObject = false;				// オブジェクトを持っているかどうか
 		bool				m_canAttract = false;					// 引き寄せられるかどうか
 		bool				m_canAttack = false;					// 攻撃できるかどうか

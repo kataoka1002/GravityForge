@@ -23,7 +23,6 @@ namespace nsPlayer
 
 	IPlayerState* PlayerJumpState::StateChange()
 	{
-		//アニメーションの再生が終わったら。
 		if (m_player->GetOnGround() == true)
 		{
 			return new PlayerIdleState(m_player);

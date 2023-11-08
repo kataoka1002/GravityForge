@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "HumanEnemyWalkState.h"
+#include "HumanEnemyDeadState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -19,6 +20,12 @@ namespace nsHumanEnemy
 
 	IHumanEnemyState* HumanEnemyWalkState::StateChange()
 	{
+		// 体力が50以下で四つん這い
+		if (m_enemy->GetHP() <= 50.0f)
+		{
+			return new HumanEnemyDeadState(m_enemy);
+		}
+
 		// ここまで来たらステートを遷移しない。
 		return nullptr;
 	}

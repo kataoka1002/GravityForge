@@ -3,6 +3,8 @@
 #include "PlayerAttractState.h"
 #include "PlayerWalkState.h"
 #include "PlayerJumpState.h"
+#include "PlayerDeadState.h"
+#include "PlayerReactionState.h"
 
 namespace
 {
@@ -52,6 +54,16 @@ namespace nsPlayer
 			return new PlayerJumpState(m_player);
 		}
 
+		if (m_player->GetHP() <= 0.0f)
+		{
+			return new PlayerDeadState(m_player);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonRB1))
+		{
+			return new PlayerReactionState(m_player);
+		}
+
 		// ここまで来たらステートを遷移しない。
 		return nullptr;
 	}
@@ -62,6 +74,11 @@ namespace nsPlayer
 		{
 			//引き寄せる処理
 			m_player->Attract();
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonY))
+		{
+			m_player->PlayerKill();
 		}
 	}
 }

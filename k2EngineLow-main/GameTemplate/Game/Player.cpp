@@ -11,6 +11,8 @@
 namespace
 {
 	const float MOVE_SPEED = 250.0f;
+
+	const float MAX_HP = 100.0f;
 }
 
 /// <summary>
@@ -43,7 +45,10 @@ namespace nsPlayer
 		animationClips[enAnimClip_WalkBack].SetLoopFlag(true);
 		animationClips[enAnimClip_WalkJump].Load("Assets/animData/player/player_walk_jump.tka");
 		animationClips[enAnimClip_WalkJump].SetLoopFlag(false);
-
+		animationClips[enAnimClip_Dead].Load("Assets/animData/player/player_dead.tka");
+		animationClips[enAnimClip_Dead].SetLoopFlag(false);
+		animationClips[enAnimClip_Reaction].Load("Assets/animData/player/player_reaction.tka");
+		animationClips[enAnimClip_Reaction].SetLoopFlag(false);
 	}
 
 	Player::~Player()
@@ -70,6 +75,9 @@ namespace nsPlayer
 			120.0f,			//高さ
 			m_position		//座標
 		);
+
+		//体力の設定
+		m_hp = MAX_HP;
 
 		// 初期ステートを設定
 		m_playerState = new PlayerIdleState(this);
