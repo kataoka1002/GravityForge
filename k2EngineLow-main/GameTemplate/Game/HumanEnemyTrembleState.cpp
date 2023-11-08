@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "HumanEnemyTrembleState.h"
 #include "HumanEnemyDieState.h"
+#include "HumanEnemyCrawlState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -24,6 +25,11 @@ namespace nsHumanEnemy
 		if (m_enemy->GetHP() <= 0.0f)
 		{
 			return new HumanEnemyDieState(m_enemy);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonLB1))
+		{
+			return new HumanEnemyCrawlState(m_enemy);
 		}
 
 		// ここまで来たらステートを遷移しない。

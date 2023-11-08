@@ -155,6 +155,17 @@ namespace nsHumanEnemy
 		m_collisionObject->SetIsEnableAutoDelete(false);
 	}
 
+	void HumanEnemy::MoveCollision()
+	{
+		//ƒRƒŠƒWƒ‡ƒ“‚ð‰¡‚É“|‚·
+		Quaternion rot = m_rotation;
+		rot.AddRotationDegX(180.0f);
+		
+		//ƒRƒŠƒWƒ‡ƒ“‚Ì‰ñ“],ˆÚ“®‚ðÝ’è‚·‚é
+		m_collisionObject->SetRotation(rot);
+		m_collisionObject->SetPosition(m_position);
+	}
+
 	void HumanEnemy::Render(RenderContext& rc)
 	{
 		m_model.Draw(rc);

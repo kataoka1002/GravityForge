@@ -20,7 +20,7 @@ Game::~Game()
 
 bool Game::Start()
 {
-	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	m_levelRender.Init("Assets/modelData/level/level.tkl",
 		[&](LevelObjectData& objData)

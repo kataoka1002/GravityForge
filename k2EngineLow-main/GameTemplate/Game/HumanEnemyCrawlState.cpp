@@ -32,6 +32,8 @@ namespace nsHumanEnemy
 
 	void HumanEnemyCrawlState::Update()
 	{
-
+		m_enemy->FollowPlayer();
+		m_enemy->Turn();
+		m_enemy->MoveCollision();
 	}
 }
