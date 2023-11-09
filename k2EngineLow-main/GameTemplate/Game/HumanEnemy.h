@@ -81,6 +81,18 @@ namespace nsHumanEnemy
 			return m_hp;
 		}
 
+		/// <summary>
+		/// プレイヤーまでの距離を測る
+		/// </summary>
+		/// <returns></returns>
+		float CheckDistanceToPlayer()
+		{
+			//プレイヤーまでのベクトルを求め距離を求める
+			Vector3 toPlayer = m_player->GetPosition() - m_position;
+			float toPlayerLen = toPlayer.Length();
+			return toPlayerLen;
+		}
+
 	protected:
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ

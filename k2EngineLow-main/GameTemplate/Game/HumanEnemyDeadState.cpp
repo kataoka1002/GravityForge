@@ -20,7 +20,7 @@ namespace nsHumanEnemy
 
 	IHumanEnemyState* HumanEnemyDeadState::StateChange()
 	{
-		// アニメーションの再生が終わったら
+		// アニメーションの再生が終わったら四つん這い
 		if (m_enemy->GetIsPlayingAnimation() == false)
 		{
 			//キャラコンの再設定を行う

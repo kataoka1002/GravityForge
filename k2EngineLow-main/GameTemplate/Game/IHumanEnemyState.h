@@ -1,5 +1,6 @@
 #pragma once
 #include "HumanEnemy.h"
+#include "HumanEnemyConstants.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間

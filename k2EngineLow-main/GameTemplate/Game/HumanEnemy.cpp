@@ -1,14 +1,9 @@
 #include "stdafx.h"
 #include "HumanEnemy.h"
+#include "HumanEnemyConstants.h"
 #include "Game.h"
 #include "IHumanEnemyState.h"
 #include "HumanEnemyIdleState.h"
-
-namespace
-{
-	//体力の最大値
-	const float MAX_HP = 100.0f;
-}
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -102,7 +97,7 @@ namespace nsHumanEnemy
 		toPlayerDir.Normalize();
 
 		//最終的な移動速度の計算
-		m_moveSpeed += toPlayerDir * 50.0f;
+		m_moveSpeed += toPlayerDir * MOVE_SPEED;
 		m_moveSpeed.y = 0.0f;
 
 		//重力の設定
@@ -120,6 +115,10 @@ namespace nsHumanEnemy
 		//移動速度から回転を求める
 		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_rotMove, m_moveSpeed);
 		
+		//前方向の設定
+		m_forward = m_rotMove;
+		m_forward.Normalize();
+
 		//回転を設定する
 		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
 		m_model.SetRotation(m_rotation);
@@ -181,14 +180,14 @@ namespace nsHumanEnemy
 			//コリジョンオブジェクトを作成する。
 			auto collisionObject = NewGO<CollisionObject>(0);
 			Vector3 collisionPosition = m_position;
-			//座標をプレイヤーの少し前に設定する。
-			collisionPosition += m_forward * 150.0f;
+			//座標をプレイヤーの少し前,上に設定する。
+			collisionPosition += m_forward * 100.0f;
 			collisionPosition.y += 100.0f;
 			//球状のコリジョンを作成する。
 			collisionObject->CreateSphere(
 				collisionPosition,		//座標。
 				Quaternion::Identity,	//回転。
-				70.0f					//半径。
+				50.0f					//半径。
 			);
 			collisionObject->SetName("human_attack");
 		}

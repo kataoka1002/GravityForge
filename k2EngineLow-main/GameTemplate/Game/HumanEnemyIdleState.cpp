@@ -23,17 +23,19 @@ namespace nsHumanEnemy
 	IHumanEnemyState* HumanEnemyIdleState::StateChange()
 	{
 		// ‘Ì—Í‚ª50ˆÈ‰º‚ÅŽl‚Â‚ñ”‡‚¢
-		if (m_enemy->GetHP() <= 50.0f)
+		if (m_enemy->GetHP() <= KNEELING_HP)
 		{
 			return new HumanEnemyDeadState(m_enemy);
 		}
-
-		if (g_pad[0]->IsTrigger(enButtonLB1))
+		
+		//ˆê’è‹——£ˆÈ‰º‚É‚È‚é‚Æ’Ç‚¢‚©‚¯‚Ä‚­‚é
+		if (m_enemy->CheckDistanceToPlayer() <= CHASE_RANGE)
 		{
 			return new HumanEnemyWalkState(m_enemy);
 		}
 
-		if (g_pad[0]->IsTrigger(enButtonLB2))
+		//ˆê’è‹——£ˆÈ‰º‚É‚È‚é‚ÆUŒ‚‚µ‚Ä‚­‚é
+		if (m_enemy->CheckDistanceToPlayer() <= ATTACK_RANGE)
 		{
 			return new HumanEnemyAttackState(m_enemy);
 		}

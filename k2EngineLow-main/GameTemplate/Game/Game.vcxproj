@@ -264,6 +264,7 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="HumanEnemyAttackState.h" />
+    <ClInclude Include="HumanEnemyConstants.h" />
     <ClInclude Include="HumanEnemyCrawlState.h" />
     <ClInclude Include="HumanEnemyDeadState.h" />
     <ClInclude Include="HumanEnemyDieState.h" />

@@ -199,5 +199,8 @@
     <ClInclude Include="HumanEnemyAttackState.h">
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="HumanEnemyConstants.h">
+      <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,12 +22,13 @@ namespace nsHumanEnemy
 	IHumanEnemyState* HumanEnemyTrembleState::StateChange()
 	{
 		// ‘Ì—Í‚ª0ˆÈ‰º‚ÅŽ€–S
-		if (m_enemy->GetHP() <= 0.0f)
+		if (m_enemy->GetHP() <= DEAD_LINE)
 		{
 			return new HumanEnemyDieState(m_enemy);
 		}
 
-		if (g_pad[0]->IsTrigger(enButtonLB1))
+		//ˆê’è‹——£ˆÈ‰º‚É‚È‚é‚Æ’Ç‚¢‚©‚¯‚Ä‚­‚é
+		if (m_enemy->CheckDistanceToPlayer() <= CHASE_RANGE_KNEELING)
 		{
 			return new HumanEnemyCrawlState(m_enemy);
 		}
@@ -38,6 +39,7 @@ namespace nsHumanEnemy
 
 	void HumanEnemyTrembleState::Update()
 	{
-		
+		//ƒRƒŠƒWƒ‡ƒ“‚Ìˆ—
+		m_enemy->MoveCollision();
 	}
 }
