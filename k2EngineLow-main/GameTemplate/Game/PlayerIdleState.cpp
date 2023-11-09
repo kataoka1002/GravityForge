@@ -59,7 +59,8 @@ namespace nsPlayer
 			return new PlayerDeadState(m_player);
 		}
 
-		if (g_pad[0]->IsTrigger(enButtonRB1))
+		//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚ç
+		if (m_player->DidAttackHit())
 		{
 			return new PlayerReactionState(m_player);
 		}

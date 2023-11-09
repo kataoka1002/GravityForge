@@ -10,7 +10,7 @@ namespace nsHumanEnemy
 	class HumanEnemy;
 
 	/// <summary>
-	/// プレイヤーの死亡ステートクラス
+	/// エネミーの四つん這い待機ステートクラス
 	/// </summary>
 	class HumanEnemyTrembleState : public IHumanEnemyState
 	{
@@ -18,7 +18,7 @@ namespace nsHumanEnemy
 		/// <summary>
 		/// コンストラクタ。
 		/// </summary>
-		/// <param name="player">プレイヤーのインスタンス。</param>
+		/// <param name="player">エネミーのインスタンス。</param>
 		HumanEnemyTrembleState(HumanEnemy* enemy) : IHumanEnemyState(enemy) {}
 		/// <summary>
 		/// デストラクタ。

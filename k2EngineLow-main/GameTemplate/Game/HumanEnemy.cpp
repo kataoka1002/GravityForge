@@ -30,6 +30,8 @@ namespace nsHumanEnemy
 		animationClips[enAnimClip_Die].SetLoopFlag(false); 
 		animationClips[enAnimClip_Walk].Load("Assets/animData/enemy/humanEnemy_walk.tka");
 		animationClips[enAnimClip_Walk].SetLoopFlag(true);
+		animationClips[enAnimClip_Attack].Load("Assets/animData/enemy/humanEnemy_Attack.tka");
+		animationClips[enAnimClip_Attack].SetLoopFlag(false);
 	}
 
 	HumanEnemy::~HumanEnemy()
@@ -44,6 +46,11 @@ namespace nsHumanEnemy
 		m_model.SetRotation(m_rotation);
 		m_model.SetScale(m_scale);
 		m_model.Update();
+
+		//アニメーションイベント用の関数を設定する
+		m_model.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
+			OnAnimationEvent(clipName, eventName);
+		});
 
 		// キャラクターコントローラーを初期化
 		m_charaCon.Init(
@@ -112,7 +119,7 @@ namespace nsHumanEnemy
 	{
 		//移動速度から回転を求める
 		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_rotMove, m_moveSpeed);
-
+		
 		//回転を設定する
 		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
 		m_model.SetRotation(m_rotation);
@@ -164,6 +171,32 @@ namespace nsHumanEnemy
 		//コリジョンの回転,移動を設定する
 		m_collisionObject->SetRotation(rot);
 		m_collisionObject->SetPosition(m_position);
+	}
+
+	void HumanEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+	{
+		//キーの名前が「attack_start」の時。
+		if (wcscmp(eventName, L"attack_start") == 0)
+		{
+			//コリジョンオブジェクトを作成する。
+			auto collisionObject = NewGO<CollisionObject>(0);
+			Vector3 collisionPosition = m_position;
+			//座標をプレイヤーの少し前に設定する。
+			collisionPosition += m_forward * 150.0f;
+			collisionPosition.y += 100.0f;
+			//球状のコリジョンを作成する。
+			collisionObject->CreateSphere(
+				collisionPosition,		//座標。
+				Quaternion::Identity,	//回転。
+				70.0f					//半径。
+			);
+			collisionObject->SetName("human_attack");
+		}
+		//キーの名前が「attack_end」の時。
+		else if (wcscmp(eventName, L"attack_end") == 0)
+		{
+			
+		}
 	}
 
 	void HumanEnemy::Render(RenderContext& rc)

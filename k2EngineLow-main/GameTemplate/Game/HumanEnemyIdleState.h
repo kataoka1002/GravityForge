@@ -10,7 +10,7 @@ namespace nsHumanEnemy
 	class HumanEnemy;
 
 	/// <summary>
-	/// プレイヤーの待機ステートクラス
+	/// エネミーの待機ステートクラス
 	/// </summary>
 	class HumanEnemyIdleState : public IHumanEnemyState
 	{
@@ -18,7 +18,7 @@ namespace nsHumanEnemy
 		/// <summary>
 		/// コンストラクタ。
 		/// </summary>
-		/// <param name="player">プレイヤーのインスタンス。</param>
+		/// <param name="player">エネミーのインスタンス。</param>
 		HumanEnemyIdleState(HumanEnemy* enemy) : IHumanEnemyState(enemy) {}
 		/// <summary>
 		/// デストラクタ。

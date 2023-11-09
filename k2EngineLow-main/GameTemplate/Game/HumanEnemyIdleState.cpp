@@ -2,6 +2,7 @@
 #include "HumanEnemyIdleState.h"
 #include "HumanEnemyDeadState.h"
 #include "HumanEnemyWalkState.h"
+#include "HumanEnemyAttackState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -30,6 +31,11 @@ namespace nsHumanEnemy
 		if (g_pad[0]->IsTrigger(enButtonLB1))
 		{
 			return new HumanEnemyWalkState(m_enemy);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonLB2))
+		{
+			return new HumanEnemyAttackState(m_enemy);
 		}
 			
 		// ここまで来たらステートを遷移しない。

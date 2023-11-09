@@ -48,6 +48,7 @@ namespace nsPlayer
 		void ResetAttack();
 		void ChangeWalkingStyle();
 		void PlayAnimation(EnAnimationClip currentAnimationClip);
+		bool DidAttackHit();
 
 		/// <summary>
 		/// ƒ|ƒWƒVƒ‡ƒ“‚Ìİ’è
@@ -216,6 +217,7 @@ namespace nsPlayer
 		{
 			m_hp = 0.0f;
 		}
+
 
 	private:
 

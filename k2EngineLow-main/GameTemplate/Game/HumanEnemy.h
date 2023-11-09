@@ -20,6 +20,7 @@ namespace nsHumanEnemy
 			enAnimClip_Tremble,
 			enAnimClip_Die,
 			enAnimClip_Walk,
+			enAnimClip_Attack,
 			enAnimClip_Num
 		};
 
@@ -30,7 +31,8 @@ namespace nsHumanEnemy
 		void Update();								//更新処理
 		void PlayAnimation(EnAnimationClip currentAnimationClip);	//アニメーションの再生
 		void SetCollision();						//コリジョンの設定
-		void MoveCollision();						//コリジョンの動きの設定
+		void MoveCollision();						//コリジョンの動きの設定	
+		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -70,6 +72,10 @@ namespace nsHumanEnemy
 			return m_model.IsPlayingAnimation();
 		}
 
+		/// <summary>
+		/// 体力の取得
+		/// </summary>
+		/// <returns></returns>
 		const float GetHP()const
 		{
 			return m_hp;

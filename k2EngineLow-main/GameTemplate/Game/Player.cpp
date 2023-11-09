@@ -272,6 +272,23 @@ namespace nsPlayer
 		}
 	}
 
+	bool Player::DidAttackHit()
+	{
+		//敵の攻撃用のコリジョンの配列を取得する。
+		const auto& collisions = g_collisionObjectManager->FindCollisionObjects("human_attack");
+		//配列をfor文で回す。
+		for (auto collision : collisions)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	void Player::Render(RenderContext& rc)
 	{
 		m_playerModel.Draw(rc);
