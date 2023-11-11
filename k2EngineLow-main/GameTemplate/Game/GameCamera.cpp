@@ -23,7 +23,7 @@ namespace
 	const float CAMERA_COLLISION_SCALE = 5.0f;
 
 	//ƒJƒƒ‰‚ÌˆÚ“®‘¬“x
-	const float CAMERA_MOVE_POWER_X = 1.0f;
+	const float CAMERA_MOVE_POWER_X = 1.3f;
 	const float CAMERA_MOVE_POWER_Y = 1.0f;
 
 	//‰“•½–Ê

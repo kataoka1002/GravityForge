@@ -49,6 +49,7 @@ namespace nsPlayer
 		void ChangeWalkingStyle();
 		void PlayAnimation(EnAnimationClip currentAnimationClip);
 		bool DidAttackHit();
+		void CalcDamage(float damage);
 
 		/// <summary>
 		/// ƒ|ƒWƒVƒ‡ƒ“‚Ìİ’è
@@ -211,11 +212,6 @@ namespace nsPlayer
 		const float& GetHP()const
 		{
 			return m_hp;
-		}
-
-		void PlayerKill()
-		{
-			m_hp = 0.0f;
 		}
 
 

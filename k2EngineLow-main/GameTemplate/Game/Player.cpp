@@ -10,7 +10,9 @@
 
 namespace
 {
-	const float MOVE_SPEED = 250.0f;
+	const float RUN_SPEED = 500.0f;
+
+	const float WALK_SPEED = 250.0f;
 
 	const float MAX_HP = 100.0f;
 }
@@ -25,7 +27,7 @@ namespace nsPlayer
 		//アニメーションの初期化
 		animationClips[enAnimClip_Idle].Load("Assets/animData/player/player_idle.tka");
 		animationClips[enAnimClip_Idle].SetLoopFlag(true);
-		animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_walk.tka");
+		animationClips[enAnimClip_Walk].Load("Assets/animData/player/player_run.tka");
 		animationClips[enAnimClip_Walk].SetLoopFlag(true);
 		animationClips[enAnimClip_Jump].Load("Assets/animData/player/player_jump.tka");
 		animationClips[enAnimClip_Jump].SetLoopFlag(false);
@@ -139,9 +141,20 @@ namespace nsPlayer
 			cameraRight.y = 0.0f;
 			cameraRight.Normalize();
 
+			//オブジェクト保持中かどうかで歩く速さを変える
+			float moveSpeed;
+			if (m_isHoldingObject)
+			{
+				moveSpeed = WALK_SPEED;
+			}
+			else
+			{
+				moveSpeed = RUN_SPEED;
+			}
+
 			//XZ成分の移動速度をクリア
-			m_moveSpeed += cameraForward * LStick_y * MOVE_SPEED;	//奥方向への移動速度を加算
-			m_moveSpeed += cameraRight * LStick_x * MOVE_SPEED;		//右方向への移動速度を加算
+			m_moveSpeed += cameraForward * LStick_y * moveSpeed;	//奥方向への移動速度を加算
+			m_moveSpeed += cameraRight * LStick_x * moveSpeed;		//右方向への移動速度を加算
 		}
 
 		//重力の設定
@@ -282,11 +295,25 @@ namespace nsPlayer
 			//コリジョンとキャラコンが衝突したら。
 			if (collision->IsHit(m_charaCon))
 			{
+				//ダメージを与える
+				CalcDamage(50.0f);
+
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	void Player::CalcDamage(float damage)
+	{
+		//HPからダメージを引く
+		m_hp -= damage;
+
+		if (m_hp <= 0.0f)
+		{
+			m_hp = 0.0f;
+		}
 	}
 
 	void Player::Render(RenderContext& rc)

@@ -80,10 +80,5 @@ namespace nsPlayer
 			//ˆø‚«Šñ‚¹‚éˆ—
 			m_player->Attract();
 		}
-
-		if (g_pad[0]->IsTrigger(enButtonY))
-		{
-			m_player->PlayerKill();
-		}
 	}
 }
