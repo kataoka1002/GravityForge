@@ -9,6 +9,7 @@
 #include "level3D/Level.h"
 #include "ObjectBase.h"
 #include "HumanEnemy.h"
+#include "House.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -83,6 +84,7 @@ private:
 	Lighting* m_light = nullptr;
 	Teapot* m_teapot = nullptr;
 	nsHumanEnemy::HumanEnemy* m_humanEnemy = nullptr;
+	House* m_house = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

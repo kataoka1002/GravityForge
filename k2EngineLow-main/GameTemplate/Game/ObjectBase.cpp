@@ -365,25 +365,25 @@ void ObjectBase::CalcAimingDirection()
 		return;
 	}
 
-	//コライダーの始点と終点
-	btTransform start, end;
-	start.setIdentity();
-	end.setIdentity();
+	////コライダーの始点と終点
+	//btTransform start, end;
+	//start.setIdentity();
+	//end.setIdentity();
 
-	//始点はオブジェクトの座標
-	start.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
-	//終点はカメラの座標
-	end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
+	////始点はオブジェクトの座標
+	//start.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	////終点はカメラの座標
+	//end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
 
-	//コライダーを始点から終点まで動かして,衝突するかどうかを調べる
-	SweepResultWall callback;
-	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+	////コライダーを始点から終点まで動かして,衝突するかどうかを調べる
+	//SweepResultWall callback;
+	//PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
 
-	//壁と衝突したら
-	if (callback.isHit == true)
-	{
-		return;
-	}
+	////壁と衝突したら
+	//if (callback.isHit == true)
+	//{
+	//	return;
+	//}
 
 	//引き寄せ可能にする
 	m_canAttract = true;

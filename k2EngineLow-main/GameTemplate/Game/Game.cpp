@@ -52,6 +52,19 @@ bool Game::Start()
 				m_bg->SetRotation(objData.rotation);
 				return true;
 			}
+			//名前がbackgroundだったら。
+			//else if (objData.EqualObjectName(L"house") == true)
+			//{
+			//	//背景オブジェクトを作成する。
+			//	m_house = NewGO<House>(0, "house");
+			//	//座標を設定する。
+			//	m_house->SetPosition(objData.position);
+			//	//大きさを設定する。
+			//	m_house->SetScale(objData.scale);
+			//	//回転を設定する。
+			//	m_house->SetRotation(objData.rotation);
+			//	return true;
+			//}
 			//名前がteapotだったら。
 			else if (objData.EqualObjectName(L"teapot") == true)
 			{
@@ -110,7 +123,7 @@ void Game::SetSkyCube()
 	m_skyCube = NewGO<SkyCube>(0, "skycube");
 	m_skyCube->SetLuminance(1.0f);
 	m_skyCube->SetScale(1000.0f);
-	m_skyCube->SetPosition({ 0.0f,100.0f,0.0f });
+	m_skyCube->SetPosition(m_player->GetPosition());
 	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
 
 	// 環境光の計算のためのIBLテクスチャをセットする。

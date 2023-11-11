@@ -109,6 +109,9 @@
     <ClCompile Include="HumanEnemyAttackState.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="House.cpp">
+      <Filter>MyCode\BackGround</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -201,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="HumanEnemyConstants.h">
       <Filter>MyCode\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="House.h">
+      <Filter>MyCode\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

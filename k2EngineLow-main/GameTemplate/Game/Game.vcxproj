@@ -227,6 +227,7 @@
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="House.cpp" />
     <ClCompile Include="HumanEnemy.cpp" />
     <ClCompile Include="HumanEnemyAttackState.cpp" />
     <ClCompile Include="HumanEnemyCrawlState.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="House.h" />
     <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="HumanEnemyAttackState.h" />
     <ClInclude Include="HumanEnemyConstants.h" />
