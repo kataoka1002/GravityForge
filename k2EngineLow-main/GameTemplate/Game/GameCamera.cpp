@@ -27,7 +27,7 @@ namespace
 	const float CAMERA_MOVE_POWER_Y = 1.0f;
 
 	//‰“•½–Ê
-	const float FAR_PLANE = 15000.0f;
+	const float FAR_PLANE = 35000.0f;
 }
 
 GameCamera::GameCamera()
