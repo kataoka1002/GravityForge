@@ -112,6 +112,9 @@
     <ClCompile Include="House.cpp">
       <Filter>MyCode\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>MyCode\MainGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -207,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="House.h">
       <Filter>MyCode\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>MyCode\MainGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
