@@ -223,8 +223,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Air.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BarrierFence.cpp" />
+    <ClCompile Include="BenchBig.cpp" />
+    <ClCompile Include="BenchSmall.cpp" />
+    <ClCompile Include="BillboardSmall.cpp" />
+    <ClCompile Include="BushBig.cpp" />
+    <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="Dustbin.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="Fence.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="House.cpp" />
@@ -236,9 +245,12 @@
     <ClCompile Include="HumanEnemyIdleState.cpp" />
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
     <ClCompile Include="HumanEnemyWalkState.cpp" />
+    <ClCompile Include="Hydrant.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
+    <ClCompile Include="PlantLong.cpp" />
+    <ClCompile Include="PlantLow.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttackState.cpp" />
     <ClCompile Include="PlayerAttractState.cpp" />
@@ -247,9 +259,12 @@
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="PlayerReactionState.cpp" />
     <ClCompile Include="PlayerStandbyState.cpp" />
+    <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="PlayerWalkJumpState.cpp" />
     <ClCompile Include="PlayerWalkState.cpp" />
     <ClCompile Include="Reticle.cpp" />
+    <ClCompile Include="RockBig.cpp" />
+    <ClCompile Include="SolarPanel.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -260,8 +275,17 @@
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Air.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="BarrierFence.h" />
+    <ClInclude Include="BenchBig.h" />
+    <ClInclude Include="BenchSmall.h" />
+    <ClInclude Include="BillboardSmall.h" />
+    <ClInclude Include="BushBig.h" />
+    <ClInclude Include="Cone.h" />
+    <ClInclude Include="Dustbin.h" />
     <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="Fence.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="House.h" />
@@ -274,10 +298,13 @@
     <ClInclude Include="HumanEnemyIdleState.h" />
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="HumanEnemyWalkState.h" />
+    <ClInclude Include="Hydrant.h" />
     <ClInclude Include="IHumanEnemyState.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="ObjectBase.h" />
+    <ClInclude Include="PlantLong.h" />
+    <ClInclude Include="PlantLow.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttackState.h" />
     <ClInclude Include="PlayerAttractState.h" />
@@ -286,9 +313,12 @@
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="PlayerReactionState.h" />
     <ClInclude Include="PlayerStandbyState.h" />
+    <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="PlayerWalkJumpState.h" />
     <ClInclude Include="PlayerWalkState.h" />
     <ClInclude Include="Reticle.h" />
+    <ClInclude Include="RockBig.h" />
+    <ClInclude Include="SolarPanel.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Teapot.h" />

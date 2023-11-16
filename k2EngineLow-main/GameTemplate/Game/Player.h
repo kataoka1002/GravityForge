@@ -214,6 +214,15 @@ namespace nsPlayer
 			return m_hp;
 		}
 
+		/// <summary>
+		/// HP‚ÌŠ„‡‚ğæ“¾
+		/// </summary>
+		/// <returns></returns>
+		const float GetHPRatio()const
+		{
+			return m_hp / 100.0f;
+		}
+
 
 	private:
 

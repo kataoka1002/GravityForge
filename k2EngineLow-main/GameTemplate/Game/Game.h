@@ -4,12 +4,29 @@
 #include "BackGround.h"
 #include "GameCamera.h"
 #include "Lighting.h"
+
 #include "Teapot.h"
+#include "Air.h"
+#include "BarrierFence.h"
+#include "BenchBig.h"
+#include "BenchSmall.h"
+#include "BillboardSmall.h"
+#include "BushBig.h"
+#include "Cone.h"
+#include "Dustbin.h"
+#include "Fence.h"
+#include "Hydrant.h"
+#include "PlantLong.h"
+#include "PlantLow.h"
+#include "RockBig.h"
+#include "SolarPanel.h"
+
 #include "Reticle.h"
 #include "level3D/Level.h"
 #include "ObjectBase.h"
 #include "HumanEnemy.h"
 #include "House.h"
+#include "PlayerUI.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -20,6 +37,8 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 	void SetSkyCube();
+	template <typename T>
+	void SetLevel(T* objct, LevelObjectData& objData);
 
 	/// <summary>
 	/// オブジェクトをリストから削除する
@@ -79,10 +98,27 @@ private:
 	SkyCube* m_skyCube = nullptr;
 	nsPlayer::Player* m_player = nullptr;
 	nsPlayer::Reticle* m_reticle = nullptr;
+	nsPlayer::PlayerUI* m_playerUI = nullptr;
 	BackGround* m_bg = nullptr;
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
+
 	Teapot* m_teapot = nullptr;
+	Air* m_air = nullptr;
+	BarrierFence* m_barrierFence = nullptr;
+	BenchBig* m_benchBig = nullptr;
+	BenchSmall* m_benchSmall = nullptr;
+	BillboardSmall* m_billboardSmall = nullptr;
+	BushBig* m_bushBig = nullptr;
+	Cone* m_cone = nullptr;
+	Dustbin* m_dustbin = nullptr;
+	Fence* m_fence = nullptr;
+	Hydrant* m_hydrant = nullptr;
+	PlantLong* m_plantLong = nullptr;
+	PlantLow* m_plantLow = nullptr;
+	RockBig* m_rockBig = nullptr;
+	SolarPanel* m_solarPanel = nullptr;
+
 	nsHumanEnemy::HumanEnemy* m_humanEnemy = nullptr;
 	House* m_house = nullptr;
 

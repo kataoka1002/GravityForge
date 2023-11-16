@@ -22,6 +22,9 @@
     <Filter Include="MyCode\MainGame">
       <UniqueIdentifier>{9eafb892-e640-40da-9425-9c043d112508}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\UI">
+      <UniqueIdentifier>{b14c40af-a174-4909-85c4-f8518ea77c78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -114,6 +117,51 @@
     </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>MyCode\MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Air.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BarrierFence.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BenchBig.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BenchSmall.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BillboardSmall.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="BushBig.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Cone.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Dustbin.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Fence.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Hydrant.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlantLong.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="PlantLow.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="RockBig.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarPanel.cpp">
+      <Filter>MyCode\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +261,51 @@
     </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>MyCode\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerUI.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Air.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BarrierFence.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchBig.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchSmall.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BillboardSmall.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BushBig.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Dustbin.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Hydrant.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlantLong.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlantLow.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="RockBig.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarPanel.h">
+      <Filter>MyCode\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
