@@ -220,6 +220,11 @@ float4 PSMain(PSInput In) : SV_Target0
     
     float4 finalColor = 1.0f;
     finalColor.xyz = lig;    
+        
+    finalColor.r *= 0.8f;
+    finalColor.g *= 0.8f;
+    finalColor.b *= 1.0f;
+    
     return finalColor;
 }
 
