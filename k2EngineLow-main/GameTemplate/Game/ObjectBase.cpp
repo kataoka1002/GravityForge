@@ -26,6 +26,9 @@ namespace
 
 	//吹っ飛ぶ速さ
 	const float BLOW_AWAY_SPEED = 3000.0f;
+
+	//引き寄せれる距離
+	const float ATTRACT_LIMIT = 1000.0f;
 }
 
 bool ObjectBase::Start()
@@ -46,15 +49,17 @@ bool ObjectBase::Start()
 
 void ObjectBase::Move()
 {
+	
+
 	switch (m_objectState)
 	{
-	//静止中
+		//静止中
 	case enObjectState_Quiescence:
 		//引き寄せれるかどうかを判定
 		CalcAimingDirection();
 		break;
 
-	//待機中
+		//待機中
 	case enObjectState_Idle:
 		//フワフワ
 		IdleMove();
@@ -63,7 +68,7 @@ void ObjectBase::Move()
 		Turn(g_camera3D->GetForward());
 		break;
 
-	//引き寄せ中
+		//引き寄せ中
 	case enObjectState_Attract:
 		//ターゲットの設定
 		CalcTargetPosition();
@@ -75,7 +80,7 @@ void ObjectBase::Move()
 		Turn(g_camera3D->GetForward());
 		break;
 
-	//吹っ飛び中
+		//吹っ飛び中
 	case enObjectState_Blow:
 		//吹っ飛ぶ処理
 		BlowAway();
@@ -346,6 +351,13 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 
 void ObjectBase::CalcAimingDirection()
 {
+	//プレイヤーとの距離が遠すぎたら早期リターン
+	Vector3 distance = m_player->GetPosition() - m_position;
+	if (distance.Length() > ATTRACT_LIMIT)
+	{
+		return;
+	}
+
 	//デフォルトは引き寄せれない
 	m_canAttract = false;
 
@@ -360,7 +372,7 @@ void ObjectBase::CalcAimingDirection()
 	float innerProduct = toCameraDir.Dot(g_camera3D->GetForward());
 
 	//内積が１より小さいなら(2つのベクトルが別の方向を向いている)なら
-	if (innerProduct < 0.9999f)
+	if (innerProduct < 0.9995f)
 	{
 		return;
 	}

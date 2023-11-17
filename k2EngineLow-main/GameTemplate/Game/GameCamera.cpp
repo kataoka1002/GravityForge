@@ -6,6 +6,7 @@ namespace
 {
 	//注視点から視点までのベクトル
 	const Vector3 TO_CAMERA_POSITION = { 0.0f, 150.0f, -300.0f };
+	const Vector3 TO_CAMERA_START_POSITION = { 0.0f, 150.0f, 300.0f };
 
 	//注視点から視点までのベクトル(近距離時)
 	const Vector3 TO_CAMERA_POSITION_NEAR = { 0.0f,100.0f,-270.0f };
@@ -45,8 +46,8 @@ bool GameCamera::Start()
 	//プレイヤーのインスタンスを探す。
 	m_player = FindGO<nsPlayer::Player>("player");
 
-	//注視点から視点までのベクトルを求める
-	SetNearCamera(false);
+	//カメラまでの距離にセット
+	m_toCameraPos.Set(TO_CAMERA_START_POSITION);
 
 	//遠平面の設定
 	g_camera3D->SetFar(FAR_PLANE);
