@@ -14,7 +14,23 @@ Game::~Game()
 	DeleteGO(m_bg);
 	DeleteGO(m_camera);
 	DeleteGO(m_light);
+
 	DeleteGO(m_teapot);
+	DeleteGO(m_air);
+	DeleteGO(m_barrierFence);
+	DeleteGO(m_benchBig);
+	DeleteGO(m_benchSmall);
+	DeleteGO(m_billboardSmall);
+	DeleteGO(m_bushBig);
+	DeleteGO(m_cone);
+	DeleteGO(m_dustbin);
+	DeleteGO(m_fence);
+	DeleteGO(m_hydrant);
+	DeleteGO(m_plantLong);
+	DeleteGO(m_plantLow);
+	DeleteGO(m_rockBig);
+	DeleteGO(m_solarPanel);
+
 	DeleteGO(m_reticle);
 	DeleteGO(m_playerUI);
 }
@@ -71,31 +87,19 @@ bool Game::Start()
 			{
 				//ティーポットオブジェクトを作成する。
 				m_teapot = NewGO<Teapot>(0, "teapot");
-				////座標を設定する。
-				//m_teapot->SetPosition(objData.position);
-				////大きさを設定する。
-				//m_teapot->SetScale(objData.scale);
-				////回転を設定する。
-				//m_teapot->SetRotation(objData.rotation);
-				
+
 				SetLevel(m_teapot, objData);
-				
+
 				//リストに追加
 				m_objectList.push_back(m_teapot);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"air") == true)
 			{
-				//ティーポットオブジェクトを作成する。
+				//換気扇オブジェクトを作成する。
 				m_air = NewGO<Air>(0, "air");
 
-				//SetLevel(m_air, objData);
-				//座標を設定する。
-				m_air->SetPosition(objData.position);
-				//大きさを設定する。
-				m_air->SetScale(objData.scale);
-				//回転を設定する。
-				m_air->SetRotation(objData.rotation);
+				SetLevel(m_air, objData);
 
 				//リストに追加
 				m_objectList.push_back(m_air);
@@ -103,7 +107,7 @@ bool Game::Start()
 			}
 			else if (objData.EqualObjectName(L"barrierFence") == true)
 			{
-				//ティーポットオブジェクトを作成する。
+				//工事の柵オブジェクトを作成する。
 				m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
 
 				SetLevel(m_barrierFence, objData);
@@ -114,7 +118,7 @@ bool Game::Start()
 			}
 			else if (objData.EqualObjectName(L"bench_big") == true)
 			{
-				//ティーポットオブジェクトを作成する。
+				//でかいベンチオブジェクトを作成する。
 				m_benchBig = NewGO<BenchBig>(0, "benchbig");
 
 				SetLevel(m_benchBig, objData);
@@ -125,7 +129,7 @@ bool Game::Start()
 			}
 			else if (objData.EqualObjectName(L"bench_small") == true)
 			{
-				//ティーポットオブジェクトを作成する。
+				//小さいベンチオブジェクトを作成する。
 				m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
 
 				SetLevel(m_benchSmall, objData);
@@ -136,113 +140,113 @@ bool Game::Start()
 			}
 			else if (objData.EqualObjectName(L"billboard_small") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
+				//看板オブジェクトを作成する。
+				m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
 
-			SetLevel(m_billboardSmall, objData);
+				SetLevel(m_billboardSmall, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_billboardSmall);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_billboardSmall);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"bush_big") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_bushBig = NewGO<BushBig>(0, "bushbig");
+				//草オブジェクトを作成する。
+				m_bushBig = NewGO<BushBig>(0, "bushbig");
 
-			SetLevel(m_bushBig, objData);
+				SetLevel(m_bushBig, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_bushBig);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_bushBig);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"cone") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_cone = NewGO<Cone>(0, "cone");
+				//三角コーンオブジェクトを作成する。
+				m_cone = NewGO<Cone>(0, "cone");
 
-			SetLevel(m_cone, objData);
+				SetLevel(m_cone, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_cone);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_cone);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"dustbin") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_dustbin = NewGO<Dustbin>(0, "dustbin");
+				//ゴミ箱オブジェクトを作成する。
+				m_dustbin = NewGO<Dustbin>(0, "dustbin");
 
-			SetLevel(m_dustbin, objData);
+				SetLevel(m_dustbin, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_dustbin);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_dustbin);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"fence") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_fence = NewGO<Fence>(0, "fence");
+				//フェンスオブジェクトを作成する。
+				m_fence = NewGO<Fence>(0, "fence");
 
-			SetLevel(m_fence, objData);
+				SetLevel(m_fence, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_fence);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_fence);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"hydrant") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_hydrant = NewGO<Hydrant>(0, "hydrant");
+				//消火栓オブジェクトを作成する。
+				m_hydrant = NewGO<Hydrant>(0, "hydrant");
 
-			SetLevel(m_hydrant, objData);
+				SetLevel(m_hydrant, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_hydrant);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_hydrant);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"plant_long") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_plantLong = NewGO<PlantLong>(0, "plantlong");
+				//大花瓶オブジェクトを作成する。
+				m_plantLong = NewGO<PlantLong>(0, "plantlong");
 
-			SetLevel(m_plantLong, objData);
+				SetLevel(m_plantLong, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_plantLong);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_plantLong);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"plant_low") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_plantLow = NewGO<PlantLow>(0, "plantlow");
+				//小花瓶オブジェクトを作成する。
+				m_plantLow = NewGO<PlantLow>(0, "plantlow");
 
-			SetLevel(m_plantLow, objData);
+				SetLevel(m_plantLow, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_plantLow);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_plantLow);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"rock_big") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_rockBig = NewGO<RockBig>(0, "rockbig");
+				//岩オブジェクトを作成する。
+				m_rockBig = NewGO<RockBig>(0, "rockbig");
 
-			SetLevel(m_rockBig, objData);
+				SetLevel(m_rockBig, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_rockBig);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_rockBig);
+				return true;
 			}
 			else if (objData.EqualObjectName(L"solarPanel") == true)
 			{
-			//ティーポットオブジェクトを作成する。
-			m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
+				//ソーラーパネルオブジェクトを作成する。
+				m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
 
-			SetLevel(m_solarPanel, objData);
+				SetLevel(m_solarPanel, objData);
 
-			//リストに追加
-			m_objectList.push_back(m_solarPanel);
-			return true;
+				//リストに追加
+				m_objectList.push_back(m_solarPanel);
+				return true;
 			}
 			//名前がhumanEnemyだったら。
 			else if (objData.EqualObjectName(L"humanEnemy") == true)

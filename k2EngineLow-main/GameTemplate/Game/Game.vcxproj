@@ -303,6 +303,7 @@
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="ObjectBase.h" />
+    <ClInclude Include="ObjectCollisionConstants.h" />
     <ClInclude Include="PlantLong.h" />
     <ClInclude Include="PlantLow.h" />
     <ClInclude Include="Player.h" />

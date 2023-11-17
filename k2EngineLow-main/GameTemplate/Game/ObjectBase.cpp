@@ -49,8 +49,6 @@ bool ObjectBase::Start()
 
 void ObjectBase::Move()
 {
-	
-
 	switch (m_objectState)
 	{
 		//静止中
@@ -292,9 +290,12 @@ void ObjectBase::BlowAway()
 {	
 	//吹っ飛び中のキャラコンの更新
 	m_position = m_charaCon.Execute(m_flightSpeed, g_gameTime->GetFrameDeltaTime());
+	
+	//コリジョンをキャラコンと同じ位置に出るようにセット
+	m_collisionPosition = { m_position.x,m_position.y + m_collisionAddPos,m_position.z };
 
 	//コリジョンのポジションのセット
-	m_collisionObject->SetPosition(m_position);
+	m_collisionObject->SetPosition(m_collisionPosition);
 }
 
 void ObjectBase::CalcCollision()

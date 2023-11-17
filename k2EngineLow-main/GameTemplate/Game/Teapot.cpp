@@ -9,6 +9,12 @@ namespace
 
 	//与えるダメージ
 	const float DAMAGE_AMOUNT = 50.0f;
+
+	//キャラコンの半径
+	const float CHARACON_RADIUS = 40.0f;
+
+	//キャラコンの高さ
+	const float CHARACON_HEIGHT = 10.0f;
 }
 
 Teapot::Teapot()

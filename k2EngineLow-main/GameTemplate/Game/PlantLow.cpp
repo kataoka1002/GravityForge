@@ -5,10 +5,16 @@
 namespace
 {
 	//コリジョンの大きさ
-	const float COLLISION_SCALE = 30.0f;
+	const float COLLISION_SCALE = 40.0f;
 
 	//与えるダメージ
 	const float DAMAGE_AMOUNT = 50.0f;
+
+	//キャラコンの半径
+	const float CHARACON_RADIUS = 30.0f;
+
+	//キャラコンの高さ
+	const float CHARACON_HEIGHT = 10.0f;
 }
 
 PlantLow::PlantLow()
@@ -40,13 +46,23 @@ void PlantLow::InitModel()
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
-		20.0f,			//半径
-		10.0f,			//高さ
-		m_position		//座標
+		CHARACON_RADIUS,	//半径
+		CHARACON_HEIGHT,	//高さ
+		m_position			//座標
 	);
 
 	//与えるダメージの設定
 	m_damage = DAMAGE_AMOUNT;
+
+	//コリジョンを出す座標の加算量を求める
+	if (CHARACON_RADIUS >= CHARACON_HEIGHT)
+	{
+		m_collisionAddPos = CHARACON_RADIUS;
+	}
+	else
+	{
+		m_collisionAddPos = CHARACON_HEIGHT;
+	}
 }
 
 void PlantLow::InitCollision()

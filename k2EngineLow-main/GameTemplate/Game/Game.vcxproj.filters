@@ -307,5 +307,8 @@
     <ClInclude Include="SolarPanel.h">
       <Filter>MyCode\Object</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectCollisionConstants.h">
+      <Filter>MyCode\Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

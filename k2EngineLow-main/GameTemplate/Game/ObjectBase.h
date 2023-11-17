@@ -162,10 +162,12 @@ protected:
 	Vector3					m_flightSpeed = Vector3::Zero;				//飛んでく速さ
 	Vector3					m_followSpeed = Vector3::Zero;				//追尾の速さ
 	Vector3					m_scale = Vector3::Zero;					//大きさ
+	Vector3					m_collisionPosition = Vector3::Zero;		//コリジョンオブジェクトの座標
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float					m_degree = 0.0f;							//フワフワ用の角度
 	float					m_damage = 0.0f;							//与えるダメージ
+	float					m_collisionAddPos = 0.0f;					//コリジョンオブジェクトのY値加算量
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 
 	nsPlayer::Player*		m_player = nullptr;
