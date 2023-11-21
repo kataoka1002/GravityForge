@@ -22,7 +22,7 @@ void EnemyBase::HandleDamageEvent(float damage)
 
 bool EnemyBase::DidAttackHit()
 {
-	//敵の攻撃用のコリジョンの配列を取得する。
+	//攻撃用のコリジョンの配列を取得する。
 	const auto& collisions = g_collisionObjectManager->FindCollisionObjects("player_punch");
 	//配列をfor文で回す。
 	for (auto collision : collisions)

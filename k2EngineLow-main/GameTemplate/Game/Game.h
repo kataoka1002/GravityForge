@@ -4,6 +4,7 @@
 #include "BackGround.h"
 #include "GameCamera.h"
 #include "Lighting.h"
+#include "Boss.h"
 
 #include "Teapot.h"
 #include "Air.h"
@@ -102,6 +103,7 @@ private:
 	BackGround* m_bg = nullptr;
 	GameCamera* m_camera = nullptr;
 	Lighting* m_light = nullptr;
+	nsBoss::Boss* m_boss = nullptr;
 
 	Teapot* m_teapot = nullptr;
 	Air* m_air = nullptr;

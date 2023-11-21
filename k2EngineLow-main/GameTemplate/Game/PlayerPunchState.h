@@ -36,4 +36,3 @@ namespace nsPlayer
 		void Update() override;
 	};
 }
-

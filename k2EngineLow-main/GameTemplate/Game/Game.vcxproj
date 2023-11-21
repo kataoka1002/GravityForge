@@ -229,6 +229,9 @@
     <ClCompile Include="BenchBig.cpp" />
     <ClCompile Include="BenchSmall.cpp" />
     <ClCompile Include="BillboardSmall.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossDeadState.cpp" />
+    <ClCompile Include="BossIdleState.cpp" />
     <ClCompile Include="BushBig.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Dustbin.cpp" />
@@ -283,6 +286,10 @@
     <ClInclude Include="BenchBig.h" />
     <ClInclude Include="BenchSmall.h" />
     <ClInclude Include="BillboardSmall.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossConstants.h" />
+    <ClInclude Include="BossDeadState.h" />
+    <ClInclude Include="BossIdleState.h" />
     <ClInclude Include="BushBig.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Dustbin.h" />
@@ -302,6 +309,7 @@
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="HumanEnemyWalkState.h" />
     <ClInclude Include="Hydrant.h" />
+    <ClInclude Include="IBossState.h" />
     <ClInclude Include="IHumanEnemyState.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />

@@ -342,7 +342,7 @@ namespace nsPlayer
 			collisionObject->CreateSphere(
 				collisionPosition,		//À•WB
 				Quaternion::Identity,	//‰ñ“]B
-				30.0f					//”¼ŒaB
+				40.0f					//”¼ŒaB
 			);
 			collisionObject->SetName("player_punch");
 		}

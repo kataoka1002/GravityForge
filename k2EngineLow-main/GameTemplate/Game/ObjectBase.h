@@ -2,6 +2,7 @@
 // ‘O•ûéŒ¾B
 namespace nsPlayer { class Player; }
 class Game;
+class Boss;
 
 class ObjectBase : public IGameObject, Noncopyable
 {

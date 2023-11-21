@@ -25,6 +25,12 @@
     <Filter Include="MyCode\UI">
       <UniqueIdentifier>{b14c40af-a174-4909-85c4-f8518ea77c78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Enemy\Boss">
+      <UniqueIdentifier>{42cf8837-9ac8-41fb-b558-da3455ab29fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Enemy\HumanEnemy">
+      <UniqueIdentifier>{91a5635b-b092-4079-87a1-d7a2961ea07d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -47,9 +53,6 @@
       <Filter>MyCode\Player</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBase.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemy.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="PlayerIdleState.cpp">
@@ -85,32 +88,11 @@
     <ClCompile Include="PlayerWalkJumpState.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
-    <ClCompile Include="HumanEnemyIdleState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyDeadState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyCrawlState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyTrembleState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyDieState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyWalkState.cpp">
-      <Filter>MyCode\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerDeadState.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayerReactionState.cpp">
       <Filter>MyCode\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="HumanEnemyAttackState.cpp">
-      <Filter>MyCode\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="House.cpp">
       <Filter>MyCode\BackGround</Filter>
@@ -166,8 +148,41 @@
     <ClCompile Include="PlayerPunchState.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HumanEnemy.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyAttackState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyCrawlState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyDeadState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyDieState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyIdleState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
     <ClCompile Include="HumanEnemyReactionState.cpp">
-      <Filter>MyCode\Enemy</Filter>
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyTrembleState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyWalkState.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossIdleState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDeadState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +206,6 @@
       <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemy.h">
       <Filter>MyCode\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="IPlayerState.h">
@@ -229,38 +241,11 @@
     <ClInclude Include="PlayerWalkJumpState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
-    <ClInclude Include="IHumanEnemyState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyIdleState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyDeadState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyCrawlState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyTrembleState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyDieState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyWalkState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerDeadState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerReactionState.h">
       <Filter>MyCode\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyAttackState.h">
-      <Filter>MyCode\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="HumanEnemyConstants.h">
-      <Filter>MyCode\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="House.h">
       <Filter>MyCode\BackGround</Filter>
@@ -319,8 +304,53 @@
     <ClInclude Include="PlayerPunchState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
+    <ClInclude Include="HumanEnemy.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyAttackState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyConstants.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyCrawlState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyDeadState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyDieState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyIdleState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
     <ClInclude Include="HumanEnemyReactionState.h">
-      <Filter>MyCode\Enemy</Filter>
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyTrembleState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyWalkState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="IHumanEnemyState.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossIdleState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="IBossState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossConstants.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDeadState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

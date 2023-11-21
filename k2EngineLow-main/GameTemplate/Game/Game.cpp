@@ -14,6 +14,7 @@ Game::~Game()
 	DeleteGO(m_bg);
 	DeleteGO(m_camera);
 	DeleteGO(m_light);
+	DeleteGO(m_boss);
 
 	DeleteGO(m_teapot);
 	DeleteGO(m_air);
@@ -69,17 +70,17 @@ bool Game::Start()
 				m_bg->SetRotation(objData.rotation);
 				return true;
 			}
-			//名前がbackgroundだったら。
-			else if (objData.EqualObjectName(L"house") == true)
+			//名前がbossだったら。
+			else if (objData.EqualObjectName(L"boss") == true)
 			{
-				//背景オブジェクトを作成する。
-				m_house = NewGO<House>(0, "house");
+				//ボスオブジェクトを作成する。
+				m_boss = NewGO<nsBoss::Boss>(0, "boss");
 				//座標を設定する。
-				m_house->SetPosition(objData.position);
+				m_boss->SetPosition(objData.position);
 				//大きさを設定する。
-				m_house->SetScale(objData.scale);
+				m_boss->SetScale(objData.scale);
 				//回転を設定する。
-				m_house->SetRotation(objData.rotation);
+				m_boss->SetRotation(objData.rotation);
 				return true;
 			}
 			//名前がteapotだったら。

@@ -4,6 +4,7 @@
 #include "Game.h"
 #include <math.h>
 #include "collision/CollisionObject.h"
+#include "Boss.h"
 
 namespace
 {
@@ -327,6 +328,19 @@ void ObjectBase::CalcCollision()
 				return;
 			}
 		}	
+	}
+
+	//ボスとぶつかったかを判定
+	nsBoss::Boss* boss = FindGO<nsBoss::Boss>("boss");
+	if (m_collisionObject->IsHit(boss->GetCharaCon()))
+	{
+		//ボスはダメージを受けた時の処理を行う
+		boss->HandleDamageEvent(m_damage);
+
+		//自分が消えるときの処理
+		OnDestroy();
+
+		return;
 	}
 }
 
