@@ -19,3 +19,23 @@ void EnemyBase::HandleDamageEvent(float damage)
 	m_hp -= damage;
 	m_hp = max(0.0f, m_hp);
 }
+
+bool EnemyBase::DidAttackHit()
+{
+	//敵の攻撃用のコリジョンの配列を取得する。
+	const auto& collisions = g_collisionObjectManager->FindCollisionObjects("player_punch");
+	//配列をfor文で回す。
+	for (auto collision : collisions)
+	{
+		//コリジョンとキャラコンが衝突したら。
+		if (collision->IsHit(m_charaCon))
+		{
+			//ダメージを与える
+			HandleDamageEvent(10.0f);
+
+			return true;
+		}
+	}
+
+	return false;
+}

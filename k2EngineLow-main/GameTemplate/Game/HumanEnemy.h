@@ -21,6 +21,7 @@ namespace nsHumanEnemy
 			enAnimClip_Die,
 			enAnimClip_Walk,
 			enAnimClip_Attack,
+			enAnimClip_Reaction,
 			enAnimClip_Num
 		};
 

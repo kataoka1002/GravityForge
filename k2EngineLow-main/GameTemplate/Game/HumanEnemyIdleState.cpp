@@ -3,6 +3,7 @@
 #include "HumanEnemyDeadState.h"
 #include "HumanEnemyWalkState.h"
 #include "HumanEnemyAttackState.h"
+#include "HumanEnemyReactionState.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -22,12 +23,6 @@ namespace nsHumanEnemy
 
 	IHumanEnemyState* HumanEnemyIdleState::StateChange()
 	{
-		// 体力が50以下で四つん這い
-		if (m_enemy->GetHP() <= KNEELING_HP)
-		{
-			return new HumanEnemyDeadState(m_enemy);
-		}
-		
 		//一定距離以下になると追いかけてくる
 		if (m_enemy->CheckDistanceToPlayer() <= CHASE_RANGE)
 		{
@@ -38,6 +33,22 @@ namespace nsHumanEnemy
 		if (m_enemy->CheckDistanceToPlayer() <= ATTACK_RANGE)
 		{
 			return new HumanEnemyAttackState(m_enemy);
+		}
+
+		//攻撃を受けたら
+		if (m_enemy->DidAttackHit())
+		{
+			// 体力が一定以下で四つん這い
+			if (m_enemy->GetHP() <= KNEELING_HP)
+			{
+				//体力0以下で死亡
+				return new HumanEnemyDeadState(m_enemy);
+			}
+			else
+			{
+				//体力あるならリアクションのみ
+				return new HumanEnemyReactionState(m_enemy);
+			}
 		}
 			
 		// ここまで来たらステートを遷移しない。

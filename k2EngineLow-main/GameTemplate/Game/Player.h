@@ -32,6 +32,7 @@ namespace nsPlayer
 			enAnimClip_WalkJump,
 			enAnimClip_Reaction,
 			enAnimClip_Dead,
+			enAnimClip_Punch,
 			enAnimClip_Num
 		};
 
@@ -50,6 +51,7 @@ namespace nsPlayer
 		void PlayAnimation(EnAnimationClip currentAnimationClip);
 		bool DidAttackHit();
 		void CalcDamage(float damage);
+		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
 
 		/// <summary>
 		/// ポジションの設定
@@ -233,6 +235,7 @@ namespace nsPlayer
 		Vector3				m_scale = Vector3::One;					// スケール
 		Vector3				m_moveSpeed = Vector3::Zero;			// 移動速度
 		Vector3             m_rotMove = Vector3::Zero;				// 回転速度
+		Vector3				m_forward = Vector3::Zero;				// 前方向
 		CharacterController m_charaCon;								// キャラクターコントローラー
 		Quaternion			m_rotation;								// クォータニオン
 		float				LStick_x = 0.0f;						// Lスティック入力量(横)

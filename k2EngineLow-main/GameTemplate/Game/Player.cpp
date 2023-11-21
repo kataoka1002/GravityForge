@@ -50,7 +50,9 @@ namespace nsPlayer
 		animationClips[enAnimClip_Dead].Load("Assets/animData/player/player_dead.tka");
 		animationClips[enAnimClip_Dead].SetLoopFlag(false);
 		animationClips[enAnimClip_Reaction].Load("Assets/animData/player/player_reaction.tka");
-		animationClips[enAnimClip_Reaction].SetLoopFlag(false);
+		animationClips[enAnimClip_Reaction].SetLoopFlag(false);	
+		animationClips[enAnimClip_Punch].Load("Assets/animData/player/player_punch.tka");
+		animationClips[enAnimClip_Punch].SetLoopFlag(false);
 	}
 
 	Player::~Player()
@@ -63,6 +65,11 @@ namespace nsPlayer
 		m_camera = FindGO<GameCamera>("gamecamera");
 
 		m_game = FindGO<Game>("game");
+
+		//アニメーションイベント用の関数を設定する
+		m_playerModel.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
+			OnAnimationEvent(clipName, eventName);
+			});
 
 		//プレイヤーモデルの初期化
 		m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
@@ -191,6 +198,10 @@ namespace nsPlayer
 			//移動速度から回転を求める
 			m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 3.5f, m_rotMove, m_moveSpeed);
 		}
+
+		//前方向の設定
+		m_forward = m_rotMove;
+		m_forward.Normalize();
 	
 		//回転を設定する
 		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
@@ -313,6 +324,32 @@ namespace nsPlayer
 		if (m_hp <= 0.0f)
 		{
 			m_hp = 0.0f;
+		}
+	}
+
+	void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+	{
+		//キーの名前が「attack_start」の時。
+		if (wcscmp(eventName, L"attack_start") == 0)
+		{
+			//コリジョンオブジェクトを作成する。
+			auto collisionObject = NewGO<CollisionObject>(0);
+			Vector3 collisionPosition = m_position;
+			//座標をプレイヤーの少し前,上に設定する。
+			collisionPosition += m_forward * 70.0f;
+			collisionPosition.y += 100.0f;
+			//球状のコリジョンを作成する。
+			collisionObject->CreateSphere(
+				collisionPosition,		//座標。
+				Quaternion::Identity,	//回転。
+				30.0f					//半径。
+			);
+			collisionObject->SetName("player_punch");
+		}
+		//キーの名前が「attack_end」の時。
+		else if (wcscmp(eventName, L"attack_end") == 0)
+		{
+
 		}
 	}
 

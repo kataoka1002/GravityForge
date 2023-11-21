@@ -12,6 +12,7 @@ public:
 
 	bool Start();
 	void HandleDamageEvent(float damage);			//ƒ_ƒ[ƒW‚ğó‚¯‚½‚Ìˆ—
+	bool DidAttackHit();
 	virtual void FollowPlayer()				= 0;	//ˆÚ“®ˆ—
 	virtual void Turn()						= 0;	//‰ñ“]ˆ—
 	virtual void OnDestroy()				= 0;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—

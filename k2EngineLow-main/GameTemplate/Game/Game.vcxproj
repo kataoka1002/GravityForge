@@ -243,6 +243,7 @@
     <ClCompile Include="HumanEnemyDeadState.cpp" />
     <ClCompile Include="HumanEnemyDieState.cpp" />
     <ClCompile Include="HumanEnemyIdleState.cpp" />
+    <ClCompile Include="HumanEnemyReactionState.cpp" />
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
     <ClCompile Include="HumanEnemyWalkState.cpp" />
     <ClCompile Include="Hydrant.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="PlayerDeadState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
     <ClCompile Include="PlayerJumpState.cpp" />
+    <ClCompile Include="PlayerPunchState.cpp" />
     <ClCompile Include="PlayerReactionState.cpp" />
     <ClCompile Include="PlayerStandbyState.cpp" />
     <ClCompile Include="PlayerUI.cpp" />
@@ -296,6 +298,7 @@
     <ClInclude Include="HumanEnemyDeadState.h" />
     <ClInclude Include="HumanEnemyDieState.h" />
     <ClInclude Include="HumanEnemyIdleState.h" />
+    <ClInclude Include="HumanEnemyReactionState.h" />
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="HumanEnemyWalkState.h" />
     <ClInclude Include="Hydrant.h" />
@@ -312,6 +315,7 @@
     <ClInclude Include="PlayerDeadState.h" />
     <ClInclude Include="PlayerIdleState.h" />
     <ClInclude Include="PlayerJumpState.h" />
+    <ClInclude Include="PlayerPunchState.h" />
     <ClInclude Include="PlayerReactionState.h" />
     <ClInclude Include="PlayerStandbyState.h" />
     <ClInclude Include="PlayerUI.h" />

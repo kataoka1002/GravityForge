@@ -26,7 +26,9 @@ namespace nsHumanEnemy
 		animationClips[enAnimClip_Walk].Load("Assets/animData/enemy/humanEnemy_walk.tka");
 		animationClips[enAnimClip_Walk].SetLoopFlag(true);
 		animationClips[enAnimClip_Attack].Load("Assets/animData/enemy/humanEnemy_Attack.tka");
-		animationClips[enAnimClip_Attack].SetLoopFlag(false);
+		animationClips[enAnimClip_Attack].SetLoopFlag(false); 
+		animationClips[enAnimClip_Reaction].Load("Assets/animData/enemy/humanEnemy_Reaction.tka");
+		animationClips[enAnimClip_Reaction].SetLoopFlag(false);
 	}
 
 	HumanEnemy::~HumanEnemy()

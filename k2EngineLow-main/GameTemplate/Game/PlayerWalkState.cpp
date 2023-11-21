@@ -3,6 +3,7 @@
 #include "PlayerAttractState.h"
 #include "PlayerIdleState.h"
 #include "PlayerWalkJumpState.h"
+#include "PlayerPunchState.h"
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -44,6 +45,12 @@ namespace nsPlayer
 
 			// 歩きジャンプステートに遷移する
 			return new PlayerWalkJumpState(m_player);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonY))
+		{
+			// パンチステートに遷移する
+			return new PlayerPunchState(m_player);
 		}
 
 		// ここまで来たらステートを遷移しない。

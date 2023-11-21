@@ -5,6 +5,7 @@
 #include "PlayerJumpState.h"
 #include "PlayerDeadState.h"
 #include "PlayerReactionState.h"
+#include "PlayerPunchState.h"
 
 namespace
 {
@@ -52,6 +53,12 @@ namespace nsPlayer
 			
 			// ジャンプステートに遷移する
 			return new PlayerJumpState(m_player);
+		}
+
+		if (g_pad[0]->IsTrigger(enButtonY))
+		{
+			// パンチステートに遷移する
+			return new PlayerPunchState(m_player);
 		}
 
 		//攻撃を受けたら

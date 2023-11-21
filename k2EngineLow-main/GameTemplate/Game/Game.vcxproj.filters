@@ -163,6 +163,12 @@
     <ClCompile Include="SolarPanel.cpp">
       <Filter>MyCode\Object</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerPunchState.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="HumanEnemyReactionState.cpp">
+      <Filter>MyCode\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -309,6 +315,12 @@
     </ClInclude>
     <ClInclude Include="ObjectCollisionConstants.h">
       <Filter>MyCode\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerPunchState.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyReactionState.h">
+      <Filter>MyCode\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

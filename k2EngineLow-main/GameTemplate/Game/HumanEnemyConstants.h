@@ -15,7 +15,7 @@ namespace
 	const float CHASE_RANGE = 1000.0f;
 
 	//’Ç‚¢‚©‚¯‚Ä‚­‚é‚æ‚¤‚É‚È‚é‹——£(l‚Â‚ñ”‡‚¢)
-	const float CHASE_RANGE_KNEELING = 300.0f;
+	const float CHASE_RANGE_KNEELING = 1000.0f;
 
 	//UŒ‚‚µ‚Ä‚­‚é‹——£
 	const float ATTACK_RANGE = 150.0f;
