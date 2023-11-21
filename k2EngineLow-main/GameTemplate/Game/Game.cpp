@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "GameClear.h"
+#include "GameOver.h"
 
 Game::Game()
 {
@@ -8,6 +10,32 @@ Game::Game()
 
 Game::~Game()
 {
+	//リストが空になるまで繰り返す
+	while (m_enemyList.size() != 0)
+	{
+		for (auto enemy : m_enemyList)
+		{
+			//削除
+			DeleteGO(enemy);
+
+			//リストから削除
+			RemoveEnemyFromList(enemy);
+		}
+	}
+
+	//リストが空になるまで繰り返す
+	while(m_objectList.size() != 0)
+	{
+		for (auto object : m_objectList)
+		{
+			//削除
+			DeleteGO(object);
+
+			//リストから削除
+			RemoveObjectFromList(object);
+		}
+	}
+
 	//削除
 	DeleteGO(m_skyCube);
 	DeleteGO(m_player);
@@ -15,23 +43,6 @@ Game::~Game()
 	DeleteGO(m_camera);
 	DeleteGO(m_light);
 	DeleteGO(m_boss);
-
-	DeleteGO(m_teapot);
-	DeleteGO(m_air);
-	DeleteGO(m_barrierFence);
-	DeleteGO(m_benchBig);
-	DeleteGO(m_benchSmall);
-	DeleteGO(m_billboardSmall);
-	DeleteGO(m_bushBig);
-	DeleteGO(m_cone);
-	DeleteGO(m_dustbin);
-	DeleteGO(m_fence);
-	DeleteGO(m_hydrant);
-	DeleteGO(m_plantLong);
-	DeleteGO(m_plantLow);
-	DeleteGO(m_rockBig);
-	DeleteGO(m_solarPanel);
-
 	DeleteGO(m_reticle);
 	DeleteGO(m_playerUI);
 }
@@ -92,7 +103,7 @@ bool Game::Start()
 				SetLevel(m_teapot, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_teapot);
+				m_objectList.emplace_back(m_teapot);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"air") == true)
@@ -103,7 +114,7 @@ bool Game::Start()
 				SetLevel(m_air, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_air);
+				m_objectList.emplace_back(m_air);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"barrierFence") == true)
@@ -114,7 +125,7 @@ bool Game::Start()
 				SetLevel(m_barrierFence, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_barrierFence);
+				m_objectList.emplace_back(m_barrierFence);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"bench_big") == true)
@@ -125,7 +136,7 @@ bool Game::Start()
 				SetLevel(m_benchBig, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_benchBig);
+				m_objectList.emplace_back(m_benchBig);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"bench_small") == true)
@@ -136,7 +147,7 @@ bool Game::Start()
 				SetLevel(m_benchSmall, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_benchSmall);
+				m_objectList.emplace_back(m_benchSmall);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"billboard_small") == true)
@@ -147,7 +158,7 @@ bool Game::Start()
 				SetLevel(m_billboardSmall, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_billboardSmall);
+				m_objectList.emplace_back(m_billboardSmall);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"bush_big") == true)
@@ -158,7 +169,7 @@ bool Game::Start()
 				SetLevel(m_bushBig, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_bushBig);
+				m_objectList.emplace_back(m_bushBig);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"cone") == true)
@@ -169,7 +180,7 @@ bool Game::Start()
 				SetLevel(m_cone, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_cone);
+				m_objectList.emplace_back(m_cone);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"dustbin") == true)
@@ -180,7 +191,7 @@ bool Game::Start()
 				SetLevel(m_dustbin, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_dustbin);
+				m_objectList.emplace_back(m_dustbin);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"fence") == true)
@@ -191,7 +202,7 @@ bool Game::Start()
 				SetLevel(m_fence, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_fence);
+				m_objectList.emplace_back(m_fence);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"hydrant") == true)
@@ -202,7 +213,7 @@ bool Game::Start()
 				SetLevel(m_hydrant, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_hydrant);
+				m_objectList.emplace_back(m_hydrant);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"plant_long") == true)
@@ -213,7 +224,7 @@ bool Game::Start()
 				SetLevel(m_plantLong, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_plantLong);
+				m_objectList.emplace_back(m_plantLong);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"plant_low") == true)
@@ -224,7 +235,7 @@ bool Game::Start()
 				SetLevel(m_plantLow, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_plantLow);
+				m_objectList.emplace_back(m_plantLow);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"rock_big") == true)
@@ -235,7 +246,7 @@ bool Game::Start()
 				SetLevel(m_rockBig, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_rockBig);
+				m_objectList.emplace_back(m_rockBig);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"solarPanel") == true)
@@ -246,7 +257,7 @@ bool Game::Start()
 				SetLevel(m_solarPanel, objData);
 
 				//リストに追加
-				m_objectList.push_back(m_solarPanel);
+				m_objectList.emplace_back(m_solarPanel);
 				return true;
 			}
 			//名前がhumanEnemyだったら。
@@ -261,7 +272,7 @@ bool Game::Start()
 				//回転を設定する。
 				m_humanEnemy->SetRotation(objData.rotation);
 				//リストに追加
-				m_enemyList.push_back(m_humanEnemy);
+				m_enemyList.emplace_back(m_humanEnemy);
 				return true;
 			}
 			return true;
@@ -294,6 +305,24 @@ void Game::SetLevel(T* objct, LevelObjectData& objData)
 	objct->SetScale(objData.scale);
 	//回転を設定する。
 	objct->SetRotation(objData.rotation);
+}
+
+void Game::SetGameClear()
+{
+	//ゲームクリアを生成
+	NewGO<GameClear>(0, "gameclear");
+
+	//自分自身の削除
+	DeleteGO(this);
+}
+
+void Game::SetGameOver()
+{
+	//ゲームオーバーを生成
+	NewGO<GameOver>(0, "gameover");
+
+	//自分自身の削除
+	DeleteGO(this);
 }
 
 void Game::Update()

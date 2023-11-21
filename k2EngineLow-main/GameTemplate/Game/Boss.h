@@ -27,7 +27,7 @@ namespace nsBoss
 		void PlayAnimation(EnAnimationClip currentAnimationClip);	//アニメーションの再生
 		void SetCollision();						//コリジョンの設定
 		void MoveCollision();						//コリジョンの動きの設定	
-		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
+		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数		
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -87,6 +87,11 @@ namespace nsBoss
 			float toPlayerLen = toPlayer.Length();
 			return toPlayerLen;
 		}
+
+		/// <summary>
+		/// ゲームをクリアした時に呼ばれる
+		/// </summary>
+		void GameClear();
 
 	protected:
 

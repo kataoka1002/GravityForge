@@ -29,6 +29,7 @@ namespace nsBoss
 		if (m_boss->GetIsPlayingAnimation() == false)
 		{
 			//ƒQ[ƒ€ƒNƒŠƒA‰æ–Ê‚Ö
+			m_boss->GameClear();
 		}
 	}
 }

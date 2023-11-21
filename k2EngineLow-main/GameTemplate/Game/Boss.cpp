@@ -188,6 +188,11 @@ namespace nsBoss
 		}
 	}
 
+	void Boss::GameClear()
+	{
+		m_game->SetGameClear();
+	}
+
 	void Boss::Render(RenderContext& rc)
 	{
 		m_model.Draw(rc);

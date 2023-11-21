@@ -239,6 +239,8 @@
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="House.cpp" />
     <ClCompile Include="HumanEnemy.cpp" />
     <ClCompile Include="HumanEnemyAttackState.cpp" />
@@ -267,6 +269,8 @@
     <ClCompile Include="PlayerUI.cpp" />
     <ClCompile Include="PlayerWalkJumpState.cpp" />
     <ClCompile Include="PlayerWalkState.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="ResultCamera.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="RockBig.cpp" />
     <ClCompile Include="SolarPanel.cpp" />
@@ -297,6 +301,8 @@
     <ClInclude Include="Fence.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="House.h" />
     <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="HumanEnemyAttackState.h" />
@@ -329,6 +335,8 @@
     <ClInclude Include="PlayerUI.h" />
     <ClInclude Include="PlayerWalkJumpState.h" />
     <ClInclude Include="PlayerWalkState.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="ResultCamera.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="RockBig.h" />
     <ClInclude Include="SolarPanel.h" />

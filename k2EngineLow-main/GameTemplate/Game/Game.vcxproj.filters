@@ -31,6 +31,9 @@
     <Filter Include="MyCode\Enemy\HumanEnemy">
       <UniqueIdentifier>{91a5635b-b092-4079-87a1-d7a2961ea07d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\MainGame\Result">
+      <UniqueIdentifier>{fc7387e4-4065-49a4-8b59-97a5cc4e11e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -183,6 +186,18 @@
     </ClCompile>
     <ClCompile Include="BossDeadState.cpp">
       <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultCamera.cpp">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClear.cpp">
+      <Filter>MyCode\MainGame\Result</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +366,18 @@
     </ClInclude>
     <ClInclude Include="BossDeadState.h">
       <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultCamera.h">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClear.h">
+      <Filter>MyCode\MainGame\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

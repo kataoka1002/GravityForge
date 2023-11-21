@@ -40,6 +40,8 @@ public:
 	void SetSkyCube();
 	template <typename T>
 	void SetLevel(T* objct, LevelObjectData& objData);
+	void SetGameClear();
+	void SetGameOver();
 
 	/// <summary>
 	/// オブジェクトをリストから削除する
