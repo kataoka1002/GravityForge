@@ -8,6 +8,7 @@ public:
 	enum EnAnimationClip
 	{
 		enAnimClip_Idle,
+		enAnimClip_Dwarf,
 		enAnimClip_Num
 	};
 
@@ -17,6 +18,7 @@ public:
 
 	bool Start();
 	void GoTitle();
+	void SetAnimation();
 	virtual void InitCamera() = 0;	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	virtual void OnDestroy() = 0;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—
 
@@ -36,5 +38,7 @@ protected:
 
 	Vector3				m_playerPosition = Vector3::Zero;
 	ResultCamera*		m_resultCamera = nullptr;
+	float				m_time = 0;
+	bool				m_didPlayAnim = false;
 };
 

@@ -353,6 +353,12 @@ namespace nsPlayer
 		}
 	}
 
+	void Player::GameOver()
+	{
+		//ゲームオーバーを呼び出す
+		m_game->SetGameOver();
+	}
+
 	void Player::Render(RenderContext& rc)
 	{
 		m_playerModel.Draw(rc);

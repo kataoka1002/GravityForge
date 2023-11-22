@@ -51,7 +51,8 @@ namespace nsPlayer
 		void PlayAnimation(EnAnimationClip currentAnimationClip);
 		bool DidAttackHit();
 		void CalcDamage(float damage);
-		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
+		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数
+		void GameOver();
 
 		/// <summary>
 		/// ポジションの設定

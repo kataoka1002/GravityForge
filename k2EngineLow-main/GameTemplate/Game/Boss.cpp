@@ -190,6 +190,7 @@ namespace nsBoss
 
 	void Boss::GameClear()
 	{
+		//ゲームクリアを呼び出す
 		m_game->SetGameClear();
 	}
 

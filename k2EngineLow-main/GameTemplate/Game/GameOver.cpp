@@ -17,15 +17,18 @@ void GameOver::InitCamera()
 	//カメラの設定
 	m_resultCamera = NewGO<ResultCamera>(0, "resultcamera");
 	m_resultCamera->SetTarget(m_playerPosition);
-
-	//タイトルへ戻る
-	GoTitle();
 }
 
 void GameOver::Update()
 {
+	//タイトルへ戻る
+	GoTitle();
+
+	//再生するアニメーションを設定
+	SetAnimation();
+
 	// アニメーションを再生
-	m_playerModel.PlayAnimation(m_currentAnimationClip, 0.3f);
+	m_playerModel.PlayAnimation(m_currentAnimationClip, 0.5f);
 	m_playerModel.Update();
 }
 

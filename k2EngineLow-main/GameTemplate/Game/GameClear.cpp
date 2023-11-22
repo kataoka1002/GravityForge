@@ -21,12 +21,15 @@ void GameClear::InitCamera()
 
 void GameClear::Update()
 {
-	// アニメーションを再生
-	m_playerModel.PlayAnimation(m_currentAnimationClip, 0.3f);
-	m_playerModel.Update();
-
 	//タイトルへ戻る
 	GoTitle();
+
+	//再生するアニメーションを設定
+	SetAnimation();
+
+	// アニメーションを再生
+	m_playerModel.PlayAnimation(m_currentAnimationClip, 0.5f);
+	m_playerModel.Update();
 }
 
 void GameClear::OnDestroy()

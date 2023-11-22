@@ -25,6 +25,11 @@ namespace nsPlayer
 
 	void PlayerDeadState::Update()
 	{
-		
+		//アニメーションの再生が終わったら
+		if (m_player->GetIsPlayingAnimation() == false)
+		{
+			//ゲームオーバー画面へ
+			m_player->GameOver();
+		}
 	}
 }
