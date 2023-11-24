@@ -6,7 +6,7 @@ namespace
 	const float MAX_HP = 100.0f;
 
 	//Žl‚Â‚ñ”‡‚¢‚É‚È‚é‘Ì—Í‚Ì‹«–Ú
-	const float KNEELING_HP = 50.0f;
+	const float KNEELING_HP = MAX_HP / 2.0f;
 
 	//Ž€‚ñ‚Å‚µ‚Ü‚¤‘Ì—Í
 	const float DEAD_LINE = 0.0f;

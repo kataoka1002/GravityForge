@@ -64,6 +64,51 @@ public:
 		return m_collisionObject;
 	}
 
+	/// <summary>
+	/// ポジションを返す
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetPosition() const
+	{
+		return m_position;
+	}
+
+	/// <summary>
+	/// 今のHPを返す
+	/// </summary>
+	/// <returns></returns>
+	const float& GetHP()
+	{
+		return m_hp;
+	}
+
+	/// <summary>
+	/// HPの最大値を返す
+	/// </summary>
+	/// <returns></returns>
+	const float& GetMaxHP()
+	{
+		return m_hpMax;
+	}
+
+	/// <summary>
+	/// クロール中にする
+	/// </summary>
+	void SetCrawlNow()
+	{
+		m_isCrawling = true;
+	}
+
+	/// <summary>
+	/// クロール中かどうかを返す
+	/// </summary>
+	/// <returns></returns>
+	bool IsCrawling()
+	{
+		return m_isCrawling;
+	}
+
+
 protected:
 	ModelRender				m_model;
 	Vector3					m_position = Vector3::Zero;				// ポジション
@@ -71,9 +116,11 @@ protected:
 	Quaternion				m_rotation;								// クォータニオン
 	CharacterController		m_charaCon;								// キャラクターコントローラー
 	float					m_hp = 0.0f;							// HP
+	float					m_hpMax = 0.0f;							// HPの最大値
 	Vector3					m_forward = {0.0f,0.0f,1.0f};			// 前方向
 	Vector3					m_moveSpeed = Vector3::Zero;			// 移動速度
 	Vector3					m_rotMove = Vector3::Zero;				// 回転速度
+	bool					m_isCrawling = false;					// クロール中かどうか
 
 	Game*					m_game = nullptr;
 	nsPlayer::Player*		m_player = nullptr;

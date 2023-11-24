@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "IHumanEnemyState.h"
 #include "HumanEnemyIdleState.h"
+#include "EnemyUI.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -34,10 +35,12 @@ namespace nsHumanEnemy
 	HumanEnemy::~HumanEnemy()
 	{
 		DeleteGO(m_collisionObject);
+		DeleteGO(m_enemyUI);
 	}
 
 	void HumanEnemy::InitModel()
 	{
+		//モデルの初期化
 		m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
 		m_model.SetPosition(m_position);
 		m_model.SetRotation(m_rotation);
@@ -58,10 +61,15 @@ namespace nsHumanEnemy
 
 		// HPの設定
 		m_hp = MAX_HP;
+		m_hpMax = MAX_HP;
 
 		// 初期ステートを設定
 		m_humanEnemyState = new HumanEnemyIdleState(this);
 		m_humanEnemyState->Enter();
+
+		//UIの作成
+		m_enemyUI = NewGO<EnemyUI>(0, "enemyui");
+		m_enemyUI->SetEnemy(this);
 	}
 
 	void HumanEnemy::Update()

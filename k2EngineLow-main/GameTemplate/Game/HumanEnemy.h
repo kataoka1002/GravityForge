@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
+class EnemyUI;
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -100,5 +101,6 @@ namespace nsHumanEnemy
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IHumanEnemyState*	m_humanEnemyState = nullptr;			// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		EnemyUI*			m_enemyUI = nullptr;
 	};
 }

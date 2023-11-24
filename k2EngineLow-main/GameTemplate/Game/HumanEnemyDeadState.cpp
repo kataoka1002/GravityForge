@@ -29,6 +29,9 @@ namespace nsHumanEnemy
 			//ƒRƒŠƒWƒ‡ƒ“‚ÌÝ’è
 			m_enemy->SetCollision();
 
+			//Žl‚Â‚ñ”‡‚¢‚ðtrue‚É‚·‚é
+			m_enemy->SetCrawlNow();
+
 			return new HumanEnemyTrembleState(m_enemy);
 		}
 
