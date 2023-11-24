@@ -19,8 +19,11 @@ namespace nsPlayer
 	private:
 		SpriteRender m_HPFrame;		//HPのフレーム
 		SpriteRender m_HPGage;		//HPのゲージ
+		SpriteRender m_HPWhite;		//HPの白ゲージ
 		SpriteRender m_HPBack;		//HPの背景
 		SpriteRender m_plus;		//HPの＋
+
+		Vector3 m_whiteScale = Vector3::One;	//白ゲージの大きさ
 
 		Player* m_player = nullptr;
 	};

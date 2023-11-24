@@ -37,6 +37,10 @@ namespace nsPlayer
 		m_HPBack.SetPivot({ 0.0f,0.5f });
 		m_HPBack.SetPosition(HP_GAGE_BACK_POSITION);
 		m_HPBack.Update();
+		m_HPWhite.Init("Assets/spriteData/UI/HPGageWhite.dds", 423.0f, 30.0f);
+		m_HPWhite.SetPivot({ 0.0f,0.5f });
+		m_HPWhite.SetPosition(HP_GAGE_BACK_POSITION);
+		m_HPWhite.Update();
 		m_plus.Init("Assets/spriteData/UI/+.dds", 40.0f, 40.0f);
 		m_plus.SetPivot({ 0.0f,0.5f });
 		m_plus.SetPosition(HP_PLUS_POSITION);
@@ -47,13 +51,22 @@ namespace nsPlayer
 
 	void PlayerUI::Update()
 	{
-		m_HPGage.SetScale({ m_player->GetHPRatio(),1.0f,1.0f });
+		Vector3 HPGageScale = { m_player->GetHPRatio(),1.0f,1.0f };
+
+		//HPゲージの設定
+		m_HPGage.SetScale(HPGageScale);
 		m_HPGage.Update();
+
+		//補間でゆっくり白のサイズを小さくする
+		m_whiteScale = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_whiteScale, HPGageScale);
+		m_HPWhite.SetScale(m_whiteScale);
+		m_HPWhite.Update();
 	}
 
 	void PlayerUI::Render(RenderContext& rc)
 	{
 		m_HPBack.Draw(rc);
+		m_HPWhite.Draw(rc);
 		m_HPGage.Draw(rc);
 		m_HPFrame.Draw(rc);
 		m_plus.Draw(rc);
