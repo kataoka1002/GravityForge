@@ -202,6 +202,9 @@
     <ClCompile Include="EnemyUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="BossUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -383,6 +386,9 @@
       <Filter>MyCode\MainGame\Result</Filter>
     </ClInclude>
     <ClInclude Include="EnemyUI.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BossUI.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -232,6 +232,7 @@
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossDeadState.cpp" />
     <ClCompile Include="BossIdleState.cpp" />
+    <ClCompile Include="BossUI.cpp" />
     <ClCompile Include="BushBig.cpp" />
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Dustbin.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="BossConstants.h" />
     <ClInclude Include="BossDeadState.h" />
     <ClInclude Include="BossIdleState.h" />
+    <ClInclude Include="BossUI.h" />
     <ClInclude Include="BushBig.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Dustbin.h" />

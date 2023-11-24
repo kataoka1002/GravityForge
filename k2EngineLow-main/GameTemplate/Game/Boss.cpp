@@ -4,6 +4,7 @@
 #include "IBossState.h"
 #include "BossIdleState.h"
 #include "BossConstants.h"
+#include "BossUI.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -22,6 +23,7 @@ namespace nsBoss
 	Boss::~Boss()
 	{
 		DeleteGO(m_collisionObject);
+		DeleteGO(m_ui);
 	}
 
 	void Boss::InitModel()
@@ -50,6 +52,9 @@ namespace nsBoss
 		// 初期ステートを設定
 		m_bossState = new BossIdleState(this);
 		m_bossState->Enter();
+
+		//UIを作成
+		m_ui = NewGO<BossUI>(0, "bossui");
 	}
 
 	void Boss::Update()

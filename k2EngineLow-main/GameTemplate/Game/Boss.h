@@ -8,6 +8,7 @@ namespace nsBoss
 {
 	//前方宣言
 	class IBossState;
+	class BossUI;
 
 	class Boss : public EnemyBase
 	{
@@ -89,6 +90,15 @@ namespace nsBoss
 		}
 
 		/// <summary>
+		/// HPの割合を取得
+		/// </summary>
+		/// <returns></returns>
+		const float GetHPRatio()const
+		{
+			return m_hp / 100.0f;
+		}
+
+		/// <summary>
 		/// ゲームをクリアした時に呼ばれる
 		/// </summary>
 		void GameClear();
@@ -97,7 +107,9 @@ namespace nsBoss
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
-		IBossState*			m_bossState = nullptr;					// ステート	
+		IBossState* m_bossState = nullptr;					// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+
+		BossUI* m_ui = nullptr;
 	};
 }
