@@ -23,6 +23,9 @@ namespace nsBoss
 		//アニメーションの再生が終わったら
 		if (m_boss->GetIsPlayingAnimation() == false)
 		{
+			//ヒットのクールダウンタイム中にする
+			m_boss->SetHitCoolDown();
+
 			return new BossIdleState(m_boss);
 		}
 

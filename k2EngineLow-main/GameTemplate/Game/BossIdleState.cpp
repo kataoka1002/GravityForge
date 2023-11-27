@@ -2,6 +2,7 @@
 #include "BossIdleState.h"
 #include "BossDeadState.h"
 #include "BossWalkState.h"
+#include "BossMagicState.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -21,17 +22,7 @@ namespace nsBoss
 
 	IBossState* BossIdleState::StateChange()
 	{
-		//攻撃を受けたら
-		if (m_boss->DidAttackHit())
-		{
-			// 体力が0以下で死亡
-			if (m_boss->GetHP() <= 0.0f)
-			{
-				return new BossDeadState(m_boss);
-			}
-		}
-
-		if (m_boss->CheckDistanceToPlayer() >= FOLLOW_RANGE)
+		if (m_boss->CheckDistanceToPlayer() >= FOLLOW_RANGE && m_boss->GetIsMagicCoolDown() != true && m_boss->GetIsHitCoolDown() != true)
 		{
 			return new BossWalkState(m_boss);
 		}
@@ -42,6 +33,18 @@ namespace nsBoss
 
 	void BossIdleState::Update()
 	{
+		//マジックのクールダウンタイム中なら
+		if (m_boss->GetIsMagicCoolDown() == true)
+		{
+			//クールダウンタイムの計算
+			m_boss->CalcMagicCoolDown();
+		}
 
+		//ヒットのクールダウンタイム中なら
+		if (m_boss->GetIsHitCoolDown() == true)
+		{
+			//クールダウンタイムの計算
+			m_boss->CalcHitCoolDown();
+		}
 	}
 }

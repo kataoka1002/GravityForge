@@ -4,6 +4,7 @@
 #include "IBossState.h"
 #include "BossIdleState.h"
 #include "BossHitReactionState.h"
+#include "BossDeadState.h"
 #include "BossConstants.h"
 #include "BossUI.h"
 
@@ -31,6 +32,8 @@ namespace nsBoss
 		animationClips[enAnimClip_Swipe].SetLoopFlag(false);
 		animationClips[enAnimClip_Walk].Load("Assets/animData/boss/boss_Walk.tka");
 		animationClips[enAnimClip_Walk].SetLoopFlag(true);
+		animationClips[enAnimClip_JumpAttack].Load("Assets/animData/boss/boss_JumpAttack.tka");
+		animationClips[enAnimClip_JumpAttack].SetLoopFlag(false);
 	}
 
 	Boss::~Boss()
@@ -62,6 +65,10 @@ namespace nsBoss
 		// HPの設定
 		m_hp = MAX_HP;
 
+		//クールダウンタイムの設定
+		m_magicCoolDowmTime = MAGIC_COOLDOWN_TIME;
+		m_hitCoolDowmTime = HIT_COOLDOWN_TIME;
+
 		// 初期ステートを設定
 		m_bossState = new BossIdleState(this);
 		m_bossState->Enter();
@@ -83,6 +90,12 @@ namespace nsBoss
 			m_bossState = bossState;
 			m_bossState->Enter();
 		}
+
+		//プレイヤーの攻撃が当たったかを判定する(投げ物はObjectクラスで判定)
+		DidAttackHit();
+
+		//体力のチェックをして生きているかを確認する
+		CheckHP();
 
 		// 各ステートの更新処理を実行。
 		m_bossState->Update();
@@ -214,13 +227,46 @@ namespace nsBoss
 
 	void Boss::SetReactionState()
 	{
+		//リアクションステートをセットする
 		m_bossState = new BossHitReactionState(this);
 		m_bossState->Enter();
 	}
 
 	void Boss::PlayReaction()
 	{
+		//特になし
+	}
 
+	void Boss::CheckHP()
+	{
+		// 体力が0以下で死亡
+		if (m_hp <= 0.0f)
+		{
+			m_bossState = new BossDeadState(this);
+			m_bossState->Enter();
+		}
+	}
+
+	void Boss::CalcMagicCoolDown()
+	{
+		m_magicCoolDowmTime -= g_gameTime->GetFrameDeltaTime();
+
+		if (m_magicCoolDowmTime <= 0.0f)
+		{
+			m_magicCoolDowmTime = MAGIC_COOLDOWN_TIME;
+			m_isMagicCoolDowm = false;
+		}
+	}
+
+	void Boss::CalcHitCoolDown()
+	{
+		m_hitCoolDowmTime -= g_gameTime->GetFrameDeltaTime();
+
+		if (m_hitCoolDowmTime <= 0.0f)
+		{
+			m_hitCoolDowmTime = HIT_COOLDOWN_TIME;
+			m_isHitCoolDowm = false;
+		}
 	}
 
 	void Boss::Render(RenderContext& rc)

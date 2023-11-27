@@ -10,4 +10,10 @@ namespace
 
 	//追従距離
 	const float FOLLOW_RANGE = 200.0f;
+
+	//マジックのクールダウンタイム
+	const float MAGIC_COOLDOWN_TIME = 3.0f;
+
+	//殴りのクールダウンタイム
+	const float HIT_COOLDOWN_TIME = 1.0f;
 }

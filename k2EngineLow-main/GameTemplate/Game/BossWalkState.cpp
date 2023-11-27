@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "BossWalkState.h"
 #include "BossSwipeState.h"
+#include "BossPunchState.h"
+#include "BossMagicState.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -22,7 +24,24 @@ namespace nsBoss
 	{
 		if (m_boss->CheckDistanceToPlayer() < FOLLOW_RANGE)
 		{
-			return new BossSwipeState(m_boss);
+			//ランダムな値を取る
+			int num = std::rand() % 2 + 1;
+
+			if (num == 1)
+			{
+				//切り裂き攻撃
+				return new BossSwipeState(m_boss);
+			}
+			if (num == 2)
+			{
+				//パンチ
+				return new BossPunchState(m_boss);
+			}
+		}
+
+		if (std::rand() % 500 + 1 == 1)
+		{
+			return new BossMagicState(m_boss);
 		}
 
 		// ここまで来たらステートを遷移しない。

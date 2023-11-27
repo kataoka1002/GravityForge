@@ -24,6 +24,7 @@ namespace nsBoss
 			enAnimClip_Punch,
 			enAnimClip_Swipe,
 			enAnimClip_Walk,
+			enAnimClip_JumpAttack,
 			enAnimClip_Num
 		};
 
@@ -37,11 +38,15 @@ namespace nsBoss
 		void MoveCollision();						//コリジョンの動きの設定	
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数
 		void SetReactionState();
+		void CheckHP();
+		void GameClear();							//ゲームをクリアした時に呼ばれる
+		void CalcMagicCoolDown();
+		void CalcHitCoolDown();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
 		void InitModel()				override;	//モデルの初期化
-		void PlayReaction() override;
+		void PlayReaction()				override;	//ヒューマンエネミー用なのでここでは特に意味なし
 		void Render(RenderContext& rc)	override;	//描画処理
 
 		/// <summary>
@@ -108,9 +113,38 @@ namespace nsBoss
 		}
 
 		/// <summary>
-		/// ゲームをクリアした時に呼ばれる
+		/// マジックのクールダウンタイム中かどうかを返す
 		/// </summary>
-		void GameClear();
+		/// <returns></returns>
+		bool GetIsMagicCoolDown()
+		{
+			return m_isMagicCoolDowm;
+		}
+
+		/// <summary>
+		/// マジックのクールダウンタイム中にする
+		/// </summary>
+		void SetMagicCoolDown()
+		{
+			m_isMagicCoolDowm = true;
+		}
+
+		/// <summary>
+		/// ヒットのクールダウンタイム中かどうかを返す
+		/// </summary>
+		/// <returns></returns>
+		bool GetIsHitCoolDown()
+		{
+			return m_isHitCoolDowm;
+		}
+
+		/// <summary>
+		/// ヒットのクールダウンタイム中にする
+		/// </summary>
+		void SetHitCoolDown()
+		{
+			m_isHitCoolDowm = true;
+		}
 
 	protected:
 
@@ -118,6 +152,10 @@ namespace nsBoss
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IBossState*			m_bossState = nullptr;					// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		float				m_magicCoolDowmTime = 0.0f;				// マジックのクールダウンタイム
+		bool				m_isMagicCoolDowm = false;				// マジックのクールダウンタイムかどうか
+		float				m_hitCoolDowmTime = 0.0f;				// ヒットのクールダウンタイム
+		bool				m_isHitCoolDowm = false;				// ヒットのクールダウンタイムかどうか
 
 		BossUI* m_ui = nullptr;
 	};

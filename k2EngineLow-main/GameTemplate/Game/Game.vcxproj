@@ -233,6 +233,7 @@
     <ClCompile Include="BossDeadState.cpp" />
     <ClCompile Include="BossHitReactionState.cpp" />
     <ClCompile Include="BossIdleState.cpp" />
+    <ClCompile Include="BossJumpAttackState.cpp" />
     <ClCompile Include="BossJumpState.cpp" />
     <ClCompile Include="BossMagicState.cpp" />
     <ClCompile Include="BossPunchState.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="BossDeadState.h" />
     <ClInclude Include="BossHitReactionState.h" />
     <ClInclude Include="BossIdleState.h" />
+    <ClInclude Include="BossJumpAttackState.h" />
     <ClInclude Include="BossJumpState.h" />
     <ClInclude Include="BossMagicState.h" />
     <ClInclude Include="BossPunchState.h" />

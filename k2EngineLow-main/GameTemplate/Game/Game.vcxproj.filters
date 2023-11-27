@@ -223,6 +223,9 @@
     <ClCompile Include="BossWalkState.cpp">
       <Filter>MyCode\Enemy\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="BossJumpAttackState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -425,6 +428,9 @@
       <Filter>MyCode\Enemy\Boss</Filter>
     </ClInclude>
     <ClInclude Include="BossWalkState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossJumpAttackState.h">
       <Filter>MyCode\Enemy\Boss</Filter>
     </ClInclude>
   </ItemGroup>

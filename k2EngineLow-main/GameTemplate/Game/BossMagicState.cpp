@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BossMagicState.h"
+#include "BossIdleState.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -19,6 +20,15 @@ namespace nsBoss
 	
 	IBossState* BossMagicState::StateChange()
 	{
+		//アニメーションの再生が終わったら
+		if (m_boss->GetIsPlayingAnimation() == false)
+		{
+			//マジックのクールダウンタイム中にする
+			m_boss->SetMagicCoolDown();
+
+			return new BossIdleState(m_boss);
+		}
+
 		// ここまで来たらステートを遷移しない。
 		return nullptr;
 	}
