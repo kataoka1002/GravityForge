@@ -8,6 +8,7 @@ namespace nsBoss
 {
 	//前方宣言
 	class IBossState;
+	class BossHitReactionState;
 	class BossUI;
 
 	class Boss : public EnemyBase
@@ -17,6 +18,12 @@ namespace nsBoss
 		{
 			enAnimClip_Idle,
 			enAnimClip_Dead,
+			enAnimClip_Reaction,
+			enAnimClip_Jump,
+			enAnimClip_Magic,
+			enAnimClip_Punch,
+			enAnimClip_Swipe,
+			enAnimClip_Walk,
 			enAnimClip_Num
 		};
 
@@ -28,7 +35,8 @@ namespace nsBoss
 		void PlayAnimation(EnAnimationClip currentAnimationClip);	//アニメーションの再生
 		void SetCollision();						//コリジョンの設定
 		void MoveCollision();						//コリジョンの動きの設定	
-		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数		
+		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数
+		void SetReactionState();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -107,7 +115,7 @@ namespace nsBoss
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
-		IBossState* m_bossState = nullptr;					// ステート	
+		IBossState*			m_bossState = nullptr;					// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
 
 		BossUI* m_ui = nullptr;

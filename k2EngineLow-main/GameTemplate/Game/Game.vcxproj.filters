@@ -205,6 +205,24 @@
     <ClCompile Include="BossUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="BossHitReactionState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossJumpState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMagicState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossPunchState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSwipeState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossWalkState.cpp">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -390,6 +408,24 @@
     </ClInclude>
     <ClInclude Include="BossUI.h">
       <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHitReactionState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossJumpState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMagicState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossPunchState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSwipeState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossWalkState.h">
+      <Filter>MyCode\Enemy\Boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

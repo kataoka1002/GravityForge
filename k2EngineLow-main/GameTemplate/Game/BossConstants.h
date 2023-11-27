@@ -6,5 +6,8 @@ namespace
 	const float MAX_HP = 100.0f;
 
 	//ˆÚ“®‘¬“x
-	const float MOVE_SPEED = 50.0f;
+	const float MOVE_SPEED = 200.0f;
+
+	//’Ç]‹——£
+	const float FOLLOW_RANGE = 200.0f;
 }

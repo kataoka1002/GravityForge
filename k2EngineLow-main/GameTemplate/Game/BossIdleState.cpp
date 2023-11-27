@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BossIdleState.h"
 #include "BossDeadState.h"
+#include "BossWalkState.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -28,6 +29,11 @@ namespace nsBoss
 			{
 				return new BossDeadState(m_boss);
 			}
+		}
+
+		if (m_boss->CheckDistanceToPlayer() >= FOLLOW_RANGE)
+		{
+			return new BossWalkState(m_boss);
 		}
 
 		// ここまで来たらステートを遷移しない。

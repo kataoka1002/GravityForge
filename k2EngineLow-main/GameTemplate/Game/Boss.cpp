@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "IBossState.h"
 #include "BossIdleState.h"
+#include "BossHitReactionState.h"
 #include "BossConstants.h"
 #include "BossUI.h"
 
@@ -18,6 +19,18 @@ namespace nsBoss
 		animationClips[enAnimClip_Idle].SetLoopFlag(true);
 		animationClips[enAnimClip_Dead].Load("Assets/animData/boss/boss_Dead.tka");
 		animationClips[enAnimClip_Dead].SetLoopFlag(false);
+		animationClips[enAnimClip_Reaction].Load("Assets/animData/boss/boss_Reaction.tka");
+		animationClips[enAnimClip_Reaction].SetLoopFlag(false);
+		animationClips[enAnimClip_Jump].Load("Assets/animData/boss/boss_Jump.tka");
+		animationClips[enAnimClip_Jump].SetLoopFlag(false);
+		animationClips[enAnimClip_Magic].Load("Assets/animData/boss/boss_Magic.tka");
+		animationClips[enAnimClip_Magic].SetLoopFlag(false);
+		animationClips[enAnimClip_Punch].Load("Assets/animData/boss/boss_Punch.tka");
+		animationClips[enAnimClip_Punch].SetLoopFlag(false);
+		animationClips[enAnimClip_Swipe].Load("Assets/animData/boss/boss_Swipe.tka");
+		animationClips[enAnimClip_Swipe].SetLoopFlag(false);
+		animationClips[enAnimClip_Walk].Load("Assets/animData/boss/boss_Walk.tka");
+		animationClips[enAnimClip_Walk].SetLoopFlag(true);
 	}
 
 	Boss::~Boss()
@@ -197,6 +210,12 @@ namespace nsBoss
 	{
 		//ゲームクリアを呼び出す
 		m_game->SetGameClear();
+	}
+
+	void Boss::SetReactionState()
+	{
+		m_bossState = new BossHitReactionState(this);
+		m_bossState->Enter();
 	}
 
 	void Boss::Render(RenderContext& rc)
