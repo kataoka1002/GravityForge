@@ -40,8 +40,9 @@ namespace nsBoss
 		void SetReactionState();
 		void CheckHP();
 		void GameClear();							//ゲームをクリアした時に呼ばれる
-		void CalcMagicCoolDown();
-		void CalcHitCoolDown();
+		void CalcMagicCoolDown();					//マジックのクールダウンタイムの計算
+		void CalcHitCoolDown();						//ヒットのクールダウンタイムの計算
+		void JumpAttack();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -146,6 +147,15 @@ namespace nsBoss
 			m_isHitCoolDowm = true;
 		}
 
+		/// <summary>
+		/// ジャンプ攻撃のターゲットを設定する
+		/// </summary>
+		/// <param name="pos"></param>
+		void SetJumpTarget()
+		{
+			m_jumpTargetPos = m_player->GetPosition();
+		}
+
 	protected:
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
@@ -156,6 +166,8 @@ namespace nsBoss
 		bool				m_isMagicCoolDowm = false;				// マジックのクールダウンタイムかどうか
 		float				m_hitCoolDowmTime = 0.0f;				// ヒットのクールダウンタイム
 		bool				m_isHitCoolDowm = false;				// ヒットのクールダウンタイムかどうか
+		bool				m_isJumping = false;					// ジャンプ中かどうか
+		Vector3				m_jumpTargetPos = Vector3::Zero;		// ジャンプ攻撃の目的地
 
 		BossUI* m_ui = nullptr;
 	};

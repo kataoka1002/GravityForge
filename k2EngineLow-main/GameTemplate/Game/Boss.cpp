@@ -126,7 +126,7 @@ namespace nsBoss
 
 		//キャラクターコントローラーを使用して座標を更新
 		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
-
+		
 		//座標を設定
 		m_model.SetPosition(m_position);
 	}
@@ -217,6 +217,32 @@ namespace nsBoss
 		{
 
 		}
+		//キーの名前が「jump_start」の時。
+		else if (wcscmp(eventName, L"jump_start") == 0)
+		{
+			m_isJumping = true;
+		}
+		//キーの名前が「jump_end」の時。
+		else if (wcscmp(eventName, L"jump_end") == 0)
+		{
+			m_isJumping = false;
+		}
+		//キーの名前が「jumpAttack_start」の時。
+		else if (wcscmp(eventName, L"jumpAttack_start") == 0)
+		{
+			//コリジョンオブジェクトを作成する。
+			auto collisionObject = NewGO<CollisionObject>(0);
+			Vector3 collisionPosition = m_position;
+			//座標をプレイヤーの少し前に設定する。
+			collisionPosition += m_forward * 50.0f;
+			//球状のコリジョンを作成する。
+			collisionObject->CreateSphere(
+				collisionPosition,		//座標。
+				Quaternion::Identity,	//回転。
+				250.0f					//半径。
+			);
+			collisionObject->SetName("boss_jumpAttack");
+		}
 	}
 
 	void Boss::GameClear()
@@ -267,6 +293,21 @@ namespace nsBoss
 			m_hitCoolDowmTime = HIT_COOLDOWN_TIME;
 			m_isHitCoolDowm = false;
 		}
+	}
+
+	void Boss::JumpAttack()
+	{
+		//ジャンプ中じゃないなら
+		if (m_isJumping != true)
+		{
+			return;
+		}
+
+		//補間でプレイヤーの場所まで飛んでくる
+		m_position = Math::Lerp(g_gameTime->GetFrameDeltaTime() * JUMP_ATTACK_SPEED, m_position, m_jumpTargetPos);
+
+		m_model.SetPosition(m_position);
+		m_charaCon.SetPosition(m_position);
 	}
 
 	void Boss::Render(RenderContext& rc)

@@ -3,6 +3,7 @@
 #include "BossSwipeState.h"
 #include "BossPunchState.h"
 #include "BossMagicState.h"
+#include "BossJumpAttackState.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -37,6 +38,11 @@ namespace nsBoss
 				//パンチ
 				return new BossPunchState(m_boss);
 			}
+		}
+
+		if (std::rand() % 100 + 1 == 1)
+		{
+			return new BossJumpAttackState(m_boss);
 		}
 
 		if (std::rand() % 500 + 1 == 1)

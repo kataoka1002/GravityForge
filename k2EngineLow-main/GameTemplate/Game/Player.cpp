@@ -299,9 +299,24 @@ namespace nsPlayer
 	bool Player::DidAttackHit()
 	{
 		//敵の攻撃用のコリジョンの配列を取得する。
-		const auto& collisions = g_collisionObjectManager->FindCollisionObjects("human_attack");
+		const auto& humanCollisions = g_collisionObjectManager->FindCollisionObjects("human_attack");
 		//配列をfor文で回す。
-		for (auto collision : collisions)
+		for (auto collision : humanCollisions)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//ダメージを与える
+				CalcDamage(10.0f); 
+
+				return true;
+			}
+		}
+
+		//敵の攻撃用のコリジョンの配列を取得する。
+		const auto& bossCollision = g_collisionObjectManager->FindCollisionObjects("boss_jumpAttack");
+		//配列をfor文で回す。
+		for (auto collision : bossCollision)
 		{
 			//コリジョンとキャラコンが衝突したら。
 			if (collision->IsHit(m_charaCon))

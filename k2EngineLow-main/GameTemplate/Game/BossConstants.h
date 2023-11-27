@@ -16,4 +16,7 @@ namespace
 
 	//殴りのクールダウンタイム
 	const float HIT_COOLDOWN_TIME = 1.0f;
+
+	//ジャンプアタックの移動スピード
+	const float JUMP_ATTACK_SPEED = 2.0f;
 }
