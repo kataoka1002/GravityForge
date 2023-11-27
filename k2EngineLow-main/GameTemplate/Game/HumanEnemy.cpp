@@ -4,6 +4,9 @@
 #include "Game.h"
 #include "IHumanEnemyState.h"
 #include "HumanEnemyIdleState.h"
+#include "HumanEnemyDeadState.h"
+#include "HumanEnemyReactionState.h"
+#include "HumanEnemyDieState.h"
 #include "EnemyUI.h"
 
 /// <summary>
@@ -85,6 +88,12 @@ namespace nsHumanEnemy
 			m_humanEnemyState = enemyState;
 			m_humanEnemyState->Enter();
 		}
+
+		//プレイヤーの攻撃が当たったかを判定する(投げ物はObjectクラスで判定)
+		DidAttackHit();
+
+		//HPを確認しステートを切り替える
+		CheckHP();
 
 		// 各ステートの更新処理を実行。
 		m_humanEnemyState->Update();
@@ -206,6 +215,54 @@ namespace nsHumanEnemy
 		{
 			
 		}
+	}
+
+	void HumanEnemy::HandleAttackHit()
+	{
+		// 体力が一定以下で四つん這い
+		if (m_hp <= KNEELING_HP)
+		{
+			//体力0以下で死亡
+			m_humanEnemyState = new HumanEnemyDeadState(this);
+		}
+		else
+		{
+			//体力あるならリアクションのみ
+			m_humanEnemyState = new HumanEnemyReactionState(this);
+		}
+
+		m_humanEnemyState->Enter();
+	}
+
+	void HumanEnemy::CheckHP()
+	{
+		// 体力が一定以下で四つん這い
+		if (m_hp > DEAD_LINE && m_hp <= KNEELING_HP && m_isSetDeadState == false)
+		{
+			m_humanEnemyState = new HumanEnemyDeadState(this);
+			m_humanEnemyState->Enter();
+
+			//セット済みにする
+			m_isSetDeadState = true;
+		}
+
+		// 体力が0以下で死亡
+		if (m_hp <= DEAD_LINE && m_isSetDieState == false)
+		{
+			m_humanEnemyState = new HumanEnemyDieState(this);
+			m_humanEnemyState->Enter();
+
+			//セット済みにする
+			m_isSetDieState = true;
+		}
+	}
+
+	void HumanEnemy::PlayReaction()
+	{
+		//リアクションの再生
+		m_humanEnemyState = new HumanEnemyReactionState(this);
+
+		m_humanEnemyState->Enter();
 	}
 
 	void HumanEnemy::Render(RenderContext& rc)

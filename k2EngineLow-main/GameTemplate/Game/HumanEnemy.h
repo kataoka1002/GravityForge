@@ -35,10 +35,13 @@ namespace nsHumanEnemy
 		void SetCollision();						//コリジョンの設定
 		void MoveCollision();						//コリジョンの動きの設定	
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
+		void HandleAttackHit();
+		void CheckHP();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
 		void InitModel()				override;	//モデルの初期化
+		void PlayReaction() override;
 		void Render(RenderContext& rc)	override;	//描画処理
 
 		/// <summary>
@@ -101,6 +104,8 @@ namespace nsHumanEnemy
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IHumanEnemyState*	m_humanEnemyState = nullptr;			// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		bool				m_isSetDeadState = false;				// 半死にステートをセットしたか
+		bool				m_isSetDieState = false;				// 死亡ステートをセットしたか
 		EnemyUI*			m_enemyUI = nullptr;
 	};
 }

@@ -13,10 +13,12 @@ public:
 	bool Start();
 	void HandleDamageEvent(float damage);			//ダメージを受けた時の処理
 	bool DidAttackHit();
+	void CalcCoolDown();
 	virtual void FollowPlayer()				= 0;	//移動処理
 	virtual void Turn()						= 0;	//回転処理
 	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
 	virtual void InitModel()				= 0;	//モデルの初期化
+	virtual void PlayReaction() = 0;
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 
 	/// <summary>
@@ -121,6 +123,8 @@ protected:
 	Vector3					m_moveSpeed = Vector3::Zero;			// 移動速度
 	Vector3					m_rotMove = Vector3::Zero;				// 回転速度
 	bool					m_isCrawling = false;					// クロール中かどうか
+	bool					m_isCooldown = false;					// クールダウン中かどうか
+	float					m_cooldownTime = 1.0f;						// 攻撃のクールダウン
 
 	Game*					m_game = nullptr;
 	nsPlayer::Player*		m_player = nullptr;

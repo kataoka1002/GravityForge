@@ -309,6 +309,8 @@ void ObjectBase::CalcCollision()
 			//エネミーはダメージを受けた時の処理を行う
 			enemy->HandleDamageEvent(m_damage);
 
+			enemy->PlayReaction();
+
 			//自分が消えるときの処理
 			OnDestroy();
 

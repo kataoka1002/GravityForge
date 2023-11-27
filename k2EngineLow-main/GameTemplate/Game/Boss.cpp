@@ -218,6 +218,11 @@ namespace nsBoss
 		m_bossState->Enter();
 	}
 
+	void Boss::PlayReaction()
+	{
+
+	}
+
 	void Boss::Render(RenderContext& rc)
 	{
 		m_model.Draw(rc);

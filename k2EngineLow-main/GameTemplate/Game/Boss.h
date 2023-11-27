@@ -41,6 +41,7 @@ namespace nsBoss
 		void Turn()						override;	//‰ñ“]ˆ—
 		void OnDestroy()				override;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—
 		void InitModel()				override;	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
+		void PlayReaction() override;
 		void Render(RenderContext& rc)	override;	//•`‰æˆ—
 
 		/// <summary>
