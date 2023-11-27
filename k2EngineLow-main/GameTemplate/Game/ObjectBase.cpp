@@ -337,6 +337,9 @@ void ObjectBase::CalcCollision()
 		//ボスはダメージを受けた時の処理を行う
 		boss->HandleDamageEvent(m_damage);
 
+		//ボスのステートの変更を行う
+		boss->SetReactionState();
+
 		//自分が消えるときの処理
 		OnDestroy();
 
