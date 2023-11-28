@@ -91,6 +91,13 @@ void ObjectBase::Move()
 		break;
 	}
 
+	//オブジェクトが静止状態じゃなくなったら
+	if (m_objectState != enObjectState_Quiescence && m_targetUI != nullptr)
+	{
+		//UIの削除
+		DeleteGO(m_targetUI);
+	}
+
 	//更新
 	m_charaCon.SetPosition(m_position);
 	m_model.SetPosition(m_position);
@@ -314,6 +321,12 @@ void ObjectBase::CalcCollision()
 			//自分が消えるときの処理
 			OnDestroy();
 
+			//UIの削除
+			if (m_targetUI != nullptr)
+			{
+				DeleteGO(m_targetUI);
+			}
+
 			return;
 		}
 
@@ -326,6 +339,12 @@ void ObjectBase::CalcCollision()
 
 				//自分が消えるときの処理
 				OnDestroy();
+
+				//UIの削除
+				if (m_targetUI != nullptr)
+				{
+					DeleteGO(m_targetUI);
+				}
 
 				return;
 			}
@@ -344,6 +363,12 @@ void ObjectBase::CalcCollision()
 
 		//自分が消えるときの処理
 		OnDestroy();
+
+		//UIの削除
+		if (m_targetUI != nullptr)
+		{
+			DeleteGO(m_targetUI);
+		}
 
 		return;
 	}
@@ -375,6 +400,16 @@ void ObjectBase::CalcAimingDirection()
 	Vector3 distance = m_player->GetPosition() - m_position;
 	if (distance.Length() > ATTRACT_LIMIT)
 	{
+		//UIが作成されているなら
+		if (m_makeTargetUI == true && m_targetUI != nullptr)
+		{
+			//削除
+			DeleteGO(m_targetUI);
+
+			//UI未作成状態に変更
+			m_makeTargetUI = false;
+		}
+
 		return;
 	}
 
@@ -394,6 +429,16 @@ void ObjectBase::CalcAimingDirection()
 	//内積が１より小さいなら(2つのベクトルが別の方向を向いている)なら
 	if (innerProduct < 0.9995f)
 	{
+		//UIが作成されているなら
+		if (m_makeTargetUI == true && m_targetUI != nullptr)
+		{
+			//削除
+			DeleteGO(m_targetUI);
+
+			//UI未作成状態に変更
+			m_makeTargetUI = false;
+		}
+
 		return;
 	}
 
@@ -419,4 +464,15 @@ void ObjectBase::CalcAimingDirection()
 
 	//引き寄せ可能にする
 	m_canAttract = true;
+
+	//ここまで来てUIがまだないなら
+	if (m_makeTargetUI == false)
+	{
+		//UIの作成
+		m_targetUI = NewGO<TargetUI>(0, "targetui");
+		m_targetUI->SetObjectPosition(m_position);
+
+		//UI作成済みに変更
+		m_makeTargetUI = true;
+	}
 }

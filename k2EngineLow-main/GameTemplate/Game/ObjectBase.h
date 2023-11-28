@@ -1,4 +1,6 @@
 #pragma once
+#include "TargetUI.h"
+
 // 前方宣言。
 namespace nsPlayer { class Player; }
 class Game;
@@ -170,9 +172,11 @@ protected:
 	float					m_damage = 0.0f;							//与えるダメージ
 	float					m_collisionAddPos = 0.0f;					//コリジョンオブジェクトのY値加算量
 	bool					m_canAttract = false;						//引き寄せれるかどうか
+	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
 
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;
+	TargetUI* m_targetUI = nullptr;
 };
 
