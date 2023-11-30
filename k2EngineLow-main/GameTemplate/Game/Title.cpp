@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Title.h"
 #include "Game.h"
+#include "Fade.h"
 
 namespace
 {
@@ -84,11 +85,6 @@ bool Title::Start()
 	m_SEBackSprite.SetPosition(SE_SPRITE_POSITION);
 	m_SEBackSprite.SetPivot(SE_SPRITE_PIVOT);
 	m_SEBackSprite.Update();
-
-	//フェード画像の初期化
-	m_fadeSprite.Init("Assets/spriteData/title/NowLoading.dds", 1600.0f, 900.0f);
-	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
-	m_fadeSprite.Update();
 
 	return true;
 }
@@ -217,7 +213,7 @@ void Title::ManageState()
 
 	case enTitleState_Fade:
 		//フェードを行う
-		Fade();
+		CalcFade();
 		break;
 
 	default:
@@ -312,19 +308,24 @@ void Title::MoveTriangle()
 	m_triangleSprite.Update();
 }
 
-void Title::Fade()
+void Title::CalcFade()
 {
-	//α値を上げていく
-	m_fadeSpriteAlpha += FADE_SPEED;
-	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
-	m_fadeSprite.Update();
-
-	//α値が1を超えたらゲームを作成
-	if (m_fadeSpriteAlpha >= 1.0f)
+	//フェードが作成されていなかったら
+	if (m_makeFade == false)
 	{
-		NewGO<Game>(0, "game");
-		DeleteGO(this);
+		//フェードの作成
+		NewGO<Fade>(0, "fade");
+		m_makeFade = true;
 	}
+}
+
+void Title::MakeGame()
+{
+	//ゲームを作成
+	NewGO<Game>(0, "game");
+
+	//自分自身の削除
+	DeleteGO(this);
 }
 
 void Title::Render(RenderContext& rc)
@@ -332,7 +333,6 @@ void Title::Render(RenderContext& rc)
 	m_titleSprite.Draw(rc);
 	m_fontSprite.Draw(rc);
 	m_triangleSprite.Draw(rc);
-	m_fadeSprite.Draw(rc);
 
 	//BGM,SEの時のみ表示
 	if (m_titleState == enTitleState_BGM || m_titleState == enTitleState_SE)

@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "GameClear.h"
 #include "GameOver.h"
+#include "Fade.h"
 
 Game::Game()
 {
@@ -49,6 +50,9 @@ Game::~Game()
 
 bool Game::Start()
 {
+	Fade* m_fade = FindGO<Fade>("fade");
+	m_fade->DeleteThis();
+
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	m_levelRender.Init("Assets/modelData/level/newLevel.tkl",

@@ -229,6 +229,9 @@
     <ClCompile Include="TargetUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>MyCode\MainGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -438,6 +441,9 @@
     </ClInclude>
     <ClInclude Include="TargetUI.h">
       <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>MyCode\MainGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

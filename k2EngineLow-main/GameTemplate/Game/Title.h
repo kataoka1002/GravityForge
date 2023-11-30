@@ -27,7 +27,8 @@ public:
 	void TriangleChange(const char* name, enTitleState state);
 	void ChangeBGMSEScale(float& scale);
 	void MoveTriangle();
-	void Fade();
+	void CalcFade();
+	void MakeGame();
 
 private:
 	enTitleState m_titleState = enTitleState_PressAButton;	//ステート
@@ -40,12 +41,11 @@ private:
 	SpriteRender m_SEGageSprite;							//SEのゲージ
 	SpriteRender m_SEFrameSprite;							//SEのフレーム
 	SpriteRender m_SEBackSprite;							//SEの背景
-	SpriteRender m_fadeSprite;								//フェード用画像
 
 	float m_degree = 0.0f;									//透明度の変更用角度
 	float m_BGMScale = 1.0f;								//BGMの大きさ
 	float m_SEScale = 1.0f;									//SEの大きさ
 	float m_trianglePosX = 0.0f;							//矢印のX座標
-	float m_fadeSpriteAlpha = 0.0f;							//フェード画面のα
+	bool m_makeFade = false;
 };
 

@@ -245,6 +245,7 @@
     <ClCompile Include="Dustbin.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyUI.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="Dustbin.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyUI.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="Fence.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
