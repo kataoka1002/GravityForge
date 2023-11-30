@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include "EnemyBase.h"
 #include "Game.h"
+#include "GameInformation.h"
+
 
 bool EnemyBase::Start()
 {
 	m_game = FindGO<Game>("game");
 	m_player = FindGO<nsPlayer::Player>("player");
+	m_gameInfo = FindGO<GameInformation>("gameinformation");
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	InitModel();

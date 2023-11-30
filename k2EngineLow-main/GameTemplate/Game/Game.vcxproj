@@ -250,6 +250,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameInformation.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="House.cpp" />
     <ClCompile Include="HumanEnemy.cpp" />
@@ -293,6 +294,7 @@
     <ClCompile Include="TargetUI.cpp" />
     <ClCompile Include="Teapot.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Air.h" />
@@ -323,6 +325,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameInformation.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="House.h" />
     <ClInclude Include="HumanEnemy.h" />
@@ -366,6 +369,7 @@
     <ClInclude Include="TargetUI.h" />
     <ClInclude Include="Teapot.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GameCamera.h"
 #include "Player.h"
+#include "GameInformation.h"
+#include "Boss.h"
 
 namespace
 {
@@ -18,7 +20,7 @@ namespace
 	const Vector3 TARGET_LOCAL_POSITION_NEAR = { 60.0f,150.0f,0.0f };
 
 	//カメラの最大移動速度
-	const float MAX_CAMERA_SPEED = 800.0f;
+	const float MAX_CAMERA_SPEED = 5000.0f;
 
 	//カメラの当たり判定の大きさ
 	const float CAMERA_COLLISION_SCALE = 5.0f;
@@ -29,6 +31,9 @@ namespace
 
 	//遠平面
 	const float FAR_PLANE = 35000.0f;
+
+	//ボスまでのベクトル
+	const Vector3 TO_CAMERA_POSITION_BOSS = { 380.0f, -30.0f, 140.0f };
 }
 
 GameCamera::GameCamera()
@@ -45,6 +50,11 @@ bool GameCamera::Start()
 {
 	//プレイヤーのインスタンスを探す。
 	m_player = FindGO<nsPlayer::Player>("player");
+
+	//インフォメーションのインスタンスを探す。
+	m_gameInfo = FindGO<GameInformation>("gameinformation");
+
+	m_boss = FindGO<nsBoss::Boss>("boss");
 
 	//カメラまでの距離にセット
 	m_toCameraPos.Set(TO_CAMERA_START_POSITION);
@@ -65,6 +75,12 @@ bool GameCamera::Start()
 
 void GameCamera::UpdatePositionAndTarget()
 {
+	//ムービー中なら返す
+	if (m_gameInfo->GetIsInMovie() == true)
+	{
+		return;
+	}
+
 	//注視点を求める
 	Vector3 target = CalcTargetPosition();
 
@@ -178,10 +194,42 @@ Vector3 GameCamera::CalcTargetPosition()
 	return target;
 }
 
+void GameCamera::BossMovieProcess()
+{
+	//ムービー中じゃないなら返す
+	if (m_gameInfo->GetIsInMovie() == false)
+	{
+		return;
+	}
+
+	//注視点を求める
+	Vector3 target = m_boss->GetPosition();
+	target.y = 180.0f;
+	target.z -= 20.0f;
+
+	//視点を計算する。
+	Vector3 pos = target + TO_CAMERA_POSITION_BOSS;
+	
+	//バネカメラに注視点と視点を設定する。
+	m_springCamera.SetPosition(pos);
+	m_springCamera.SetTarget(target);
+	
+	//一定時間経過でボス出現
+	m_bossMakeTime -= g_gameTime->GetFrameDeltaTime();
+	if (m_bossMakeTime <= 0.0f)
+	{
+		m_gameInfo->StartBossBattle();
+		m_bossMakeTime = 0.0f;
+	}
+}
+
 void GameCamera::Update()
 {
-	//カメラの視点と注視点の設定
+	//ゲーム中のカメラの視点と注視点の設定
 	UpdatePositionAndTarget();
+
+	//ボスムービー中の処理
+	BossMovieProcess();
 
 	//カメラの更新。
 	m_springCamera.Update();

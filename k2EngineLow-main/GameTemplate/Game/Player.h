@@ -4,6 +4,7 @@ class GameCamera;
 class Game;
 class ObjectBase;
 class Teapot;
+class GameInformation;
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -53,6 +54,7 @@ namespace nsPlayer
 		void CalcDamage(float damage);
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数
 		void GameOver();
+		void CheckTouchBossWall();
 
 		/// <summary>
 		/// ポジションの設定
@@ -247,10 +249,12 @@ namespace nsPlayer
 		bool				m_canAttract = false;					// 引き寄せられるかどうか
 		bool				m_canAttack = false;					// 攻撃できるかどうか
 		bool				m_isJumping = false;					// その場ジャンプ中かどうか
+		bool				m_touchWall = false;					// 壁に触ったかどうか
 
 		Game* m_game = nullptr;
 		GameCamera* m_camera = nullptr;
 		ObjectBase* m_holdingObject = nullptr;
 		IPlayerState* m_playerState = nullptr;
+		GameInformation* m_gameInfo = nullptr;
 	};
 }

@@ -14,7 +14,7 @@ namespace nsBoss
 	void BossJumpState::Enter()
 	{
 		// 再生するアニメーションを設定。
-		m_boss->SetAnimation(Boss::enAnimClip_Jump, 0.3f);
+		m_boss->SetAnimation(Boss::enAnimClip_Jump, 0.1f);
 	}
 
 	IBossState* BossJumpState::StateChange()
@@ -25,6 +25,14 @@ namespace nsBoss
 
 	void BossJumpState::Update()
 	{
+		//重力の処理
+		m_boss->Gravity(2.0f);
 
+		//アニメーションが終わったら
+		if (m_boss->GetIsPlayingAnimation() == false)
+		{
+			//ネームプレートの出現
+			m_boss->SetPlate();
+		}
 	}
 }

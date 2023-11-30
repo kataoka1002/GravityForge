@@ -46,12 +46,16 @@ Game::~Game()
 	DeleteGO(m_boss);
 	DeleteGO(m_reticle);
 	DeleteGO(m_playerUI);
+	DeleteGO(m_wall);
+	DeleteGO(m_gameInfo);
 }
 
 bool Game::Start()
 {
 	Fade* m_fade = FindGO<Fade>("fade");
 	m_fade->SetAlphaDown();
+
+	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
@@ -267,7 +271,7 @@ bool Game::Start()
 			//名前がhumanEnemyだったら。
 			else if (objData.EqualObjectName(L"humanEnemy") == true)
 			{
-				//ティーポットオブジェクトを作成する。
+				//エネミーオブジェクトを作成する。
 				m_humanEnemy = NewGO<nsHumanEnemy::HumanEnemy>(0, "humanenemy");
 				//座標を設定する。
 				m_humanEnemy->SetPosition(objData.position);
@@ -279,6 +283,20 @@ bool Game::Start()
 				m_enemyList.emplace_back(m_humanEnemy);
 				return true;
 			}
+			//名前がwallだったら。
+			else if (objData.EqualObjectName(L"wall") == true)
+			{
+				//当たり判定壁オブジェクトを作成する。
+				m_wall = NewGO<Wall>(0, "wall");
+				//座標を設定する。
+				m_wall->SetPosition(objData.position);
+				//大きさを設定する。
+				m_wall->SetScale(objData.scale);
+				//回転を設定する。
+				m_wall->SetRotation(objData.rotation);
+				return true;
+			}
+
 			return true;
 		});
 	

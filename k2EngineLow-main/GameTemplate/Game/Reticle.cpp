@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Reticle.h"
 #include "Player.h"
+#include "GameInformation.h"
 
 namespace
 {
@@ -33,6 +34,8 @@ namespace nsPlayer
 	bool Reticle::Start()
 	{
 		m_player = FindGO<Player>("player");
+
+		m_gameInfo = FindGO<GameInformation>("gameinformation");
 
 		m_dotReticle.Init("Assets/spriteData/dotReticle.dds", 1600.0f, 900.0f);
 		m_dotReticle.SetScale(DOT_RETICLE_SCALE);
@@ -87,6 +90,11 @@ namespace nsPlayer
 
 	void Reticle::Render(RenderContext& rc)
 	{
+		if (m_gameInfo->GetIsInMovie())
+		{
+			return;
+		}
+
 		m_dotReticle.Draw(rc);
 		m_sideReticle.Draw(rc);
 	}

@@ -3,10 +3,12 @@
 #include "Game.h"
 #include "IBossState.h"
 #include "BossIdleState.h"
+#include "BossJumpState.h"
 #include "BossHitReactionState.h"
 #include "BossDeadState.h"
 #include "BossConstants.h"
 #include "BossUI.h"
+#include "GameInformation.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -22,7 +24,7 @@ namespace nsBoss
 		animationClips[enAnimClip_Dead].SetLoopFlag(false);
 		animationClips[enAnimClip_Reaction].Load("Assets/animData/boss/boss_Reaction.tka");
 		animationClips[enAnimClip_Reaction].SetLoopFlag(false);
-		animationClips[enAnimClip_Jump].Load("Assets/animData/boss/boss_Jump.tka");
+		animationClips[enAnimClip_Jump].Load("Assets/animData/boss/boss_MovieJump.tka");
 		animationClips[enAnimClip_Jump].SetLoopFlag(false);
 		animationClips[enAnimClip_Magic].Load("Assets/animData/boss/boss_Magic.tka");
 		animationClips[enAnimClip_Magic].SetLoopFlag(false);
@@ -70,7 +72,7 @@ namespace nsBoss
 		m_hitCoolDowmTime = HIT_COOLDOWN_TIME;
 
 		// 初期ステートを設定
-		m_bossState = new BossIdleState(this);
+		m_bossState = new BossJumpState(this);
 		m_bossState->Enter();
 
 		//UIを作成
@@ -79,6 +81,11 @@ namespace nsBoss
 
 	void Boss::Update()
 	{
+		if (m_gameInfo->GetIsInBossBattle() == false)
+		{
+			return;
+		}
+
 		// ステートを変更するか
 		IBossState* bossState = m_bossState->StateChange();
 
@@ -121,12 +128,18 @@ namespace nsBoss
 		m_moveSpeed += toPlayerDir * MOVE_SPEED;
 		m_moveSpeed.y = 0.0f;
 
+		//重力の処理
+		Gravity(1.0f);
+	}
+
+	void Boss::Gravity(float pow)
+	{
 		//重力の設定
-		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime();
+		m_moveSpeed.y -= 980.0f * g_gameTime->GetFrameDeltaTime() * pow;
 
 		//キャラクターコントローラーを使用して座標を更新
 		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
-		
+
 		//座標を設定
 		m_model.SetPosition(m_position);
 	}
@@ -310,8 +323,39 @@ namespace nsBoss
 		m_charaCon.SetPosition(m_position);
 	}
 
+	void Boss::SetPlate()
+	{
+		//時間計測
+		m_plateDrawTime -= g_gameTime->GetFrameDeltaTime();
+
+		//ネームプレートの表示
+		m_ui->DrawPlate(true);
+
+		//一定時間経過で
+		if (m_plateDrawTime <= 0.0f)
+		{
+			//ボスのステートをアイドルにする
+			m_bossState = new BossIdleState(this);
+			m_bossState->Enter();
+
+			//ネームプレート非表示
+			m_ui->DrawPlate(false);
+
+			//HPの表示
+			m_ui->DrawHP(true);
+
+			//ムービー終了の合図
+			m_gameInfo->SetInMovie(false);
+		}
+	}
+
 	void Boss::Render(RenderContext& rc)
 	{
+		if (m_gameInfo->GetIsInBossBattle() == false)
+		{
+			return;
+		}
+
 		m_model.Draw(rc);
 	}
 }

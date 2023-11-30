@@ -10,6 +10,8 @@ namespace
 
 	const Vector3 HP_NAME_POSITION = { 0.0f,400.0f,0.0f };
 
+	const Vector3 PLATE_POSITION = { 0.0f,-300.0f,0.0f };
+
 	const float HP_SCALE_Y = 0.8f;
 }
 
@@ -46,6 +48,9 @@ namespace nsBoss
 		m_name.Init("Assets/spriteData/UI/boss/Doom.dds", 160.0f, 57.0f);
 		m_name.SetPosition(HP_NAME_POSITION);
 		m_name.Update();
+		m_plate.Init("Assets/spriteData/UI/boss/doomPlate.dds", 1600.0f, 171.0f);
+		m_plate.SetPosition(PLATE_POSITION);
+		m_plate.Update();
 
 		return true;
 	}
@@ -66,10 +71,18 @@ namespace nsBoss
 
 	void BossUI::Render(RenderContext& rc)
 	{
-		m_HPBack.Draw(rc);
-		m_HPOrange.Draw(rc);
-		m_HPGage.Draw(rc);
-		m_HPFrame.Draw(rc);
-		m_name.Draw(rc);
+		if (m_drawHP == true)
+		{
+			m_HPBack.Draw(rc);
+			m_HPOrange.Draw(rc);
+			m_HPGage.Draw(rc);
+			m_HPFrame.Draw(rc);
+			m_name.Draw(rc);
+		}
+
+		if (m_drawPlate == true)
+		{
+			m_plate.Draw(rc);
+		}
 	}
 }

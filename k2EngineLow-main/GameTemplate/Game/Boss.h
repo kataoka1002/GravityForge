@@ -43,6 +43,8 @@ namespace nsBoss
 		void CalcMagicCoolDown();					//マジックのクールダウンタイムの計算
 		void CalcHitCoolDown();						//ヒットのクールダウンタイムの計算
 		void JumpAttack();
+		void Gravity(float pow);
+		void SetPlate();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -168,6 +170,7 @@ namespace nsBoss
 		bool				m_isHitCoolDowm = false;				// ヒットのクールダウンタイムかどうか
 		bool				m_isJumping = false;					// ジャンプ中かどうか
 		Vector3				m_jumpTargetPos = Vector3::Zero;		// ジャンプ攻撃の目的地
+		float				m_plateDrawTime = 2.0f;
 
 		BossUI* m_ui = nullptr;
 	};

@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 class Game;
+class GameInformation;
 
 class EnemyBase : public IGameObject, Noncopyable
 {
@@ -129,5 +130,6 @@ protected:
 	Game*					m_game = nullptr;
 	nsPlayer::Player*		m_player = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;			// ƒRƒŠƒWƒ‡ƒ“
+	GameInformation* m_gameInfo = nullptr;
 };
 

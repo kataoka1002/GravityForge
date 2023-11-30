@@ -1,4 +1,5 @@
 #pragma once
+class GameInformation;
 
 namespace nsPlayer
 {
@@ -24,6 +25,7 @@ namespace nsPlayer
 		Vector3 m_sideReticleScale = Vector3::Zero;
 
 		Player* m_player = nullptr;
+		GameInformation* m_gameInfo = nullptr;
 	};
 
 }

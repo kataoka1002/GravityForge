@@ -28,6 +28,8 @@
 #include "HumanEnemy.h"
 #include "House.h"
 #include "PlayerUI.h"
+#include "Wall.h"
+#include "GameInformation.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -125,6 +127,8 @@ private:
 
 	nsHumanEnemy::HumanEnemy* m_humanEnemy = nullptr;
 	House* m_house = nullptr;
+	Wall* m_wall = nullptr;
+	GameInformation* m_gameInfo = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

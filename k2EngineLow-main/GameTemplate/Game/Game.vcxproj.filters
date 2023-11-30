@@ -52,9 +52,6 @@
     <ClCompile Include="Teapot.cpp">
       <Filter>MyCode\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Reticle.cpp">
-      <Filter>MyCode\Player</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyBase.cpp">
       <Filter>MyCode\Enemy</Filter>
     </ClCompile>
@@ -232,6 +229,15 @@
     <ClCompile Include="Fade.cpp">
       <Filter>MyCode\MainGame</Filter>
     </ClCompile>
+    <ClCompile Include="GameInformation.cpp">
+      <Filter>MyCode\MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>MyCode\MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Reticle.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -249,9 +255,6 @@
     </ClInclude>
     <ClInclude Include="Teapot.h">
       <Filter>MyCode\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Reticle.h">
-      <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
       <Filter>MyCode\Enemy</Filter>
@@ -444,6 +447,15 @@
     </ClInclude>
     <ClInclude Include="Fade.h">
       <Filter>MyCode\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInformation.h">
+      <Filter>MyCode\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>MyCode\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Reticle.h">
+      <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

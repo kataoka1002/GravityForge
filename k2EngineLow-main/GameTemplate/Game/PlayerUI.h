@@ -1,4 +1,5 @@
 #pragma once
+class GameInformation;
 
 /// <summary>
 /// プレイヤーの名前空間
@@ -26,5 +27,6 @@ namespace nsPlayer
 		Vector3 m_whiteScale = Vector3::One;	//白ゲージの大きさ
 
 		Player* m_player = nullptr;
+		GameInformation* m_gameInfo = nullptr;
 	};
 }

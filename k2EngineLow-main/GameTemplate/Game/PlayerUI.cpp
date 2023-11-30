@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerUI.h"
 #include "Player.h"
+#include "GameInformation.h"
 
 namespace
 {
@@ -24,6 +25,8 @@ namespace nsPlayer
 	bool PlayerUI::Start()
 	{
 		m_player = FindGO<Player>("player");
+
+		m_gameInfo = FindGO<GameInformation>("gameinformation");
 
 		m_HPFrame.Init("Assets/spriteData/UI/HPFrame.dds", 439.0f, 46.0f);
 		m_HPFrame.SetPivot({ 0.0f,0.5f });
@@ -65,6 +68,11 @@ namespace nsPlayer
 
 	void PlayerUI::Render(RenderContext& rc)
 	{
+		if(m_gameInfo->GetIsInMovie())
+		{
+			return;
+		}
+
 		m_HPBack.Draw(rc);
 		m_HPWhite.Draw(rc);
 		m_HPGage.Draw(rc);

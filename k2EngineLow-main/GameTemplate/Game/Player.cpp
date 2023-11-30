@@ -7,6 +7,7 @@
 #include "IPlayerState.h"
 #include "PlayerIdleState.h"
 #include "PlayerJumpState.h"
+#include "GameInformation.h"
 
 namespace
 {
@@ -66,6 +67,8 @@ namespace nsPlayer
 
 		m_game = FindGO<Game>("game");
 
+		m_gameInfo = FindGO<GameInformation>("gameinformation");
+
 		//アニメーションイベント用の関数を設定する
 		m_playerModel.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
 			OnAnimationEvent(clipName, eventName);
@@ -97,6 +100,12 @@ namespace nsPlayer
 
 	void Player::Update()
 	{
+		//ムービー中は操作できない
+		if (m_gameInfo->GetIsInMovie())
+		{
+			return;
+		}
+
 		// ステートを変更するか
 		IPlayerState* playerState = m_playerState->StateChange();
 
@@ -108,6 +117,9 @@ namespace nsPlayer
 			m_playerState = playerState;
 			m_playerState->Enter();
 		}
+
+		//ボスの壁に触れているかを確認
+		CheckTouchBossWall();
 
 		// 各ステートの更新処理を実行。
 		m_playerState->Update();
@@ -329,6 +341,29 @@ namespace nsPlayer
 		}
 
 		return false;
+	}
+
+	void Player::CheckTouchBossWall()
+	{
+		//すでに壁に触っていたら
+		if (m_touchWall == true)
+		{
+			return;
+		}
+
+		//コリジョンを取得する
+		const auto& wallCollision = g_collisionObjectManager->FindCollisionObjects("BossFloorWall");
+		//配列をfor文で回す
+		for (auto collision : wallCollision)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//ボス戦movieスタート
+				m_gameInfo->SetInMovie(true);
+				m_touchWall = true;
+			}
+		}
 	}
 
 	void Player::CalcDamage(float damage)
