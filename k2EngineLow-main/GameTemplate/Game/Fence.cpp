@@ -5,7 +5,7 @@
 namespace
 {
 	//コリジョンの大きさ
-	const float COLLISION_SCALE = 45.0f;
+	const float COLLISION_SCALE = 55.0f;
 
 	//与えるダメージ
 	const float DAMAGE_AMOUNT = 50.0f;

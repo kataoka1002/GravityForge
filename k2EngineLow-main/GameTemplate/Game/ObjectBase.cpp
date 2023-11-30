@@ -26,10 +26,10 @@ namespace
 	const Vector3 OBJECT_LOCAL_POSITION = { 100.0f,150.0f,0.0f };
 
 	//‚Á”ò‚Ô‘¬‚³
-	const float BLOW_AWAY_SPEED = 3000.0f;
+	const float BLOW_AWAY_SPEED = 7000.0f;
 
 	//ˆø‚«Šñ‚¹‚ê‚é‹——£
-	const float ATTRACT_LIMIT = 1000.0f;
+	const float ATTRACT_LIMIT = 800.0f;
 
 	//Î‚ß‚ÌŠp“x‚ÌÅ‘å’l
 	const float MAX_DIAGONAL_ROTATION = 20.0f;
