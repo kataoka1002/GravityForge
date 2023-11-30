@@ -51,7 +51,7 @@ Game::~Game()
 bool Game::Start()
 {
 	Fade* m_fade = FindGO<Fade>("fade");
-	m_fade->DeleteThis();
+	m_fade->SetAlphaDown();
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 

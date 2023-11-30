@@ -5,7 +5,9 @@
 
 namespace
 {
-	const float FADE_SPEED = 0.02f;
+	const float FADE_UP_SPEED = 0.02f;
+
+	const float FADE_DOWN_SPEED = 0.1f;
 
 	const float ROTATION_SPEED = 3.0f;
 
@@ -69,10 +71,28 @@ void Fade::CalcRotation()
 
 void Fade::CalcFadeAlpha()
 {
-	//α値を上げていく
-	m_fadeSpriteAlpha += FADE_SPEED;
-	m_fadeSpriteAlpha = min(1.0f, m_fadeSpriteAlpha);
+	if (m_alphaUp == true)
+	{
+		//α値を上げていく
+		m_fadeSpriteAlpha += FADE_UP_SPEED;
+		m_fadeSpriteAlpha = min(1.0f, m_fadeSpriteAlpha);
+	}
+	else
+	{
+		//α値を下げていく
+		m_fadeSpriteAlpha -= FADE_DOWN_SPEED;
+		m_fadeSpriteAlpha = max(0.0f, m_fadeSpriteAlpha);
+
+		//α値が0以下で
+		if (m_fadeSpriteAlpha <= 0.0f)
+		{
+			//自身の削除
+			DeleteGO(this);
+		}
+	}
+
 	m_fadeSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
+	m_loadRotSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_fadeSpriteAlpha });
 }
 
 void Fade::MakeGame()
