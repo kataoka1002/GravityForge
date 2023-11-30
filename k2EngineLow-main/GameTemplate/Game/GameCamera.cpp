@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "GameInformation.h"
 #include "Boss.h"
+#include "BlackFade.h"
 
 namespace
 {
@@ -34,6 +35,9 @@ namespace
 
 	//ボスまでのベクトル
 	const Vector3 TO_CAMERA_POSITION_BOSS = { 380.0f, -30.0f, 140.0f };
+
+	//オープニング中のベクトル
+	const Vector3 TO_CAMERA_POSITION_OP = { 0.0f, 0.0f, 100.0f };
 }
 
 GameCamera::GameCamera()
@@ -54,7 +58,11 @@ bool GameCamera::Start()
 	//インフォメーションのインスタンスを探す。
 	m_gameInfo = FindGO<GameInformation>("gameinformation");
 
+	//ボスのインスタンスを探す
 	m_boss = FindGO<nsBoss::Boss>("boss");
+
+	//ブラックフェードを探す
+	m_blackFade = FindGO<BlackFade>("blackfade");
 
 	//カメラまでの距離にセット
 	m_toCameraPos.Set(TO_CAMERA_START_POSITION);
@@ -70,13 +78,119 @@ bool GameCamera::Start()
 		CAMERA_COLLISION_SCALE	//カメラに設定される球体コリジョンの半径。第３引数がtrueの時に有効になる。
 	);
 
+	//最初のターゲット
+	m_opTarget = { -700.0f,150.0f,100.0f };
+
 	return true;
+}
+
+void GameCamera::OpeningProcess()
+{
+	//オープニング中じゃないなら返す
+	if (m_gameInfo->GetIsInOpening() == false)
+	{
+		return;
+	}
+
+	//時間計測
+	m_opTime += g_gameTime->GetFrameDeltaTime();
+
+	Vector3 pos;
+	if (m_opState == enOP_Camera1)
+	{
+		//場所①でカメラ横移動
+		//注視点を求める
+		m_opTarget.x += 5.0f;
+
+		if (m_opTime >= 1.5f)
+		{
+			//フェードインの開始
+			m_blackFade->SetAlphaUp(true);
+		}
+
+		if (m_blackFade->GetBlackAlpha() >= 1.0f)
+		{
+			//カメラ場所②に移動
+			m_opTarget = { 240.0f,150.0f,1700.0f };
+			m_springCamera.Refresh();
+			//フェードインの終了
+			m_blackFade->SetAlphaUp(false);
+			//フェードアウトの開始
+			m_blackFade->SetAlphaDown(true);
+			//タイマーのリセット
+			m_opTime = 0.0f;
+			
+			//次のステートへ移動
+			m_opState = enOP_Camera2;
+		}
+
+		//視点を計算する。
+		pos = m_opTarget + TO_CAMERA_POSITION_OP;
+	}
+	else if (m_opState == enOP_Camera2)
+	{
+		if (m_blackFade->GetBlackAlpha() <= 0.0f && m_camera1End == false)
+		{
+			//フェードアウトの終了
+			m_blackFade->SetAlphaDown(false);
+
+			m_camera1End = true;
+		}
+
+		//注視点を求める
+		m_opTarget.x -= 5.0f;
+
+		if (m_opTime >= 1.5f)
+		{
+			//フェードインの開始
+			m_blackFade->SetAlphaUp(true);
+		}
+
+		if (m_blackFade->GetBlackAlpha() >= 1.0f)
+		{
+			//カメラ場所3に移動
+			m_opTarget = CalcTargetPosition();
+			m_springCamera.Refresh();
+			//フェードインの終了
+			m_blackFade->SetAlphaUp(false);
+			//フェードアウトの開始
+			m_blackFade->SetAlphaDown(true);
+			//タイマーのリセット
+			m_opTime = 0.0f;
+
+			//次のステートへ移動
+			m_opState = enOP_Player;
+		}
+
+		//視点を計算する。
+		pos = m_opTarget + TO_CAMERA_POSITION_OP;
+	}
+	else if (m_opState == enOP_Player)
+	{
+		//視点を計算する。
+		pos = m_opTarget + TO_CAMERA_START_POSITION;
+
+		if (m_blackFade->GetBlackAlpha() <= 0.0f)
+		{
+			//フェードアウトの終了
+			m_blackFade->SetAlphaDown(false);
+
+			//オープニングの終了
+			m_gameInfo->SetInOpening(false);
+
+			//ゲームのスタート
+			m_gameInfo->SetInGame(true);
+		}
+	}
+
+	m_springCamera.SetPosition(pos);
+	m_springCamera.SetTarget(m_opTarget);
 }
 
 void GameCamera::UpdatePositionAndTarget()
 {
-	//ムービー中なら返す
-	if (m_gameInfo->GetIsInMovie() == true)
+	//ゲーム中じゃないなら返す
+	if (m_gameInfo->GetIsInGame() == false)
 	{
 		return;
 	}
@@ -225,6 +339,9 @@ void GameCamera::BossMovieProcess()
 
 void GameCamera::Update()
 {
+	//オープニング中の処理
+	OpeningProcess();
+
 	//ゲーム中のカメラの視点と注視点の設定
 	UpdatePositionAndTarget();
 

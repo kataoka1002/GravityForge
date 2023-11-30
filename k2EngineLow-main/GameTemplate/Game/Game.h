@@ -30,6 +30,7 @@
 #include "PlayerUI.h"
 #include "Wall.h"
 #include "GameInformation.h"
+#include "BlackFade.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -129,6 +130,7 @@ private:
 	House* m_house = nullptr;
 	Wall* m_wall = nullptr;
 	GameInformation* m_gameInfo = nullptr;
+	BlackFade* m_blackFade = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

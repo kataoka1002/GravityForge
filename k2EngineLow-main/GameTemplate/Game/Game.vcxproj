@@ -229,6 +229,7 @@
     <ClCompile Include="BenchBig.cpp" />
     <ClCompile Include="BenchSmall.cpp" />
     <ClCompile Include="BillboardSmall.cpp" />
+    <ClCompile Include="BlackFade.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossDeadState.cpp" />
     <ClCompile Include="BossHitReactionState.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="BenchBig.h" />
     <ClInclude Include="BenchSmall.h" />
     <ClInclude Include="BillboardSmall.h" />
+    <ClInclude Include="BlackFade.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BossConstants.h" />
     <ClInclude Include="BossDeadState.h" />

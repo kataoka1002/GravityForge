@@ -40,6 +40,24 @@ public:
 	}
 
 	/// <summary>
+	/// オープニング中かどうかをセットする
+	/// </summary>
+	/// <param name="now"></param>
+	void SetInOpening(bool now)
+	{
+		m_isInOpening = now;
+	}
+
+	/// <summary>
+	/// ゲーム中かどうかをセットする
+	/// </summary>
+	/// <param name="now"></param>
+	void SetInGame(bool now)
+	{
+		m_isInGame = now;
+	}
+
+	/// <summary>
 	/// ボス戦に行くことができるかどうかを返す
 	/// </summary>
 	/// <returns></returns>
@@ -66,9 +84,29 @@ public:
 		return m_isInMovie;
 	}
 
+	/// <summary>
+	/// オープニング中かどうかを返す
+	/// </summary>
+	/// <returns></returns>
+	const bool GetIsInOpening() const
+	{
+		return m_isInOpening;
+	}
+
+	/// <summary>
+	/// ゲーム中かどうかを返す
+	/// </summary>
+	/// <returns></returns>
+	const bool GetIsInGame() const
+	{
+		return m_isInGame;
+	}
+
 private:
 	int m_defeatEnemyNum = 0;			//倒した敵の数
 	bool m_canGoBossBattle = false;		//ボス戦に行けるかどうか
 	bool m_isInBossBattle = false;		//ボス戦中かどうか
 	bool m_isInMovie = false;			//ムービー中かどうか
+	bool m_isInOpening = true;			//オープニング中かどうか
+	bool m_isInGame = false;			//メインゲームかどうか
 };

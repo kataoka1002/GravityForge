@@ -48,6 +48,7 @@ Game::~Game()
 	DeleteGO(m_playerUI);
 	DeleteGO(m_wall);
 	DeleteGO(m_gameInfo);
+	DeleteGO(m_blackFade);
 }
 
 bool Game::Start()
@@ -314,6 +315,9 @@ bool Game::Start()
 
 	//ライトの作成
 	m_light = NewGO<Lighting>(0, "lighting");
+
+	//黒フェードの作成
+	m_blackFade = NewGO<BlackFade>(0, "blackfade");
 
 	return true;
 }
