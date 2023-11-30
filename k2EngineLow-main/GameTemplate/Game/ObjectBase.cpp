@@ -30,6 +30,12 @@ namespace
 
 	//ˆø‚«Šñ‚¹‚ê‚é‹——£
 	const float ATTRACT_LIMIT = 1000.0f;
+
+	//ŽÎ‚ß‚ÌŠp“x‚ÌÅ‘å’l
+	const float MAX_DIAGONAL_ROTATION = 20.0f;
+
+	//ŽÎ‚ß‚É‚È‚é‘¬‚³
+	const float DIAGONAL_ROTATION_SPEED = 0.5f;
 }
 
 bool ObjectBase::Start()
@@ -275,6 +281,14 @@ void ObjectBase::Turn(Vector3 speed)
 	//ŠŠ‚ç‚©‚É‰ñ“]‚³‚¹‚é
 	m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 2.0f, m_rotMove, speed);
 	m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+
+	//ŽÎ‚ß‚É‚·‚é
+	m_diagonalRot += DIAGONAL_ROTATION_SPEED;
+	if (m_diagonalRot >= MAX_DIAGONAL_ROTATION)
+	{
+		m_diagonalRot = MAX_DIAGONAL_ROTATION;
+	}
+	m_rotation.SetRotationDegZ(m_diagonalRot);
 
 	m_model.SetRotation(m_rotation);
 }

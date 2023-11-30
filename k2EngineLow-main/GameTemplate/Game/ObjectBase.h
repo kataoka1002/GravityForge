@@ -171,6 +171,7 @@ protected:
 	float					m_degree = 0.0f;							//フワフワ用の角度
 	float					m_damage = 0.0f;							//与えるダメージ
 	float					m_collisionAddPos = 0.0f;					//コリジョンオブジェクトのY値加算量
+	float					m_diagonalRot = 0.0f;						//斜めの角度
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
 
