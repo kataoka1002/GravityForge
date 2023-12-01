@@ -90,7 +90,7 @@ namespace nsPlayer
 
 	void Reticle::Render(RenderContext& rc)
 	{
-		if (m_gameInfo->GetIsInMovie())
+		if (m_gameInfo->GetIsInGame() == false)
 		{
 			return;
 		}
