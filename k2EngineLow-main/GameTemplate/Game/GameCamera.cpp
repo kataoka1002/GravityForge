@@ -38,6 +38,16 @@ namespace
 
 	//オープニング中のベクトル
 	const Vector3 TO_CAMERA_POSITION_OP = { 0.0f, 0.0f, 100.0f };
+
+	//オープニングのカメラスピード
+	const float OP_CAMERA_SPEED = 4.0f;
+
+	//オープニングの視点の位置
+	const Vector3 OP_CAMERA_POS_1 = { -700.0f,150.0f,100.0f };
+	const Vector3 OP_CAMERA_POS_2 = { 240.0f,150.0f,1700.0f };
+
+	//フェードが始まるまでの時間
+	const float FADE_START_TIME = 2.0f;
 }
 
 GameCamera::GameCamera()
@@ -79,7 +89,7 @@ bool GameCamera::Start()
 	);
 
 	//最初のターゲット
-	m_opTarget = { -700.0f,150.0f,100.0f };
+	m_opTarget = OP_CAMERA_POS_1;
 
 	return true;
 }
@@ -95,40 +105,25 @@ void GameCamera::OpeningProcess()
 	//時間計測
 	m_opTime += g_gameTime->GetFrameDeltaTime();
 
-	Vector3 pos;
+	//視点の設定
+	Vector3 pos = Vector3::Zero;
+
+	//場所①でのカメラ横移動
 	if (m_opState == enOP_Camera1)
 	{
-		//場所①でカメラ横移動
-		//注視点を求める
-		m_opTarget.x += 5.0f;
+		//注視点を移動させる
+		m_opTarget.x += OP_CAMERA_SPEED;
 
-		if (m_opTime >= 1.5f)
-		{
-			//フェードインの開始
-			m_blackFade->SetAlphaUp(true);
-		}
-
-		if (m_blackFade->GetBlackAlpha() >= 1.0f)
-		{
-			//カメラ場所②に移動
-			m_opTarget = { 240.0f,150.0f,1700.0f };
-			m_springCamera.Refresh();
-			//フェードインの終了
-			m_blackFade->SetAlphaUp(false);
-			//フェードアウトの開始
-			m_blackFade->SetAlphaDown(true);
-			//タイマーのリセット
-			m_opTime = 0.0f;
-			
-			//次のステートへ移動
-			m_opState = enOP_Camera2;
-		}
+		//フェードの処理
+		CalcOpeningFade(enOP_Camera2, OP_CAMERA_POS_2);
 
 		//視点を計算する。
 		pos = m_opTarget + TO_CAMERA_POSITION_OP;
 	}
+	//場所②でのカメラ移動
 	else if (m_opState == enOP_Camera2)
 	{
+		//画面が明るくなったら
 		if (m_blackFade->GetBlackAlpha() <= 0.0f && m_camera1End == false)
 		{
 			//フェードアウトの終了
@@ -137,39 +132,19 @@ void GameCamera::OpeningProcess()
 			m_camera1End = true;
 		}
 
-		//注視点を求める
-		m_opTarget.x -= 5.0f;
-
-		if (m_opTime >= 1.5f)
-		{
-			//フェードインの開始
-			m_blackFade->SetAlphaUp(true);
-		}
-
-		if (m_blackFade->GetBlackAlpha() >= 1.0f)
-		{
-			//カメラ場所3に移動
-			m_opTarget = CalcTargetPosition();
-			m_springCamera.Refresh();
-			//フェードインの終了
-			m_blackFade->SetAlphaUp(false);
-			//フェードアウトの開始
-			m_blackFade->SetAlphaDown(true);
-			//タイマーのリセット
-			m_opTime = 0.0f;
-
-			//次のステートへ移動
-			m_opState = enOP_Player;
-		}
+		//注視点を移動させる
+		m_opTarget.x -= OP_CAMERA_SPEED;
+		
+		//フェードの処理
+		CalcOpeningFade(enOP_Player, CalcTargetPosition());
 
 		//視点を計算する。
 		pos = m_opTarget + TO_CAMERA_POSITION_OP;
 	}
+	//プレイヤーの位置でのカメラ処理
 	else if (m_opState == enOP_Player)
 	{
-		//視点を計算する。
-		pos = m_opTarget + TO_CAMERA_START_POSITION;
-
+		//画面が明るくなったら
 		if (m_blackFade->GetBlackAlpha() <= 0.0f)
 		{
 			//フェードアウトの終了
@@ -181,10 +156,45 @@ void GameCamera::OpeningProcess()
 			//ゲームのスタート
 			m_gameInfo->SetInGame(true);
 		}
+
+		//視点を計算する。
+		pos = m_opTarget + TO_CAMERA_START_POSITION;
 	}
 
+	//視点と注視点の設定
 	m_springCamera.SetPosition(pos);
 	m_springCamera.SetTarget(m_opTarget);
+}
+
+void GameCamera::CalcOpeningFade(const enOPState& nextState, const Vector3& nextPos)
+{
+	if (m_opTime <= FADE_START_TIME)
+	{
+		return;
+	}
+		 
+	//フェードインの開始
+	m_blackFade->SetAlphaUp(true);
+
+	//画面が真っ暗になったら
+	if (m_blackFade->GetBlackAlpha() >= 1.0f)
+	{
+		//次のカメラ場所に移動
+		m_opTarget = nextPos;
+		m_springCamera.Refresh();
+
+		//フェードインの終了
+		m_blackFade->SetAlphaUp(false);
+
+		//フェードアウトの開始
+		m_blackFade->SetAlphaDown(true);
+
+		//タイマーのリセット
+		m_opTime = 0.0f;
+
+		//次のステートへ移動
+		m_opState = nextState;
+	}
 }
 
 void GameCamera::UpdatePositionAndTarget()

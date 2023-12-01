@@ -27,12 +27,12 @@ void BlackFade::CalcAlpha()
 {
 	if (m_alphaUp == true)
 	{
-		m_blackAlpha += 0.1f;
+		m_blackAlpha += 0.05f;
 	}
 
 	if (m_alphaDown == true)
 	{
-		m_blackAlpha -= 0.1f;
+		m_blackAlpha -= 0.05f;
 	}
 
 	m_blackSprite.SetMulColor({ 0.0f,0.0f,0.0f,m_blackAlpha });

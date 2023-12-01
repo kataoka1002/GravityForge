@@ -1,8 +1,8 @@
 #pragma once
 #include "SpringCamera.h"
 namespace nsPlayer { class Player; }
-class GameInformation;
 namespace nsBoss { class Boss; }
+class GameInformation;
 class BlackFade;
 
 class GameCamera : public IGameObject
@@ -26,16 +26,17 @@ public:
 	Vector3 CalcTargetPosition();
 	void BossMovieProcess();
 	void OpeningProcess();
+	void CalcOpeningFade(const enOPState& nextState, const Vector3& nextPos);
 
 private:
-	enOPState m_opState = enOP_Camera1;
+	enOPState m_opState = enOP_Camera1;		//オープニングステート
 	Vector3	m_toCameraPos = Vector3::One;	//注視点から視点に向かうベクトル
 	SpringCamera m_springCamera;			//ばねカメラ
 	bool m_isNearCamera = false;			//近距離カメラかどうか
-	float m_bossMakeTime = 0.7f;
-	Vector3 m_opTarget = Vector3::Zero;
-	float m_opTime = 0.0f;
-	bool m_camera1End = false;
+	float m_bossMakeTime = 0.7f;			//ボスが出現するまでの時間
+	Vector3 m_opTarget = Vector3::Zero;		//OPカメラのターゲット
+	float m_opTime = 0.0f;					//オープニング用のタイマー
+	bool m_camera1End = false;				//カメラ１が終わったかどうか
 
 	nsPlayer::Player* m_player = nullptr;	//プレイヤー
 	nsBoss::Boss* m_boss = nullptr;			//ボス

@@ -18,8 +18,5 @@ bool GameInformation::Start()
 
 void GameInformation::Update()
 {
-	if (m_defeatEnemyNum >= ENABLE_BOSSBATTLE_ENEMY_NUM)
-	{
-		m_canGoBossBattle = true;
-	}
+	
 }
