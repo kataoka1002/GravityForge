@@ -2,6 +2,7 @@
 #include "Title.h"
 #include "Game.h"
 #include "Fade.h"
+#include "GameStart.h"
 
 namespace
 {

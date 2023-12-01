@@ -241,6 +241,9 @@
     <ClCompile Include="BlackFade.cpp">
       <Filter>MyCode\MainGame</Filter>
     </ClCompile>
+    <ClCompile Include="GameStart.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -462,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="BlackFade.h">
       <Filter>MyCode\MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStart.h">
+      <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

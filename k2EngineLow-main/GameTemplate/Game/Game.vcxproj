@@ -253,6 +253,7 @@
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameInformation.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="GameStart.cpp" />
     <ClCompile Include="House.cpp" />
     <ClCompile Include="HumanEnemy.cpp" />
     <ClCompile Include="HumanEnemyAttackState.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameInformation.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="GameStart.h" />
     <ClInclude Include="House.h" />
     <ClInclude Include="HumanEnemy.h" />
     <ClInclude Include="HumanEnemyAttackState.h" />

@@ -4,6 +4,7 @@
 #include "GameInformation.h"
 #include "Boss.h"
 #include "BlackFade.h"
+#include "GameStart.h"
 
 namespace
 {
@@ -153,8 +154,8 @@ void GameCamera::OpeningProcess()
 			//オープニングの終了
 			m_gameInfo->SetInOpening(false);
 
-			//ゲームのスタート
-			m_gameInfo->SetInGame(true);
+			//バトルスタートを表示(ゲームのスタートはこの中で行っている)
+			NewGO<GameStart>(0,"gamestart");
 		}
 
 		//視点を計算する。
