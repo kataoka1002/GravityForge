@@ -231,25 +231,25 @@ namespace nsPlayer
 
 	private:
 
-		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
-		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
-		ModelRender			m_playerModel;							// プレイヤーモデル
-		Vector3				m_position = Vector3::Zero;				// 座標
-		Vector3				m_scale = Vector3::One;					// スケール
-		Vector3				m_moveSpeed = Vector3::Zero;			// 移動速度
-		Vector3             m_rotMove = Vector3::Zero;				// 回転速度
-		Vector3				m_forward = Vector3::Zero;				// 前方向
-		CharacterController m_charaCon;								// キャラクターコントローラー
-		Quaternion			m_rotation;								// クォータニオン
-		float				LStick_x = 0.0f;						// Lスティック入力量(横)
-		float				LStick_y = 0.0f;						// Lスティック入力量(縦)
-		float				m_complementTime = 0.0f;				// アニメーションの補完時間
-		float				m_hp = 0.0f;							// HP
-		bool				m_isHoldingObject = false;				// オブジェクトを持っているかどうか
-		bool				m_canAttract = false;					// 引き寄せられるかどうか
-		bool				m_canAttack = false;					// 攻撃できるかどうか
-		bool				m_isJumping = false;					// その場ジャンプ中かどうか
-		bool				m_touchWall = false;					// 壁に触ったかどうか
+		AnimationClip		animationClips[enAnimClip_Num];				// アニメーションクリップ
+		EnAnimationClip		m_currentAnimationClip = enAnimClip_Idle;	// 現在設定されているアニメーションクリップ
+		ModelRender			m_playerModel;								// プレイヤーモデル
+		Vector3				m_position = Vector3::Zero;					// 座標
+		Vector3				m_scale = Vector3::One;						// スケール
+		Vector3				m_moveSpeed = Vector3::Zero;				// 移動速度
+		Vector3             m_rotMove = Vector3::Zero;					// 回転速度
+		Vector3				m_forward = Vector3::Zero;					// 前方向
+		CharacterController m_charaCon;									// キャラクターコントローラー
+		Quaternion			m_rotation;									// クォータニオン
+		float				LStick_x = 0.0f;							// Lスティック入力量(横)
+		float				LStick_y = 0.0f;							// Lスティック入力量(縦)
+		float				m_complementTime = 0.0f;					// アニメーションの補完時間
+		float				m_hp = 0.0f;								// HP
+		bool				m_isHoldingObject = false;					// オブジェクトを持っているかどうか
+		bool				m_canAttract = false;						// 引き寄せられるかどうか
+		bool				m_canAttack = false;						// 攻撃できるかどうか
+		bool				m_isJumping = false;						// その場ジャンプ中かどうか
+		bool				m_touchWall = false;						// 壁に触ったかどうか
 
 		Game* m_game = nullptr;
 		GameCamera* m_camera = nullptr;

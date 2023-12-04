@@ -100,9 +100,15 @@ namespace nsPlayer
 
 	void Player::Update()
 	{
-		//ムービー中は操作できない
-		if (m_gameInfo->GetIsInMovie())
+		//ゲーム中以外は操作できない
+		if (m_gameInfo->GetIsInGame() == false)
 		{
+			// アニメーションを再生する。
+			PlayAnimation(m_currentAnimationClip);
+
+			// モデルを更新する。
+			m_playerModel.Update();
+
 			return;
 		}
 
