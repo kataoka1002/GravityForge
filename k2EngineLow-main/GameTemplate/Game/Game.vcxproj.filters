@@ -244,6 +244,9 @@
     <ClCompile Include="GameStart.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="MissionUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -467,6 +470,9 @@
       <Filter>MyCode\MainGame</Filter>
     </ClInclude>
     <ClInclude Include="GameStart.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionUI.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>

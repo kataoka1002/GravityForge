@@ -49,6 +49,7 @@ Game::~Game()
 	DeleteGO(m_wall);
 	DeleteGO(m_gameInfo);
 	DeleteGO(m_blackFade);
+	DeleteGO(m_missionUI);
 }
 
 bool Game::Start()
@@ -318,6 +319,9 @@ bool Game::Start()
 
 	//黒フェードの作成
 	m_blackFade = NewGO<BlackFade>(0, "blackfade");
+
+	//ミッションUIの作成
+	m_missionUI = NewGO<MissionUI>(0, "missionui");
 
 	return true;
 }

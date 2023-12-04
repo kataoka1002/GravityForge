@@ -31,6 +31,7 @@
 #include "Wall.h"
 #include "GameInformation.h"
 #include "BlackFade.h"
+#include "MissionUI.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -131,6 +132,7 @@ private:
 	Wall* m_wall = nullptr;
 	GameInformation* m_gameInfo = nullptr;
 	BlackFade* m_blackFade = nullptr;
+	MissionUI* m_missionUI = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト
