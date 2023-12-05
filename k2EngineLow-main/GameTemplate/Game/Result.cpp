@@ -17,7 +17,7 @@ bool Result::Start()
 	m_playerModel.Update();
 
 	//”wŒiƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_bgModel.Init("Assets/modelData/map/map2.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_bgModel.Init("Assets/modelData/map/map3.tkm", nullptr, 0, enModelUpAxisZ, true);
 	m_bgModel.SetPosition(m_playerPosition);
 	m_bgModel.Update();
 
