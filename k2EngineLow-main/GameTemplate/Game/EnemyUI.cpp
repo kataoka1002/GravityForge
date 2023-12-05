@@ -6,10 +6,10 @@
 namespace
 {
 	//スプライトのサイズ(左：画像のサイズ、右：大きさの倍率)
-	const Vector2 HP_BLACK_SIZE = { 657.0f * 0.6f,29.0f * 0.6f };
-	const Vector2 HP_ORANGE_SIZE = { 657.0f * 0.6f,29.0f * 0.6f };
-	const Vector2 HP_RED_SIZE = { 657.0f * 0.6f,29.0f * 0.6f };
-	const Vector2 HP_FRAME_SIZE = { 681.0f * 0.6f,53.0f * 0.6f };
+	const Vector2 HP_BLACK_SIZE = { 657.0f * 0.3f,29.0f * 0.5f };
+	const Vector2 HP_ORANGE_SIZE = { 657.0f * 0.3f,29.0f * 0.5f };
+	const Vector2 HP_RED_SIZE = { 657.0f * 0.3f,29.0f * 0.5f };
+	const Vector2 HP_FRAME_SIZE = { 681.0f * 0.3f,53.0f * 0.5f };
 
 	//HPバーのローカルポジション
 	const float HP_BER_POS_Y = 220.0f;
