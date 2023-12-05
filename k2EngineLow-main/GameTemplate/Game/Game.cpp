@@ -57,6 +57,10 @@ bool Game::Start()
 	Fade* m_fade = FindGO<Fade>("fade");
 	m_fade->SetAlphaDown();
 
+	//エフェクトの初期化
+	InitEffectName();
+
+	//ゲーム情報クラスの作成
 	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
@@ -324,6 +328,13 @@ bool Game::Start()
 	m_missionUI = NewGO<MissionUI>(0, "missionui");
 
 	return true;
+}
+
+void Game::InitEffectName()
+{
+	//エフェクトの設定
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_ObjectPush, u"Assets/effect/objectPush.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_ObjectSmoke, u"Assets/effect/objectSmoke.efk");
 }
 
 template <typename T>

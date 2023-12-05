@@ -295,6 +295,14 @@ void ObjectBase::Turn(Vector3 speed)
 
 void ObjectBase::InitBlowAway()
 {
+	//エフェクト発生
+	EffectEmitter* efe = NewGO<EffectEmitter>(0);
+	efe->Init(enEffectName_ObjectPush);
+	efe->SetScale(Vector3::One);
+	efe->SetRotation(m_player->GetRotation());
+	efe->SetPosition(m_position);
+	efe->Play();
+
 	//コリジョンの初期化
 	InitCollision();
 
@@ -318,6 +326,19 @@ void ObjectBase::BlowAway()
 
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_collisionPosition);
+
+	aaaaa++;
+	if (aaaaa >= 2)
+	{
+	//エフェクト発生
+	EffectEmitter* efe = NewGO<EffectEmitter>(0);
+	efe->Init(enEffectName_ObjectSmoke);
+	efe->SetScale(Vector3::One);
+	//efe->SetRotation();
+	efe->SetPosition(m_position);
+	efe->Play();
+	aaaaa = 0;
+	}
 }
 
 void ObjectBase::CalcCollision()

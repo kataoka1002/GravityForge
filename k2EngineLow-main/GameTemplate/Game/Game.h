@@ -33,6 +33,16 @@
 #include "BlackFade.h"
 #include "MissionUI.h"
 
+/// <summary>
+/// エフェクトの名前
+/// </summary>
+enum EffectName
+{
+	enEffectName_ObjectPush,
+	enEffectName_ObjectSmoke,
+	enEffectName_Num,
+};
+
 class Game : public IGameObject, Noncopyable
 {
 public:
@@ -46,6 +56,7 @@ public:
 	void SetLevel(T* objct, LevelObjectData& objData);
 	void SetGameClear();
 	void SetGameOver();
+	void InitEffectName();
 
 	/// <summary>
 	/// オブジェクトをリストから削除する

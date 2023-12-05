@@ -175,6 +175,8 @@ protected:
 	bool					m_canAttract = false;						//ˆø‚«Šñ‚¹‚ê‚é‚©‚Ç‚¤‚©
 	bool					m_makeTargetUI = false;						//targetUI‚ğì‚Á‚½‚©‚Ç‚¤‚©
 
+	int aaaaa = 0;
+
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;

@@ -269,6 +269,9 @@ namespace nsK2EngineLow
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
 
+		//ここでエフェクトドロー。
+		EffectEngine::GetInstance()->Draw();
+
 		//描画したオブジェクトをクリアする
 		ObjectClear();
 	}
