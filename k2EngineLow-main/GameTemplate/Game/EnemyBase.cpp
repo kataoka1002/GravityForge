@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include "Game.h"
 #include "GameInformation.h"
+#include "GameCamera.h"
 
 
 bool EnemyBase::Start()
@@ -9,6 +10,7 @@ bool EnemyBase::Start()
 	m_game = FindGO<Game>("game");
 	m_player = FindGO<nsPlayer::Player>("player");
 	m_gameInfo = FindGO<GameInformation>("gameinformation");
+	m_gameCamera = FindGO<GameCamera>("gamecamera");
 
 	//ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 	InitModel();

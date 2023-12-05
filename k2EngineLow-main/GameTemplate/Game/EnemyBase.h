@@ -2,6 +2,7 @@
 #include "Player.h"
 class Game;
 class GameInformation;
+class GameCamera;
 
 class EnemyBase : public IGameObject, Noncopyable
 {
@@ -131,5 +132,6 @@ protected:
 	nsPlayer::Player*		m_player = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;			// ƒRƒŠƒWƒ‡ƒ“
 	GameInformation* m_gameInfo = nullptr;
+	GameCamera* m_gameCamera = nullptr;
 };
 

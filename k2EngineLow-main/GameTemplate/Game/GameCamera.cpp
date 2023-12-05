@@ -49,6 +49,15 @@ namespace
 
 	//フェードが始まるまでの時間
 	const float FADE_START_TIME = 2.0f;
+
+	//ボスを出現させるまでの時間
+	const float MAKE_BOSS_TIME = 0.7f;
+
+	//揺れの減少量
+	const int VIB_DECREASE_AMOUNT = 10;
+
+	//揺れの最大値
+	const float VIBRATION_MAX = 640.0f;
 }
 
 GameCamera::GameCamera()
@@ -209,6 +218,10 @@ void GameCamera::UpdatePositionAndTarget()
 	//注視点を求める
 	Vector3 target = CalcTargetPosition();
 
+	//揺れの大きさを足す
+	target.x += BGX;
+	target.y += BGY;
+
 	Vector3 toCameraPosOld = m_toCameraPos;
 
 	//パッドの入力を使ってカメラを回す。
@@ -332,6 +345,10 @@ void GameCamera::BossMovieProcess()
 	target.y = 180.0f;
 	target.z -= 20.0f;
 
+	//揺れの大きさを足す
+	target.x += BGX;
+	target.y += BGY;
+
 	//視点を計算する。
 	Vector3 pos = target + TO_CAMERA_POSITION_BOSS;
 	
@@ -340,11 +357,49 @@ void GameCamera::BossMovieProcess()
 	m_springCamera.SetTarget(target);
 	
 	//一定時間経過でボス出現
-	m_bossMakeTime -= g_gameTime->GetFrameDeltaTime();
-	if (m_bossMakeTime <= 0.0f)
+	m_bossMakeTime += g_gameTime->GetFrameDeltaTime();
+	if (m_bossMakeTime >= MAKE_BOSS_TIME)
 	{
+		//ボス戦スタート
 		m_gameInfo->StartBossBattle();
-		m_bossMakeTime = 0.0f;
+	}
+}
+
+void GameCamera::PlayVibration(int decline, int maxVib, bool& flag, int& vibration)
+{
+	//振幅の設定
+	int vib = vibration / 2;
+
+	//揺れを徐々に小さくする
+	vibration -= decline;
+
+	//揺れの大きさが0になったら
+	if (vib == 0)
+	{
+		//揺れの為に必要な変数を初期化
+		flag = false;
+		BGX = 0; BGY = 0;
+		vibration = maxVib;
+	}
+	else
+	{
+		//左右に揺れるために半分の値を引く
+		int vibHalf = vib / 2;
+		BGX = rand() % vib - vibHalf;
+		BGY = rand() % vib - vibHalf;
+	}
+}
+
+void GameCamera::ManageVibration()
+{
+	//揺れのフラグが立ったら
+	if (m_vibFlag == true)
+	{
+		//揺れの最大値を設定
+		static int Vibration = VIBRATION_MAX;
+
+		//揺れの処理
+		PlayVibration(VIB_DECREASE_AMOUNT, VIBRATION_MAX, m_vibFlag, Vibration);
 	}
 }
 
@@ -358,6 +413,9 @@ void GameCamera::Update()
 
 	//ボスムービー中の処理
 	BossMovieProcess();
+
+	//画面揺れの処理
+	ManageVibration();
 
 	//カメラの更新。
 	m_springCamera.Update();

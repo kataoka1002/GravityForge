@@ -9,6 +9,7 @@
 #include "BossConstants.h"
 #include "BossUI.h"
 #include "GameInformation.h"
+#include "GameCamera.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -239,6 +240,8 @@ namespace nsBoss
 		else if (wcscmp(eventName, L"jump_end") == 0)
 		{
 			m_isJumping = false;
+
+			m_gameCamera->SetVibFlag(true);
 		}
 		//キーの名前が「jumpAttack_start」の時。
 		else if (wcscmp(eventName, L"jumpAttack_start") == 0)
