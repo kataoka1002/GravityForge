@@ -18,5 +18,10 @@ bool GameInformation::Start()
 
 void GameInformation::Update()
 {
-	
+	//ボス戦なら
+	if (m_isInBossBattle)
+	{
+		//ボス撃破時間の計測
+		m_bossKillTime += g_gameTime->GetFrameDeltaTime();
+	}
 }

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GameClear.h"
 #include "ResultCamera.h"
+#include "ResultUI.h"
+#include "BlackFade.h"
 
 GameClear::GameClear()
 {
@@ -10,6 +12,8 @@ GameClear::GameClear()
 GameClear::~GameClear()
 {
 	DeleteGO(m_resultCamera);
+	DeleteGO(m_resultUI);
+	DeleteGO(m_blackFade);
 }
 
 void GameClear::InitCamera()
@@ -19,6 +23,13 @@ void GameClear::InitCamera()
 	m_resultCamera->SetTarget(m_playerPosition);
 }
 
+void GameClear::InitUI()
+{
+	//UIの設定
+	m_resultUI = NewGO<ResultUI>(0, "resultui");
+	m_resultUI->SetPlayerDead(false);
+}
+
 void GameClear::Update()
 {
 	//タイトルへ戻る
@@ -26,6 +37,11 @@ void GameClear::Update()
 
 	//再生するアニメーションを設定
 	SetAnimation();
+
+	if (m_pressAButton)
+	{
+		m_resultUI->SetFontAlpha();
+	}
 
 	// アニメーションを再生
 	m_playerModel.PlayAnimation(m_currentAnimationClip, 0.5f);
@@ -41,4 +57,5 @@ void GameClear::OnDestroy()
 void GameClear::Render(RenderContext& rc)
 {
 	m_playerModel.Draw(rc);
+	m_bgModel.Draw(rc);
 }

@@ -136,5 +136,8 @@ private:
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト
+
+	bool m_gameClear = false;
+	bool m_gameOver = false;
 };
 

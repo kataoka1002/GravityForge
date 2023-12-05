@@ -49,9 +49,15 @@ bool Title::Start()
 	//背景の初期化
 	m_titleSprite.Init("Assets/spriteData/title/title.dds", 1600.0f, 900.0f);
 
+	//最初のフェードの画像
+	m_openFadeSprite.Init("Assets/spriteData/title/title.dds", 1600.0f, 900.0f);
+	m_openFadeSprite.SetMulColor({ 0.0f,0.0f,0.0f,m_openAlpha });
+	m_openFadeSprite.Update();
+
 	//表示されている文字画像の初期化
 	m_fontSprite.Init("Assets/spriteData/title/PressAButton.dds", 1600.0f, 900.0f);
 	m_fontSprite.SetPosition(PRESS_A_BUTTON_POSITION);
+	m_fontSprite.SetMulColor({ 1.0f,1.0f,1.0f,0.0f });
 	m_fontSprite.Update();
 
 	//矢印の初期化
@@ -109,6 +115,20 @@ void Title::ManageState()
 {
 	switch (m_titleState)
 	{
+	case enTitleState_OpenFade:
+		//フェードアウト
+		m_openAlpha -= 0.05f;
+		m_openFadeSprite.SetMulColor({ 0.0f,0.0f,0.0f,m_openAlpha });
+		m_openFadeSprite.Update();
+
+		//フェードアウトが終わったら次のステートへ
+		if (m_openAlpha <= 0.0f)
+		{
+			m_titleState = enTitleState_PressAButton;
+		}
+
+		break;
+
 	case enTitleState_PressAButton:
 
 		//文字の点滅の処理
@@ -345,4 +365,6 @@ void Title::Render(RenderContext& rc)
 		m_SEGageSprite.Draw(rc);
 		m_SEFrameSprite.Draw(rc);
 	}
+
+	m_openFadeSprite.Draw(rc);
 }

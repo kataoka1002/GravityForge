@@ -38,7 +38,7 @@ Game::~Game()
 	}
 
 	//削除
-	DeleteGO(m_skyCube);
+	//DeleteGO(m_skyCube);	//ResultUIでデリートしている
 	DeleteGO(m_player);
 	DeleteGO(m_bg);
 	DeleteGO(m_camera);
@@ -47,7 +47,7 @@ Game::~Game()
 	DeleteGO(m_reticle);
 	DeleteGO(m_playerUI);
 	DeleteGO(m_wall);
-	DeleteGO(m_gameInfo);
+	//DeleteGO(m_gameInfo); //ResultUIでデリートしている
 	DeleteGO(m_blackFade);
 	DeleteGO(m_missionUI);
 }
@@ -318,7 +318,7 @@ bool Game::Start()
 	m_light = NewGO<Lighting>(0, "lighting");
 
 	//黒フェードの作成
-	m_blackFade = NewGO<BlackFade>(0, "blackfade");
+	m_blackFade = NewGO<BlackFade>(1, "blackfade");
 
 	//ミッションUIの作成
 	m_missionUI = NewGO<MissionUI>(0, "missionui");
@@ -339,25 +339,52 @@ void Game::SetLevel(T* objct, LevelObjectData& objData)
 
 void Game::SetGameClear()
 {
-	//ゲームクリアを生成
-	NewGO<GameClear>(0, "gameclear");
+	if (m_gameClear == false && m_gameOver == false)
+	{
+		//フェードインの開始
+		m_blackFade->SetAlphaUp(true);
 
-	//自分自身の削除
-	DeleteGO(this);
+		m_gameClear = true;
+	}
 }
 
 void Game::SetGameOver()
 {
-	//ゲームオーバーを生成
-	NewGO<GameOver>(0, "gameover");
+	if (m_gameClear == false && m_gameOver == false)
+	{
+		//フェードインの開始
+		m_blackFade->SetAlphaUp(true);
 
-	//自分自身の削除
-	DeleteGO(this);
+		m_gameOver = true;
+	}
 }
 
 void Game::Update()
 {
-	
+	if (m_gameClear == true)
+	{
+		//フェードインが終わったら
+		if (m_blackFade->GetBlackAlpha() >= 1.0f)
+		{
+			//ゲームクリアを生成
+			NewGO<GameClear>(0, "gameclear");
+
+			//自分自身の削除
+			DeleteGO(this);
+		}
+	}
+	else if (m_gameOver == true)
+	{
+		//フェードインが終わったら
+		if (m_blackFade->GetBlackAlpha() >= 1.0f)
+		{
+			//ゲームオーバーを生成
+			NewGO<GameOver>(0, "gameover");
+
+			//自分自身の削除
+			DeleteGO(this);
+		}
+	}
 }
 
 void Game::SetSkyCube()

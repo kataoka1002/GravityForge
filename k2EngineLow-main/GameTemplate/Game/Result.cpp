@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Result.h"
 #include "Title.h"
+#include "BlackFade.h"
 
 bool Result::Start()
 {
@@ -15,8 +16,19 @@ bool Result::Start()
 	m_playerModel.SetPosition(m_playerPosition);
 	m_playerModel.Update();
 
+	//背景モデルの初期化
+	m_bgModel.Init("Assets/modelData/map/map2.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_bgModel.SetPosition(m_playerPosition);
+	m_bgModel.Update();
+
 	//初期化
 	InitCamera();
+
+	//UIの作成
+	InitUI();
+
+	//フェードクラスの作成
+	m_blackFade = NewGO<BlackFade>(1, "blackfade");
 
 	return true;
 }
@@ -26,11 +38,23 @@ void Result::GoTitle()
 	//Aボタンでタイトルへ戻る
 	if (g_pad[0]->IsPress(enButtonA))
 	{
-		//タイトルの作成
-		NewGO<Title>(0, "title");
+		//Aボタンが押されたらフェードイン
+		m_pressAButton = true;
 
-		//削除処理
-		OnDestroy();
+		m_blackFade->SetAlphaUp(true);
+	}
+
+	if (m_pressAButton)
+	{
+		//フェードインが終わったら
+		if (m_blackFade->GetBlackAlpha() >= 1.0f)
+		{
+			//タイトルの作成
+			NewGO<Title>(0, "title");
+
+			//削除処理
+			OnDestroy();
+		}
 	}
 }
 

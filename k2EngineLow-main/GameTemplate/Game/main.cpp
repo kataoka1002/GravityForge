@@ -25,7 +25,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	auto title = NewGO<Title>(0, "title");
 
-
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{

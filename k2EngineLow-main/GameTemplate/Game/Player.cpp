@@ -325,7 +325,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//ƒ_ƒ[ƒW‚ğ—^‚¦‚é
-				CalcDamage(10.0f); 
+				CalcDamage(100.0f); 
 
 				return true;
 			}

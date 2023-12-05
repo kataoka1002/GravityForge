@@ -148,6 +148,9 @@ namespace nsHumanEnemy
 		//ƒŠƒXƒg‚©‚çíœ
 		m_game->RemoveEnemyFromList(this);
 
+		//E‚µ‚½”‚ğ‘‚â‚·
+		m_gameInfo->AddDefeatEnemyNum();
+
 		//íœ
 		DeleteGO(this);
 	}

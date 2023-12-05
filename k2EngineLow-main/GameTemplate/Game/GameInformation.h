@@ -102,8 +102,27 @@ public:
 		return m_isInGame;
 	}
 
+	/// <summary>
+	/// ボス討伐時間を返す
+	/// </summary>
+	/// <returns></returns>
+	const float GetBossKillTime()const
+	{
+		return m_bossKillTime;
+	}
+
+	/// <summary>
+	/// 倒した敵の数を返す
+	/// </summary>
+	/// <returns></returns>
+	const int GetKillEnemyNum()const
+	{
+		return m_defeatEnemyNum;
+	}
+
 private:
 	int m_defeatEnemyNum = 0;			//倒した敵の数
+	float m_bossKillTime = 0.0f;		//ボス撃破時間
 	bool m_canGoBossBattle = false;		//ボス戦に行けるかどうか
 	bool m_isInBossBattle = false;		//ボス戦中かどうか
 	bool m_isInMovie = false;			//ムービー中かどうか

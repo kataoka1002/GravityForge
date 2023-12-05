@@ -5,6 +5,7 @@ class Title : public IGameObject
 public:
 	enum enTitleState
 	{
+		enTitleState_OpenFade,
 		enTitleState_PressAButton,
 		enTitleState_GameStart,
 		enTitleState_Option,
@@ -31,7 +32,8 @@ public:
 	void MakeGame();
 
 private:
-	enTitleState m_titleState = enTitleState_PressAButton;	//ステート
+	enTitleState m_titleState = enTitleState_OpenFade;		//ステート
+	SpriteRender m_openFadeSprite;
 	SpriteRender m_titleSprite;								//タイトルの画像
 	SpriteRender m_fontSprite;								//文字の画像
 	SpriteRender m_triangleSprite;							//矢印の画像
@@ -46,6 +48,7 @@ private:
 	float m_BGMScale = 1.0f;								//BGMの大きさ
 	float m_SEScale = 1.0f;									//SEの大きさ
 	float m_trianglePosX = 0.0f;							//矢印のX座標
-	bool m_makeFade = false;
+	float m_openAlpha = 1.0f;								//最初の画像のα値
+	bool m_makeFade = false;								//フェードが作られているかどうか
 };
 

@@ -285,6 +285,7 @@
     <ClCompile Include="PlayerWalkState.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="ResultCamera.cpp" />
+    <ClCompile Include="ResultUI.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="RockBig.cpp" />
     <ClCompile Include="SolarPanel.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="PlayerWalkState.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="ResultCamera.h" />
+    <ClInclude Include="ResultUI.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="RockBig.h" />
     <ClInclude Include="SolarPanel.h" />

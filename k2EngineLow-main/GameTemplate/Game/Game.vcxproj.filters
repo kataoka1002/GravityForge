@@ -247,6 +247,9 @@
     <ClCompile Include="MissionUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ResultUI.cpp">
+      <Filter>MyCode\MainGame\Result</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -474,6 +477,9 @@
     </ClInclude>
     <ClInclude Include="MissionUI.h">
       <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultUI.h">
+      <Filter>MyCode\MainGame\Result</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
