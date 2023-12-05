@@ -212,6 +212,14 @@ namespace nsHumanEnemy
 				50.0f					//半径。
 			);
 			collisionObject->SetName("human_attack");
+
+			//エフェクト発生
+			EffectEmitter* efe = NewGO<EffectEmitter>(0);
+			efe->Init(enEffectName_HumanAttack);
+			efe->SetScale(Vector3::One);
+			efe->SetRotation(m_rotation);
+			efe->SetPosition(collisionPosition);
+			efe->Play();
 		}
 		//キーの名前が「attack_end」の時。
 		else if (wcscmp(eventName, L"attack_end") == 0)
