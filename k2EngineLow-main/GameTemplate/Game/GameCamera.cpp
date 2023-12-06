@@ -28,8 +28,8 @@ namespace
 	const float CAMERA_COLLISION_SCALE = 5.0f;
 
 	//カメラの移動速度
-	const float CAMERA_MOVE_POWER_X = 1.3f;
-	const float CAMERA_MOVE_POWER_Y = 1.0f;
+	const float CAMERA_MOVE_POWER_X = 2.0f;
+	const float CAMERA_MOVE_POWER_Y = 1.5f;
 
 	//遠平面
 	const float FAR_PLANE = 35000.0f;
@@ -215,6 +215,9 @@ void GameCamera::UpdatePositionAndTarget()
 		return;
 	}
 
+	//遠近カメラの処理
+	CalcChangeCamera();
+
 	//注視点を求める
 	Vector3 target = CalcTargetPosition();
 
@@ -222,11 +225,19 @@ void GameCamera::UpdatePositionAndTarget()
 	target.x += BGX;
 	target.y += BGY;
 
+	//直前のベクトルを保存
 	Vector3 toCameraPosOld = m_toCameraPos;
 
-	//パッドの入力を使ってカメラを回す。
-	float x = g_pad[0]->GetRStickXF();
-	float y = g_pad[0]->GetRStickYF();
+	//パッドの入力量
+	float x = 0.0f, y = 0.0f;
+
+	//遠近カメラが切り替わっている時じゃないなら
+	if (m_isChangingCamera != true)
+	{
+		//パッドの入力を使ってカメラを回す
+		x = g_pad[0]->GetRStickXF();
+		y = g_pad[0]->GetRStickYF();
+	}
 
 	//Y軸周りの回転
 	Quaternion qRot;
@@ -250,9 +261,17 @@ void GameCamera::UpdatePositionAndTarget()
 		m_toCameraPos = toCameraPosOld;
 	}
 	//カメラが下向きすぎ
-	else if (toPosDir.y > 0.5f)
+	else if (toPosDir.y > 0.6f)
 	{
 		m_toCameraPos = toCameraPosOld;
+
+		//遠近カメラ切り替わり中なら
+		if (m_isChangingCamera)
+		{
+			//カメラの向きを平行に戻す
+			qRot.AddRotationDegX(5.0f);
+			qRot.Apply(m_toCameraPos);
+		}
 	}
 
 	//視点を計算する。
@@ -292,6 +311,9 @@ void GameCamera::SetNearCamera(bool isNear)
 
 		//注視点から視点までの距離を設定
 		toCameraPos = TO_CAMERA_POSITION;
+
+		//遠近カメラ切り替わり中にする
+		m_isChangingCamera = true;
 	}
 
 	//カメラの回転に合わせたローカルポジションを計算
@@ -300,6 +322,26 @@ void GameCamera::SetNearCamera(bool isNear)
 
 	//カメラまでの距離にセット
 	m_toCameraPos.Set(localPos);
+}
+
+void GameCamera::CalcChangeCamera()
+{
+	//遠近カメラ切り替わり中なら
+	if (m_isChangingCamera)
+	{
+		//時間計測
+		m_cameraChangeTime -= g_gameTime->GetFrameDeltaTime();
+
+		//一定時間経過で
+		if (m_cameraChangeTime <= 0.0f)
+		{
+			//切り替わり終了
+			m_isChangingCamera = false;
+
+			//時間のリセット
+			m_cameraChangeTime = 0.5f;
+		}
+	}
 }
 
 Vector3 GameCamera::CalcTargetPosition()

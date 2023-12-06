@@ -29,6 +29,7 @@ public:
 	void CalcOpeningFade(const enOPState& nextState, const Vector3& nextPos);
 	void PlayVibration(int decline, int maxVib, bool& flag, int& vibration);
 	void ManageVibration();
+	void CalcChangeCamera();
 
 	/// <summary>
 	/// 揺れているかどうかのフラグをセットする
@@ -59,7 +60,8 @@ private:
 	bool m_camera1End = false;				//カメラ１が終わったかどうか
 	int BGX = 0, BGY = 0;					//最終的な揺れの大きさ
 	bool m_vibFlag = false;					//画面が揺れているかどうか
-
+	float m_cameraChangeTime = 0.5f;		//近距離から遠距離に切り替わる時間
+	bool m_isChangingCamera = false;		//近距離から遠距離に切り替わり中かどうか
 
 	nsPlayer::Player* m_player = nullptr;	//プレイヤー
 	nsBoss::Boss* m_boss = nullptr;			//ボス
