@@ -61,21 +61,6 @@ namespace nsPlayer
 			return new PlayerPunchState(m_player);
 		}
 
-		//攻撃を受けたら
-		if (m_player->DidAttackHit())
-		{
-			if (m_player->GetHP() <= 0.0f)
-			{
-				//体力0以下で死亡
-				return new PlayerDeadState(m_player);
-			}
-			else
-			{
-				//体力あるならリアクションのみ
-				return new PlayerReactionState(m_player);
-			}
-		}
-
 		// ここまで来たらステートを遷移しない。
 		return nullptr;
 	}

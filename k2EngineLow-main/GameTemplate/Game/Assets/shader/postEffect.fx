@@ -51,7 +51,7 @@ float4 PSSamplingLuminance(PSInput In) : SV_Target0
     float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
     
     //カラーの明るさが1以下ならピクセルキルをする
-    clip(t - 1.5f);
+    clip(t - 1.15f);
     
     return color;
 }

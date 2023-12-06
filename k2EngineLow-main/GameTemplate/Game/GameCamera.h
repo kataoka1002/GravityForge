@@ -39,6 +39,15 @@ public:
 		m_vibFlag = flag;
 	}
 
+	/// <summary>
+	/// 近距離カメラかどうかを返す
+	/// </summary>
+	/// <returns></returns>
+	const bool GetIsNearCamera() const
+	{
+		return m_isNearCamera;
+	}
+
 private:
 	enOPState m_opState = enOP_Camera1;		//オープニングステート
 	Vector3	m_toCameraPos = Vector3::One;	//注視点から視点に向かうベクトル

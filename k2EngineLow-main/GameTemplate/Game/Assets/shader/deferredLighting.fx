@@ -222,9 +222,9 @@ float4 PSMain(PSInput In) : SV_Target0
     finalColor.xyz = lig;    
         
     //êFí≤Çê¬êFã≠ÇﬂÇ≈ï‚ê≥Ç∑ÇÈ
-    finalColor.r *= 0.8f;
-    finalColor.g *= 0.8f;
-    finalColor.b *= 1.0f;
+    //finalColor.r *= 0.9f;
+    //finalColor.g *= 0.9f;
+    finalColor.b *= 1.2f;
     
     return finalColor;
 }

@@ -22,7 +22,7 @@ namespace nsPlayer
 	{
 		if (m_player->GetCanAttack())
 		{
-			//UŒ‚•s‰Â‚Ìó‘Ô‚É–ß‚·
+			//UŒ‚’†‚Å‚Í‚È‚­‚·‚é
 			m_player->SetCanAttack(false);
 
 			//UŒ‚ƒXƒe[ƒg‚É‘JˆÚ

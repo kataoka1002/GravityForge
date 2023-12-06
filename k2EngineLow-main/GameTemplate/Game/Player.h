@@ -55,6 +55,8 @@ namespace nsPlayer
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数
 		void GameOver();
 		void CheckTouchBossWall();
+		void CheckHP();
+		void CalcCoolDown();
 
 		/// <summary>
 		/// ポジションの設定
@@ -245,11 +247,14 @@ namespace nsPlayer
 		float				LStick_y = 0.0f;							// Lスティック入力量(縦)
 		float				m_complementTime = 0.0f;					// アニメーションの補完時間
 		float				m_hp = 0.0f;								// HP
+		float				m_cooldownTime = 1.0f;						// 攻撃を受けるクールダウン
 		bool				m_isHoldingObject = false;					// オブジェクトを持っているかどうか
 		bool				m_canAttract = false;						// 引き寄せられるかどうか
 		bool				m_canAttack = false;						// 攻撃できるかどうか
 		bool				m_isJumping = false;						// その場ジャンプ中かどうか
 		bool				m_touchWall = false;						// 壁に触ったかどうか
+		bool				m_isCooldown = false;						// クールダウン中かどうか
+
 
 		Game* m_game = nullptr;
 		GameCamera* m_camera = nullptr;

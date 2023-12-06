@@ -7,6 +7,8 @@
 #include "IPlayerState.h"
 #include "PlayerIdleState.h"
 #include "PlayerJumpState.h"
+#include "PlayerReactionState.h"
+#include "PlayerDeadState.h"
 #include "GameInformation.h"
 
 namespace
@@ -126,6 +128,12 @@ namespace nsPlayer
 
 		//ボスの壁に触れているかを確認
 		CheckTouchBossWall();
+
+		//攻撃が当たっているかチェック
+		DidAttackHit();
+
+		//体力のチェックをして生きているかを確認する
+		CheckHP();
 
 		// 各ステートの更新処理を実行。
 		m_playerState->Update();
@@ -272,8 +280,12 @@ namespace nsPlayer
 
 	void Player::ResetAttack()
 	{
-		//カメラを遠距離に戻す
-		m_camera->SetNearCamera(false);
+		//もしカメラが近距離なら
+		if (m_camera->GetIsNearCamera())
+		{
+			//カメラを遠距離に戻す
+			m_camera->SetNearCamera(false);
+		}
 
 		//オブジェクト保持状態を解除
 		m_isHoldingObject = false;
@@ -316,6 +328,15 @@ namespace nsPlayer
 
 	bool Player::DidAttackHit()
 	{
+		//クールダウンの計算
+		CalcCoolDown();
+
+		//クールダウン中なら返す
+		if (m_isCooldown == true)
+		{
+			return false;
+		}
+
 		//敵の攻撃用のコリジョンの配列を取得する。
 		const auto& humanCollisions = g_collisionObjectManager->FindCollisionObjects("human_attack");
 		//配列をfor文で回す。
@@ -325,7 +346,14 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//ダメージを与える
-				CalcDamage(100.0f); 
+				CalcDamage(10.0f); 
+
+				//リアクションをさせる
+				m_playerState = new PlayerReactionState(this);
+				m_playerState->Enter();
+
+				//クールダウン中にする
+				m_isCooldown = true;
 
 				return true;
 			}
@@ -342,11 +370,48 @@ namespace nsPlayer
 				//ダメージを与える
 				CalcDamage(50.0f);
 
+				//リアクションをさせる
+				m_playerState = new PlayerReactionState(this);
+				m_playerState->Enter();
+
+				//クールダウン中にする
+				m_isCooldown = true;
+
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	void Player::CalcCoolDown()
+	{
+		//クールダウン中じゃないなら
+		if (m_isCooldown == false)
+		{
+			return;
+		}
+
+		m_cooldownTime -= g_gameTime->GetFrameDeltaTime();
+
+		if (m_cooldownTime <= 0.0f)
+		{
+			//クールダウン終わり
+			m_isCooldown = false;
+
+			//タイマーのリセット
+			m_cooldownTime = 1.0f;
+		}
+	}
+
+	void Player::CheckHP()
+	{
+		// 体力が0以下で死亡
+		if (m_hp <= 0.0f)
+		{
+			m_playerState = new PlayerDeadState(this);
+			m_playerState->Enter();
+		}
 	}
 
 	void Player::CheckTouchBossWall()
