@@ -28,6 +28,9 @@ namespace
 	//吹っ飛ぶ速さ
 	const float BLOW_AWAY_SPEED = 3000.0f;
 
+	//落下速度
+	const float FALL_SPEED = 100.0f;
+
 	//引き寄せれる距離
 	const float ATTRACT_LIMIT = 800.0f;
 
@@ -91,6 +94,14 @@ void ObjectBase::Move()
 		BlowAway();
 		//衝突したかどうかの処理
 		CalcCollision();
+		break;
+
+		//落下中
+	case enObjectState_Falling:
+		//落下中の処理
+		FallingObject();
+		//着地判定
+		CheckToLand();
 		break;
 
 	default:
@@ -327,17 +338,42 @@ void ObjectBase::BlowAway()
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_collisionPosition);
 
-	aaaaa++;
-	if (aaaaa >= 2)
+	m_smokeEfeInterval++;
+	if (m_smokeEfeInterval >= 2)
 	{
-	//エフェクト発生
-	EffectEmitter* efe = NewGO<EffectEmitter>(0);
-	efe->Init(enEffectName_ObjectSmoke);
-	efe->SetScale(Vector3::One);
-	//efe->SetRotation();
-	efe->SetPosition(m_position);
-	efe->Play();
-	aaaaa = 0;
+		//エフェクト発生
+		EffectEmitter* efe = NewGO<EffectEmitter>(0);
+		efe->Init(enEffectName_ObjectSmoke);
+		efe->SetScale(Vector3::One);
+		//efe->SetRotation();
+		efe->SetPosition(m_position);
+		efe->Play();
+		m_smokeEfeInterval = 0;
+	}
+}
+
+void ObjectBase::FallingObject()
+{
+	//落下速度の設定
+	Vector3 fallSpeed = { 0.0f,0.0f,0.0f };
+
+	//落ち始めてからの時間を計測する
+	m_fallingTime += g_gameTime->GetFrameDeltaTime();
+
+	//時間による自由落下の速さを計算
+	fallSpeed.y = -9.8f * m_fallingTime * FALL_SPEED;
+	
+	//落下中のキャラコンの更新
+	m_position = m_charaCon.Execute(fallSpeed, g_gameTime->GetFrameDeltaTime());
+}
+
+void ObjectBase::CheckToLand()
+{
+	//地面に着いたら
+	if (m_charaCon.IsOnGround())
+	{
+		//自分が消えるときの処理
+		OnDestroy();
 	}
 }
 

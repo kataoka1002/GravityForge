@@ -289,6 +289,9 @@ namespace nsPlayer
 
 		//オブジェクト保持状態を解除
 		m_isHoldingObject = false;
+
+		//持っているオブジェクトは無しにする
+		m_holdingObject = nullptr;
 	}
 
 	void Player::ChangeWalkingStyle()
@@ -355,6 +358,13 @@ namespace nsPlayer
 				//クールダウン中にする
 				m_isCooldown = true;
 
+				//オブジェクトを持っているなら
+				if (m_holdingObject != nullptr)
+				{
+					//オブジェクトを落下中にする
+					m_holdingObject->SetFallingState();
+				}
+
 				return true;
 			}
 		}
@@ -376,6 +386,13 @@ namespace nsPlayer
 
 				//クールダウン中にする
 				m_isCooldown = true;
+
+				//オブジェクトを持っているなら
+				if (m_holdingObject != nullptr)
+				{
+					//オブジェクトを落下中にする
+					m_holdingObject->SetFallingState();
+				}
 
 				return true;
 			}

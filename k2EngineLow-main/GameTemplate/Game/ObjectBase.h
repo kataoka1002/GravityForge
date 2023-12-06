@@ -25,6 +25,16 @@ public:
 	/// </summary>
 	void InitBlowAway();
 
+	/// <summary>
+	/// 落下中の処理
+	/// </summary>
+	void FallingObject();
+
+	/// <summary>
+	/// 地面に落下したかどうかの判定
+	/// </summary>
+	void CheckToLand();
+
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
@@ -73,6 +83,14 @@ public:
 	void SetVelocity(Vector3 vel)
 	{
 		m_velocity = vel;
+	}
+
+	/// <summary>
+	/// ステートを落下中にする
+	/// </summary>
+	void SetFallingState()
+	{
+		m_objectState = enObjectState_Falling;
 	}
 
 	/// <summary>
@@ -151,7 +169,8 @@ protected:
 		enObjectState_Quiescence,	//初期状態
 		enObjectState_Idle,			//待機中
 		enObjectState_Attract,		//引き寄せ中
-		enObjectState_Blow,
+		enObjectState_Blow,			//吹っ飛び中
+		enObjectState_Falling,		//落下中
 		enObjectState_Num
 	};
 
@@ -172,14 +191,14 @@ protected:
 	float					m_damage = 0.0f;							//与えるダメージ
 	float					m_collisionAddPos = 0.0f;					//コリジョンオブジェクトのY値加算量
 	float					m_diagonalRot = 0.0f;						//斜めの角度
+	float					m_fallingTime = 0.0f;						//落下し始めてからの時間
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
-
-	int aaaaa = 0;
+	int						m_smokeEfeInterval = 0;						//煙エフェクトが発生する間隔
 
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;
-	TargetUI* m_targetUI = nullptr;
+	TargetUI*				m_targetUI = nullptr;
 };
 
