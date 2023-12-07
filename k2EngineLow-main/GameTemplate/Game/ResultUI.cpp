@@ -9,6 +9,8 @@ namespace
 	const float KILL_BOSS_TIME_UP_SPEED = 2.0f;
 
 	const int SCORE_UP_SPEED = 30;
+
+	const float SCORE_SCALE_TARGET = 2.5f;
 }
 
 ResultUI::~ResultUI()
@@ -41,7 +43,7 @@ bool ResultUI::Start()
 	m_resultSprite.SetPosition({ 0.0f,-60.0f,0.0f });
 	m_resultSprite.Update();
 
-	m_scoreSprite.Init("Assets/spriteData/Result/TOTALSCORE.dds", 285.0f, 31.0f);
+	m_scoreSprite.Init("Assets/spriteData/Result/TOTALSCORE.dds", 285.0f * 1.3f, 31.0f * 1.3f);
 	m_scoreSprite.SetPosition({ -500.0f,-230.0f,0.0f });
 	m_scoreSprite.SetMulColor({ 1.0f,1.0f,1.0f,m_scoreAlpha });
 	m_scoreSprite.SetScale(m_scoreScale);
@@ -183,9 +185,16 @@ void ResultUI::EnemyNumProcess()
 	}
 
 	wchar_t text[256];
-	swprintf_s(text, 256, L"x%02d", m_drawNum);
+	if (m_drawNum < 10)
+	{
+		swprintf_s(text, 256, L"   x%d", m_drawNum);
+	}
+	else
+	{
+		swprintf_s(text, 256, L"  x%d", m_drawNum);
+	}
 	m_enemyNumFont.SetText(text);
-	m_enemyNumFont.SetPosition({ 0.0f,50.0f,0.0f });
+	m_enemyNumFont.SetPosition({ 0.0f,41.0f,0.0f });
 }
 
 void ResultUI::BossProcess()
@@ -224,7 +233,7 @@ void ResultUI::BossTimeProcess()
 	int sec = (int)m_drawTime % 60;
 	swprintf_s(text, 256, L"%02d:%02d", minute, sec);
 	m_bossTimeFont.SetText(text);
-	m_bossTimeFont.SetPosition({ 0.0f,0.0f,0.0f });
+	m_bossTimeFont.SetPosition({ 0.0f,-20.0f,0.0f });
 }
 
 void ResultUI::ScoreProcess()
@@ -255,15 +264,14 @@ void ResultUI::ScoreValueProcess()
 		m_drawScore = m_score;
 
 		//大きくして小さくする(一定の大きさで次のステートへ)
-		CalcFontScale(m_scoreFontScale, enResultUIState_GoTitle);
-
-		m_scoreFont.SetScale(m_scoreFontScale);
+		CalcFontScale(m_scoreFontScale, enResultUIState_GoTitle, SCORE_SCALE_TARGET, 1.5f);
 	}
 
 	wchar_t text[256];
 	swprintf_s(text, 256, L"%d", m_drawScore);
 	m_scoreFont.SetText(text);
 	m_scoreFont.SetPosition({ 0.0f,-250.0f,0.0f });
+	m_scoreFont.SetScale(m_scoreFontScale);
 }
 
 void ResultUI::GoTitleProcess()
@@ -292,20 +300,20 @@ void ResultUI::CalcScaleAndAlpha(float& scale, float& alpa)
 	}
 }
 
-void ResultUI::CalcFontScale(float& scale, enResultUIState next)
+void ResultUI::CalcFontScale(float& scale, enResultUIState next, float target, float origin)
 {
 	//サイズの変化
 	scale += m_step;
 
-	//2.0に達したらステップを反転して減少方向に変更
-	if (scale >= 2.0)
+	//目的の大きさに達したらステップを反転して減少方向に変更
+	if (scale >= target)
 	{
 		m_step *= -1.0f;
 	}
-	//1.0に戻ったらステップを再び増加方向に変更
-	else if (scale < 1.0)
+	//最初の大きさに戻ったらステップを再び増加方向に変更
+	else if (scale < origin)
 	{
-		scale = 1.0f;
+		scale = origin;
 		m_step *= -1.0f;
 		m_resultUIState = next;
 	}

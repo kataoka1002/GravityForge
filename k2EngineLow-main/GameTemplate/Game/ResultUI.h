@@ -33,7 +33,7 @@ public:
 	void ScoreValueProcess();
 	void GoTitleProcess();
 	void CalcScaleAndAlpha(float& scale, float& alpa);
-	void CalcFontScale(float& scale, enResultUIState next);
+	void CalcFontScale(float& scale, enResultUIState next, float target = 2.0f, float origin = 1.0f);
 	void Render(RenderContext& rc);
 
 	void SetPlayerDead(bool which)
@@ -86,7 +86,7 @@ private:
 
 	FontRender m_scoreFont;
 	float m_score = 0.0f;				//スコア
-	float m_scoreFontScale = 1.0f;		//スコアフォントの大きさ
+	float m_scoreFontScale = 1.5f;		//スコアフォントの大きさ
 	int m_drawScore = 0.0f;				//今表示している,スコア
 
 	bool m_isPlayerDead = false;		//プレイヤーが死んだかどうか
