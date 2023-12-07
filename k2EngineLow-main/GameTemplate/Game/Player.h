@@ -1,4 +1,6 @@
 #pragma once
+#include "MakeEffect.h"
+
 //前方宣言
 class GameCamera;
 class Game;
@@ -57,6 +59,15 @@ namespace nsPlayer
 		void CheckTouchBossWall();
 		void CheckHP();
 		void CalcCoolDown();
+
+		/// <summary>
+		/// エフェクトの再生
+		/// </summary>
+		/// <param name="name">名前</param>
+		/// <param name="pos">ポジション</param>
+		/// <param name="rot">回転</param>
+		/// <param name="scale">大きさ</param>
+		void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale);
 
 		/// <summary>
 		/// ポジションの設定

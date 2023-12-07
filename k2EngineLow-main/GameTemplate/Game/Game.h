@@ -32,17 +32,7 @@
 #include "GameInformation.h"
 #include "BlackFade.h"
 #include "MissionUI.h"
-
-/// <summary>
-/// エフェクトの名前
-/// </summary>
-enum EffectName
-{
-	enEffectName_ObjectPush,
-	enEffectName_ObjectSmoke,
-	enEffectName_HumanAttack,
-	enEffectName_Num,
-};
+#include "MakeEffect.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -57,7 +47,6 @@ public:
 	void SetLevel(T* objct, LevelObjectData& objData);
 	void SetGameClear();
 	void SetGameOver();
-	void InitEffectName();
 
 	/// <summary>
 	/// オブジェクトをリストから削除する
@@ -145,6 +134,7 @@ private:
 	GameInformation* m_gameInfo = nullptr;
 	BlackFade* m_blackFade = nullptr;
 	MissionUI* m_missionUI = nullptr;
+	MakeEffect* m_makeEfe = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

@@ -39,6 +39,8 @@ namespace
 
 	//斜めになる速さ
 	const float DIAGONAL_ROTATION_SPEED = 0.5f;
+
+	const Vector3 DROP_EFFECT_SCALE = { 1.5f,1.5f ,1.5f };
 }
 
 bool ObjectBase::Start()
@@ -307,12 +309,7 @@ void ObjectBase::Turn(Vector3 speed)
 void ObjectBase::InitBlowAway()
 {
 	//エフェクト発生
-	EffectEmitter* efe = NewGO<EffectEmitter>(0);
-	efe->Init(enEffectName_ObjectPush);
-	efe->SetScale(Vector3::One);
-	efe->SetRotation(m_player->GetRotation());
-	efe->SetPosition(m_position);
-	efe->Play();
+	PlayEffect(enEffectName_ObjectPush, m_position, m_player->GetRotation(), Vector3::One);
 
 	//コリジョンの初期化
 	InitCollision();
@@ -338,16 +335,13 @@ void ObjectBase::BlowAway()
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_collisionPosition);
 
+	//2フレーム間隔でエフェクト発生
 	m_smokeEfeInterval++;
 	if (m_smokeEfeInterval >= 2)
 	{
 		//エフェクト発生
-		EffectEmitter* efe = NewGO<EffectEmitter>(0);
-		efe->Init(enEffectName_ObjectSmoke);
-		efe->SetScale(Vector3::One);
-		//efe->SetRotation();
-		efe->SetPosition(m_position);
-		efe->Play();
+		PlayEffect(enEffectName_ObjectSmoke, m_position, m_rotation, Vector3::One);
+
 		m_smokeEfeInterval = 0;
 	}
 }
@@ -372,6 +366,9 @@ void ObjectBase::CheckToLand()
 	//地面に着いたら
 	if (m_charaCon.IsOnGround())
 	{
+		//エフェクト発生
+		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, DROP_EFFECT_SCALE);
+
 		//自分が消えるときの処理
 		OnDestroy();
 	}
@@ -546,4 +543,15 @@ void ObjectBase::CalcAimingDirection()
 		//UI作成済みに変更
 		m_makeTargetUI = true;
 	}
+}
+
+void ObjectBase::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
+{
+	//エフェクトの再生
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(name);
+	m_effect->SetPosition(pos);
+	m_effect->SetRotation(rot);
+	m_effect->SetScale(scale);
+	m_effect->Play();
 }

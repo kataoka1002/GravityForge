@@ -267,6 +267,7 @@
     <ClCompile Include="Hydrant.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MakeEffect.cpp" />
     <ClCompile Include="MissionUI.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="PlantLong.cpp" />
@@ -349,6 +350,7 @@
     <ClInclude Include="IHumanEnemyState.h" />
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />
+    <ClInclude Include="MakeEffect.h" />
     <ClInclude Include="MissionUI.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectCollisionConstants.h" />

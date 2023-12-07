@@ -1,5 +1,6 @@
 #pragma once
 #include "TargetUI.h"
+#include "MakeEffect.h"
 
 // 前方宣言。
 namespace nsPlayer { class Player; }
@@ -162,6 +163,15 @@ protected:
 	/// レティクルに合わさっているかの処理
 	/// </summary>
 	void CalcAimingDirection();
+
+	/// <summary>
+	/// エフェクトの再生
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="pos">ポジション</param>
+	/// <param name="rot">回転</param>
+	/// <param name="scale">大きさ</param>
+	void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale);
 
 protected:
 	enum EnObjectState

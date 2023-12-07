@@ -34,6 +34,12 @@
     <Filter Include="MyCode\MainGame\Result">
       <UniqueIdentifier>{fc7387e4-4065-49a4-8b59-97a5cc4e11e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\MainGame\InGame">
+      <UniqueIdentifier>{f9baec9f-8012-4d99-9ff4-f1c8757e776a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\MainGame\Title">
+      <UniqueIdentifier>{39cb52d8-2b83-403e-94a1-930231b5f757}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -57,15 +63,6 @@
     </ClCompile>
     <ClCompile Include="PlayerIdleState.cpp">
       <Filter>MyCode\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>MyCode\MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
-      <Filter>MyCode\MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Lighting.cpp">
-      <Filter>MyCode\MainGame</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>MyCode\MainGame</Filter>
@@ -96,9 +93,6 @@
     </ClCompile>
     <ClCompile Include="House.cpp">
       <Filter>MyCode\BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>MyCode\MainGame</Filter>
     </ClCompile>
     <ClCompile Include="PlayerUI.cpp">
       <Filter>MyCode\UI</Filter>
@@ -226,20 +220,8 @@
     <ClCompile Include="TargetUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>MyCode\MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="GameInformation.cpp">
-      <Filter>MyCode\MainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>MyCode\MainGame</Filter>
-    </ClCompile>
     <ClCompile Include="Reticle.cpp">
       <Filter>MyCode\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="BlackFade.cpp">
-      <Filter>MyCode\MainGame</Filter>
     </ClCompile>
     <ClCompile Include="GameStart.cpp">
       <Filter>MyCode\UI</Filter>
@@ -249,6 +231,33 @@
     </ClCompile>
     <ClCompile Include="ResultUI.cpp">
       <Filter>MyCode\MainGame\Result</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>MyCode\MainGame\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>MyCode\MainGame\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInformation.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="BlackFade.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="MakeEffect.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,15 +286,6 @@
     <ClInclude Include="PlayerIdleState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCamera.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="Lighting.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerWalkState.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
@@ -312,9 +312,6 @@
     </ClInclude>
     <ClInclude Include="House.h">
       <Filter>MyCode\BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>MyCode\MainGame</Filter>
     </ClInclude>
     <ClInclude Include="PlayerUI.h">
       <Filter>MyCode\UI</Filter>
@@ -457,20 +454,8 @@
     <ClInclude Include="TargetUI.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="GameInformation.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>MyCode\MainGame</Filter>
-    </ClInclude>
     <ClInclude Include="Reticle.h">
       <Filter>MyCode\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="BlackFade.h">
-      <Filter>MyCode\MainGame</Filter>
     </ClInclude>
     <ClInclude Include="GameStart.h">
       <Filter>MyCode\UI</Filter>
@@ -480,6 +465,33 @@
     </ClInclude>
     <ClInclude Include="ResultUI.h">
       <Filter>MyCode\MainGame\Result</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>MyCode\MainGame\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>MyCode\MainGame\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="BlackFade.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInformation.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="MakeEffect.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

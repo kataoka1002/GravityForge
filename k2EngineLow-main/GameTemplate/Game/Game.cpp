@@ -50,6 +50,7 @@ Game::~Game()
 	//DeleteGO(m_gameInfo); //ResultUIでデリートしている
 	DeleteGO(m_blackFade);
 	DeleteGO(m_missionUI);
+	DeleteGO(m_makeEfe);
 }
 
 bool Game::Start()
@@ -58,7 +59,7 @@ bool Game::Start()
 	m_fade->SetAlphaDown();
 
 	//エフェクトの初期化
-	InitEffectName();
+	m_makeEfe = NewGO<MakeEffect>(0, "makeeffect");
 
 	//ゲーム情報クラスの作成
 	m_gameInfo = NewGO<GameInformation>(0, "gameinformation");
@@ -328,14 +329,6 @@ bool Game::Start()
 	m_missionUI = NewGO<MissionUI>(0, "missionui");
 
 	return true;
-}
-
-void Game::InitEffectName()
-{
-	//エフェクトの設定
-	EffectEngine::GetInstance()->ResistEffect(enEffectName_ObjectPush, u"Assets/effect/objectPush.efk");
-	EffectEngine::GetInstance()->ResistEffect(enEffectName_ObjectSmoke, u"Assets/effect/objectSmoke.efk");
-	EffectEngine::GetInstance()->ResistEffect(enEffectName_HumanAttack, u"Assets/effect/humanEnemyAttack.efk");
 }
 
 template <typename T>

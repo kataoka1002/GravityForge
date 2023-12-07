@@ -483,6 +483,9 @@ namespace nsPlayer
 				40.0f					//半径。
 			);
 			collisionObject->SetName("player_punch");
+
+			//エフェクト発生
+			PlayEffect(enEffectName_PlayerPunch, collisionPosition, m_rotation, Vector3::One);
 		}
 		//キーの名前が「attack_end」の時。
 		else if (wcscmp(eventName, L"attack_end") == 0)
@@ -495,6 +498,17 @@ namespace nsPlayer
 	{
 		//ゲームオーバーを呼び出す
 		m_game->SetGameOver();
+	}
+
+	void Player::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
+	{
+		//エフェクトの再生
+		EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+		m_effect->Init(name);
+		m_effect->SetPosition(pos);
+		m_effect->SetRotation(rot);
+		m_effect->SetScale(scale);
+		m_effect->Play();
 	}
 
 	void Player::Render(RenderContext& rc)
