@@ -484,8 +484,13 @@ namespace nsPlayer
 			);
 			collisionObject->SetName("player_punch");
 
+			//プレイヤーの左側を設定しエフェクトが出る場所を少しずらす
+			Vector3 left = m_forward;
+			left.Cross({ 0.0f,1.0f,0.0f });
+			Vector3 effectPos = collisionPosition + left * 15.0f;
+			
 			//エフェクト発生
-			PlayEffect(enEffectName_PlayerPunch, collisionPosition, m_rotation, Vector3::One);
+			PlayEffect(enEffectName_PlayerPunch, effectPos, m_rotation, Vector3::One);
 		}
 		//キーの名前が「attack_end」の時。
 		else if (wcscmp(eventName, L"attack_end") == 0)
