@@ -54,6 +54,7 @@ namespace nsK2EngineLow
 		void InitShadow();
 		void Execute(RenderContext& rc);
 		void RenderToGBuffer(RenderContext& rc);
+		void DrawEffect(RenderContext& rc);
 		void DeferredLighting(RenderContext& rc);
 		void SpriteFontDraw(RenderContext& rc);
 		void DrawShadowMap(RenderContext& rc);

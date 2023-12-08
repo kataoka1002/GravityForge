@@ -234,6 +234,9 @@ namespace nsK2EngineLow
 		//GBufferへのレンダリング
 		RenderToGBuffer(rc);
 
+		//エフェクトの描画
+		DrawEffect(rc);
+
 		//シャドウマップに影を描画
 		DrawShadowMap(rc);
 
@@ -268,9 +271,6 @@ namespace nsK2EngineLow
 
 		//メインレンダリングターゲットの絵をフレームバッファにコピー
 		CopyMainRenderTargetToFrameBuffer(rc);
-
-		//ここでエフェクトドロー。
-		EffectEngine::GetInstance()->Draw();
 
 		//描画したオブジェクトをクリアする
 		ObjectClear();
@@ -307,6 +307,23 @@ namespace nsK2EngineLow
 		// レンダリングターゲットへの書き込み待ち
 		rc.WaitUntilFinishDrawingToRenderTargets(ARRAYSIZE(rts), rts);
 
+		EndGPUEvent();
+	}
+
+	void RenderingEngine::DrawEffect(RenderContext& rc)
+	{
+		BeginGPUEvent("DrawEffect");
+
+		// アルベドのgバッファーをセット
+		rc.WaitUntilToPossibleSetRenderTarget(m_gBuffer[enGBufferAlbedo]);
+		rc.SetRenderTargetAndViewport(m_gBuffer[enGBufferAlbedo]);
+		
+		//ここでエフェクトドロー。
+		EffectEngine::GetInstance()->Draw();
+
+		// 終了待ち
+		rc.WaitUntilFinishDrawingToRenderTarget(m_gBuffer[enGBufferAlbedo]);
+	
 		EndGPUEvent();
 	}
 
