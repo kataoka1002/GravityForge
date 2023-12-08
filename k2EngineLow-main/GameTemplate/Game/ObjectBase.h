@@ -205,6 +205,7 @@ protected:
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
 	int						m_smokeEfeInterval = 0;						//煙エフェクトが発生する間隔
+	int						m_sandCount = 0;
 
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;

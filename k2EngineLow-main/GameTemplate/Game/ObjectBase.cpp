@@ -173,6 +173,18 @@ void ObjectBase::UpDown()
 
 void ObjectBase::AttractedToPlayer()
 {
+	//最初の20フレームだけ
+	if (m_sandCount <= 20)
+	{
+		if(m_sandCount % 2 == 0)
+		{
+			//持ち上げた時にエフェクトを出す
+			PlayEffect(enEffectName_ObjectSand, m_position, m_rotation, Vector3::One);
+		}
+
+		m_sandCount++;
+	}
+
 	//ターゲットまでの方向、距離を計算
 	Vector3 toTarget = m_targetPosition - m_position;
 	Vector3 toTargetDir = toTarget;
