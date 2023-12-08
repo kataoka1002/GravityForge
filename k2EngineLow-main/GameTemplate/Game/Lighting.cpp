@@ -3,7 +3,7 @@
 
 namespace
 {
-	const Vector3 DIRECTION_LIG_COLOR = { 1.9f,1.9f,1.9f };
+	const Vector3 DIRECTION_LIG_COLOR = { 2.9f,2.9f,2.9f };
 }
 
 bool Lighting::Start()

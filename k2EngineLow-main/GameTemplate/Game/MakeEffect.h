@@ -8,6 +8,7 @@ enum EffectName
 	enEffectName_ObjectPush,
 	enEffectName_ObjectSmoke,
 	enEffectName_ObjectDrop,
+	enEffectName_ObjectBom,
 	enEffectName_HumanAttack,
 	enEffectName_PlayerPunch,
 	enEffectName_Num,

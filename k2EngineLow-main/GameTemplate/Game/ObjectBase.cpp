@@ -40,7 +40,8 @@ namespace
 	//斜めになる速さ
 	const float DIAGONAL_ROTATION_SPEED = 0.5f;
 
-	const Vector3 DROP_EFFECT_SCALE = { 1.5f,1.5f ,1.5f };
+	//オブジェクトを落としたときのエフェクトの大きさ
+	const Vector3 DROP_EFFECT_SCALE = { 1.9f,1.9f ,1.9f };
 }
 
 bool ObjectBase::Start()
@@ -335,12 +336,12 @@ void ObjectBase::BlowAway()
 	//コリジョンのポジションのセット
 	m_collisionObject->SetPosition(m_collisionPosition);
 
-	//2フレーム間隔でエフェクト発生
+	//フレーム間隔でエフェクト発生
 	m_smokeEfeInterval++;
-	if (m_smokeEfeInterval >= 2)
+	if (m_smokeEfeInterval >= 1)
 	{
 		//エフェクト発生
-		PlayEffect(enEffectName_ObjectSmoke, m_position, m_rotation, Vector3::One);
+		PlayEffect(enEffectName_ObjectSmoke, m_position, m_player->GetRotation(), Vector3::One);
 
 		m_smokeEfeInterval = 0;
 	}
@@ -386,6 +387,9 @@ void ObjectBase::CalcCollision()
 
 			enemy->PlayReaction();
 
+			//エフェクトの発生
+			PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
+
 			//自分が消えるときの処理
 			OnDestroy();
 
@@ -404,6 +408,9 @@ void ObjectBase::CalcCollision()
 			{
 				//エネミーはダメージを受けた時の処理を行う
 				enemy->HandleDamageEvent(m_damage);
+
+				//エフェクトの発生
+				PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
 
 				//自分が消えるときの処理
 				OnDestroy();
@@ -428,6 +435,9 @@ void ObjectBase::CalcCollision()
 
 		//ボスのステートの変更を行う
 		boss->SetReactionState();
+
+		//エフェクトの発生
+		PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
 
 		//自分が消えるときの処理
 		OnDestroy();
