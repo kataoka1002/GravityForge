@@ -11,32 +11,22 @@ Game::Game()
 
 Game::~Game()
 {
-	//リストが空になるまで繰り返す
-	//while (m_enemyList.size() != 0)
+	//エネミーをすべて削除
+	for (auto enemy : m_enemyList)
 	{
-		for (auto enemy : m_enemyList)
-		{
-			//削除
-			DeleteGO(enemy);
-
-			//リストから削除
-			//RemoveEnemyFromList(enemy);
-		}
+		//削除
+		DeleteGO(enemy);
 	}
+	//リストを空にする
 	m_enemyList.clear();
 
-	//リストが空になるまで繰り返す
-	//while(m_objectList.size() != 0)
+	//オブジェクトを全て削除
+	for (auto object : m_objectList)
 	{
-		for (auto object : m_objectList)
-		{
-			//削除
-			DeleteGO(object);
-
-			//リストから削除
-			//RemoveObjectFromList(object);
-		}
+		//削除
+		DeleteGO(object);
 	}
+	//リストを空にする
 	m_objectList.clear();
 
 
@@ -99,213 +89,213 @@ bool Game::Start()
 				m_bg->SetRotation(objData.rotation);
 				return true;
 			}
-			//名前がbossだったら。
-			else if (objData.EqualObjectName(L"boss") == true)
-			{
-				//ボスオブジェクトを作成する。
-				m_boss = NewGO<nsBoss::Boss>(0, "boss");
-				//座標を設定する。
-				m_boss->SetPosition(objData.position);
-				//大きさを設定する。
-				m_boss->SetScale(objData.scale);
-				//回転を設定する。
-				m_boss->SetRotation(objData.rotation);
-				return true;
-			}
-			//名前がteapotだったら。
-			else if (objData.EqualObjectName(L"teapot") == true)
-			{
-				//ティーポットオブジェクトを作成する。
-				m_teapot = NewGO<Teapot>(0, "teapot");
+			////名前がbossだったら。
+			//else if (objData.EqualObjectName(L"boss") == true)
+			//{
+			//	//ボスオブジェクトを作成する。
+			//	m_boss = NewGO<nsBoss::Boss>(0, "boss");
+			//	//座標を設定する。
+			//	m_boss->SetPosition(objData.position);
+			//	//大きさを設定する。
+			//	m_boss->SetScale(objData.scale);
+			//	//回転を設定する。
+			//	m_boss->SetRotation(objData.rotation);
+			//	return true;
+			//}
+			////名前がteapotだったら。
+			//else if (objData.EqualObjectName(L"teapot") == true)
+			//{
+			//	//ティーポットオブジェクトを作成する。
+			//	m_teapot = NewGO<Teapot>(0, "teapot");
 
-				SetLevel(m_teapot, objData);
+			//	SetLevel(m_teapot, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_teapot);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"air") == true)
-			{
-				//換気扇オブジェクトを作成する。
-				m_air = NewGO<Air>(0, "air");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_teapot);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"air") == true)
+			//{
+			//	//換気扇オブジェクトを作成する。
+			//	m_air = NewGO<Air>(0, "air");
 
-				SetLevel(m_air, objData);
+			//	SetLevel(m_air, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_air);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"barrierFence") == true)
-			{
-				//工事の柵オブジェクトを作成する。
-				m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_air);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"barrierFence") == true)
+			//{
+			//	//工事の柵オブジェクトを作成する。
+			//	m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
 
-				SetLevel(m_barrierFence, objData);
+			//	SetLevel(m_barrierFence, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_barrierFence);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"bench_big") == true)
-			{
-				//でかいベンチオブジェクトを作成する。
-				m_benchBig = NewGO<BenchBig>(0, "benchbig");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_barrierFence);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"bench_big") == true)
+			//{
+			//	//でかいベンチオブジェクトを作成する。
+			//	m_benchBig = NewGO<BenchBig>(0, "benchbig");
 
-				SetLevel(m_benchBig, objData);
+			//	SetLevel(m_benchBig, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_benchBig);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"bench_small") == true)
-			{
-				//小さいベンチオブジェクトを作成する。
-				m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_benchBig);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"bench_small") == true)
+			//{
+			//	//小さいベンチオブジェクトを作成する。
+			//	m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
 
-				SetLevel(m_benchSmall, objData);
+			//	SetLevel(m_benchSmall, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_benchSmall);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"billboard_small") == true)
-			{
-				//看板オブジェクトを作成する。
-				m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_benchSmall);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"billboard_small") == true)
+			//{
+			//	//看板オブジェクトを作成する。
+			//	m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
 
-				SetLevel(m_billboardSmall, objData);
+			//	SetLevel(m_billboardSmall, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_billboardSmall);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"bush_big") == true)
-			{
-				//草オブジェクトを作成する。
-				m_bushBig = NewGO<BushBig>(0, "bushbig");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_billboardSmall);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"bush_big") == true)
+			//{
+			//	//草オブジェクトを作成する。
+			//	m_bushBig = NewGO<BushBig>(0, "bushbig");
 
-				SetLevel(m_bushBig, objData);
+			//	SetLevel(m_bushBig, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_bushBig);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"cone") == true)
-			{
-				//三角コーンオブジェクトを作成する。
-				m_cone = NewGO<Cone>(0, "cone");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_bushBig);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"cone") == true)
+			//{
+			//	//三角コーンオブジェクトを作成する。
+			//	m_cone = NewGO<Cone>(0, "cone");
 
-				SetLevel(m_cone, objData);
+			//	SetLevel(m_cone, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_cone);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"dustbin") == true)
-			{
-				//ゴミ箱オブジェクトを作成する。
-				m_dustbin = NewGO<Dustbin>(0, "dustbin");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_cone);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"dustbin") == true)
+			//{
+			//	//ゴミ箱オブジェクトを作成する。
+			//	m_dustbin = NewGO<Dustbin>(0, "dustbin");
 
-				SetLevel(m_dustbin, objData);
+			//	SetLevel(m_dustbin, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_dustbin);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"fence") == true)
-			{
-				//フェンスオブジェクトを作成する。
-				m_fence = NewGO<Fence>(0, "fence");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_dustbin);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"fence") == true)
+			//{
+			//	//フェンスオブジェクトを作成する。
+			//	m_fence = NewGO<Fence>(0, "fence");
 
-				SetLevel(m_fence, objData);
+			//	SetLevel(m_fence, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_fence);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"hydrant") == true)
-			{
-				//消火栓オブジェクトを作成する。
-				m_hydrant = NewGO<Hydrant>(0, "hydrant");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_fence);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"hydrant") == true)
+			//{
+			//	//消火栓オブジェクトを作成する。
+			//	m_hydrant = NewGO<Hydrant>(0, "hydrant");
 
-				SetLevel(m_hydrant, objData);
+			//	SetLevel(m_hydrant, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_hydrant);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"plant_long") == true)
-			{
-				//大花瓶オブジェクトを作成する。
-				m_plantLong = NewGO<PlantLong>(0, "plantlong");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_hydrant);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"plant_long") == true)
+			//{
+			//	//大花瓶オブジェクトを作成する。
+			//	m_plantLong = NewGO<PlantLong>(0, "plantlong");
 
-				SetLevel(m_plantLong, objData);
+			//	SetLevel(m_plantLong, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_plantLong);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"plant_low") == true)
-			{
-				//小花瓶オブジェクトを作成する。
-				m_plantLow = NewGO<PlantLow>(0, "plantlow");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_plantLong);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"plant_low") == true)
+			//{
+			//	//小花瓶オブジェクトを作成する。
+			//	m_plantLow = NewGO<PlantLow>(0, "plantlow");
 
-				SetLevel(m_plantLow, objData);
+			//	SetLevel(m_plantLow, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_plantLow);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"rock_big") == true)
-			{
-				//岩オブジェクトを作成する。
-				m_rockBig = NewGO<RockBig>(0, "rockbig");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_plantLow);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"rock_big") == true)
+			//{
+			//	//岩オブジェクトを作成する。
+			//	m_rockBig = NewGO<RockBig>(0, "rockbig");
 
-				SetLevel(m_rockBig, objData);
+			//	SetLevel(m_rockBig, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_rockBig);
-				return true;
-			}
-			else if (objData.EqualObjectName(L"solarPanel") == true)
-			{
-				//ソーラーパネルオブジェクトを作成する。
-				m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_rockBig);
+			//	return true;
+			//}
+			//else if (objData.EqualObjectName(L"solarPanel") == true)
+			//{
+			//	//ソーラーパネルオブジェクトを作成する。
+			//	m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
 
-				SetLevel(m_solarPanel, objData);
+			//	SetLevel(m_solarPanel, objData);
 
-				//リストに追加
-				m_objectList.emplace_back(m_solarPanel);
-				return true;
-			}
-			//名前がhumanEnemyだったら。
-			else if (objData.EqualObjectName(L"humanEnemy") == true)
-			{
-				//エネミーオブジェクトを作成する。
-				m_humanEnemy = NewGO<nsHumanEnemy::HumanEnemy>(0, "humanenemy");
-				//座標を設定する。
-				m_humanEnemy->SetPosition(objData.position);
-				//大きさを設定する。
-				m_humanEnemy->SetScale(objData.scale);
-				//回転を設定する。
-				m_humanEnemy->SetRotation(objData.rotation);
-				//リストに追加
-				m_enemyList.emplace_back(m_humanEnemy);
-				return true;
-			}
-			//名前がwallだったら。
-			else if (objData.EqualObjectName(L"wall") == true)
-			{
-				//当たり判定壁オブジェクトを作成する。
-				m_wall = NewGO<Wall>(0, "wall");
-				//座標を設定する。
-				m_wall->SetPosition(objData.position);
-				//大きさを設定する。
-				m_wall->SetScale(objData.scale);
-				//回転を設定する。
-				m_wall->SetRotation(objData.rotation);
-				return true;
-			}
+			//	//リストに追加
+			//	m_objectList.emplace_back(m_solarPanel);
+			//	return true;
+			//}
+			////名前がhumanEnemyだったら。
+			//else if (objData.EqualObjectName(L"humanEnemy") == true)
+			//{
+			//	//エネミーオブジェクトを作成する。
+			//	m_humanEnemy = NewGO<nsHumanEnemy::HumanEnemy>(0, "humanenemy");
+			//	//座標を設定する。
+			//	m_humanEnemy->SetPosition(objData.position);
+			//	//大きさを設定する。
+			//	m_humanEnemy->SetScale(objData.scale);
+			//	//回転を設定する。
+			//	m_humanEnemy->SetRotation(objData.rotation);
+			//	//リストに追加
+			//	m_enemyList.emplace_back(m_humanEnemy);
+			//	return true;
+			//}
+			////名前がwallだったら。
+			//else if (objData.EqualObjectName(L"wall") == true)
+			//{
+			//	//当たり判定壁オブジェクトを作成する。
+			//	m_wall = NewGO<Wall>(0, "wall");
+			//	//座標を設定する。
+			//	m_wall->SetPosition(objData.position);
+			//	//大きさを設定する。
+			//	m_wall->SetScale(objData.scale);
+			//	//回転を設定する。
+			//	m_wall->SetRotation(objData.rotation);
+			//	return true;
+			//}
 
 			return true;
 		});

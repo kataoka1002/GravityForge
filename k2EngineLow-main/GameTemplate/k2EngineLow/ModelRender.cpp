@@ -97,14 +97,14 @@ namespace nsK2EngineLow {
 		SetupVertexShaderEntryPointFunc(modelInitData);
 
 		//ピクセルシェーダーのエントリーポイントを設定
-		if (isShadowReciever) 
+		//if (isShadowReciever) 
 		{
 			modelInitData.m_psEntryPointFunc = "PSShadowMain";
 		}
-		else
+		/*else
 		{
 			modelInitData.m_psEntryPointFunc = "PSMain";
-		}
+		}*/
 
 		m_renderToGBufferModel.Init(modelInitData);
 	}
