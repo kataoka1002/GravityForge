@@ -59,6 +59,7 @@ namespace nsPlayer
 		void CheckTouchBossWall();
 		void CheckHP();
 		void CalcCoolDown();
+		void AttackHitProcess(float damage);
 
 		/// <summary>
 		/// エフェクトの再生

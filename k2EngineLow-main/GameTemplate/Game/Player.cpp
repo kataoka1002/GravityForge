@@ -348,22 +348,8 @@ namespace nsPlayer
 			//コリジョンとキャラコンが衝突したら。
 			if (collision->IsHit(m_charaCon))
 			{
-				//ダメージを与える
-				CalcDamage(10.0f); 
-
-				//リアクションをさせる
-				m_playerState = new PlayerReactionState(this);
-				m_playerState->Enter();
-
-				//クールダウン中にする
-				m_isCooldown = true;
-
-				//オブジェクトを持っているなら
-				if (m_holdingObject != nullptr)
-				{
-					//オブジェクトを落下中にする
-					m_holdingObject->SetFallingState();
-				}
+				//攻撃が当たった時の処理
+				AttackHitProcess(10.0f);
 
 				return true;
 			}
@@ -377,28 +363,79 @@ namespace nsPlayer
 			//コリジョンとキャラコンが衝突したら。
 			if (collision->IsHit(m_charaCon))
 			{
-				//ダメージを与える
-				CalcDamage(50.0f);
-
-				//リアクションをさせる
-				m_playerState = new PlayerReactionState(this);
-				m_playerState->Enter();
-
-				//クールダウン中にする
-				m_isCooldown = true;
-
-				//オブジェクトを持っているなら
-				if (m_holdingObject != nullptr)
-				{
-					//オブジェクトを落下中にする
-					m_holdingObject->SetFallingState();
-				}
+				//攻撃が当たった時の処理
+				AttackHitProcess(50.0f);
 
 				return true;
 			}
 		}
 
+		//敵の攻撃用のコリジョンの配列を取得する。
+		const auto& swipeCollision = g_collisionObjectManager->FindCollisionObjects("swipe_attack");
+		//配列をfor文で回す。
+		for (auto collision : swipeCollision)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//攻撃が当たった時の処理
+				AttackHitProcess(5.0f);
+
+				return true;
+			}
+		}
+
+		//敵の攻撃用のコリジョンの配列を取得する。
+		const auto& punchCollision = g_collisionObjectManager->FindCollisionObjects("punch_attack");
+		//配列をfor文で回す。
+		for (auto collision : punchCollision)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//攻撃が当たった時の処理
+				AttackHitProcess(5.0f);
+
+				return true;
+			}
+		}
+
+		//敵の攻撃用のコリジョンの配列を取得する。
+		const auto& magicCollision = g_collisionObjectManager->FindCollisionObjects("magic_attack");
+		//配列をfor文で回す。
+		for (auto collision : magicCollision)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//攻撃が当たった時の処理
+				AttackHitProcess(5.0f);
+
+				return true;
+			}
+		}
+		
 		return false;
+	}
+
+	void Player::AttackHitProcess(float damage)
+	{
+		//ダメージを与える
+		CalcDamage(damage);
+
+		//リアクションをさせる
+		m_playerState = new PlayerReactionState(this);
+		m_playerState->Enter();
+
+		//クールダウン中にする
+		m_isCooldown = true;
+
+		//オブジェクトを持っているなら
+		if (m_holdingObject != nullptr)
+		{
+			//オブジェクトを落下中にする
+			m_holdingObject->SetFallingState();
+		}
 	}
 
 	void Player::CalcCoolDown()
