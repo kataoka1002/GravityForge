@@ -12,7 +12,7 @@ Game::Game()
 Game::~Game()
 {
 	//リストが空になるまで繰り返す
-	while (m_enemyList.size() != 0)
+	//while (m_enemyList.size() != 0)
 	{
 		for (auto enemy : m_enemyList)
 		{
@@ -20,12 +20,13 @@ Game::~Game()
 			DeleteGO(enemy);
 
 			//リストから削除
-			RemoveEnemyFromList(enemy);
+			//RemoveEnemyFromList(enemy);
 		}
 	}
+	m_enemyList.clear();
 
 	//リストが空になるまで繰り返す
-	while(m_objectList.size() != 0)
+	//while(m_objectList.size() != 0)
 	{
 		for (auto object : m_objectList)
 		{
@@ -33,10 +34,10 @@ Game::~Game()
 			DeleteGO(object);
 
 			//リストから削除
-			RemoveObjectFromList(object);
+			//RemoveObjectFromList(object);
 		}
 	}
-
+	m_objectList.clear();
 
 
 	//削除
