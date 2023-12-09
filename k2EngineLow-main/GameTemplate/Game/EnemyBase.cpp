@@ -79,3 +79,14 @@ void EnemyBase::CalcCoolDown()
 		m_cooldownTime = 1.0f;
 	}
 }
+
+void EnemyBase::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
+{
+	//エフェクトの再生
+	EffectEmitter* m_effect = NewGO<EffectEmitter>(0);
+	m_effect->Init(name);
+	m_effect->SetPosition(pos);
+	m_effect->SetRotation(rot);
+	m_effect->SetScale(scale);
+	m_effect->Play();
+}

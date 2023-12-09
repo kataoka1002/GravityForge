@@ -40,7 +40,7 @@ namespace nsBoss
 			}
 		}
 
-		if (std::rand() % 500 + 1 == 1)
+		if (std::rand() % 20 + 1 == 1)
 		{
 			return new BossJumpAttackState(m_boss);
 		}

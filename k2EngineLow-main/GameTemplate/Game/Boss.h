@@ -45,6 +45,7 @@ namespace nsBoss
 		void JumpAttack();
 		void Gravity(float pow);
 		void SetPlate();
+		void MagicAttack();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -171,6 +172,8 @@ namespace nsBoss
 		bool				m_isJumping = false;					// ジャンプ中かどうか
 		Vector3				m_jumpTargetPos = Vector3::Zero;		// ジャンプ攻撃の目的地
 		float				m_plateDrawTime = 2.0f;
+		bool				m_magicAttackNow = false;				// マジック中かどうか
+		bool				m_makeMagicEffe = false;				// マジックのエフェクトを作ったかどうか
 
 		BossUI* m_ui = nullptr;
 	};

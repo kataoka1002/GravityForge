@@ -37,6 +37,8 @@ Game::~Game()
 		}
 	}
 
+
+
 	//íœ
 	//DeleteGO(m_skyCube);	//ResultUI‚ÅƒfƒŠ[ƒg‚µ‚Ä‚¢‚é
 	DeleteGO(m_player);

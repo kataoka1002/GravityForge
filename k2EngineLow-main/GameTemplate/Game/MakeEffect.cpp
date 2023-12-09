@@ -16,6 +16,10 @@ bool MakeEffect::Start()
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_ObjectSand, u"Assets/effect/objectSand.efk");
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_HumanAttack, u"Assets/effect/humanEnemyAttack.efk");
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_PlayerPunch, u"Assets/effect/playerPunch.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossMagic, u"Assets/effect/bossMagic.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossPanch, u"Assets/effect/bossPanch.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossSwipe, u"Assets/effect/bossSwipe.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossJumpAttack, u"Assets/effect/bossJumpAttack.efk");
 
 	return true;
 }

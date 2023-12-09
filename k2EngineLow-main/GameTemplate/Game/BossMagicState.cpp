@@ -35,6 +35,7 @@ namespace nsBoss
 
 	void BossMagicState::Update()
 	{
-
+		//マジック攻撃の処理
+		m_boss->MagicAttack();
 	}
 }

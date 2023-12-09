@@ -209,27 +209,45 @@ namespace nsBoss
 
 	void Boss::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 	{
-		//キーの名前が「attack_start」の時。
-		if (wcscmp(eventName, L"attack_start") == 0)
+		//キーの名前が「swipe_start」の時。
+		if (wcscmp(eventName, L"swipe_start") == 0)
 		{
 			//コリジョンオブジェクトを作成する。
 			auto collisionObject = NewGO<CollisionObject>(0);
 			Vector3 collisionPosition = m_position;
 			//座標をプレイヤーの少し前,上に設定する。
-			collisionPosition += m_forward * 100.0f;
+			collisionPosition += m_forward * 240.0f;
+			collisionPosition.y += 150.0f;
+			//球状のコリジョンを作成する。
+			collisionObject->CreateSphere(
+				collisionPosition,		//座標。
+				Quaternion::Identity,	//回転。
+				150.0f					//半径。
+			);
+			collisionObject->SetName("swipe_attack");
+
+			//エフェクト発生
+			PlayEffect(enEffectName_BossSwipe, collisionPosition, m_rotation, Vector3::One);
+		}
+		//キーの名前が「punch_start」の時。
+		else if (wcscmp(eventName, L"punch_start") == 0)
+		{
+			//コリジョンオブジェクトを作成する。
+			auto collisionObject = NewGO<CollisionObject>(0);
+			Vector3 collisionPosition = m_position;
+			//座標をプレイヤーの少し前,上に設定する。
+			collisionPosition += m_forward * 200.0f;
 			collisionPosition.y += 100.0f;
 			//球状のコリジョンを作成する。
 			collisionObject->CreateSphere(
 				collisionPosition,		//座標。
 				Quaternion::Identity,	//回転。
-				50.0f					//半径。
+				100.0f					//半径。
 			);
-			collisionObject->SetName("human_attack");
-		}
-		//キーの名前が「attack_end」の時。
-		else if (wcscmp(eventName, L"attack_end") == 0)
-		{
+			collisionObject->SetName("punch_attack");
 
+			//エフェクト発生
+			PlayEffect(enEffectName_BossPanch, collisionPosition, m_rotation, Vector3::One);
 		}
 		//キーの名前が「jump_start」の時。
 		else if (wcscmp(eventName, L"jump_start") == 0)
@@ -258,6 +276,25 @@ namespace nsBoss
 				250.0f					//半径。
 			);
 			collisionObject->SetName("boss_jumpAttack");
+
+			//エフェクトの発生位置の設定
+			Vector3 efePos = m_position;
+			efePos.y += 10.0f;
+			efePos += m_forward * 120.0f;
+			//エフェクト発生
+			PlayEffect(enEffectName_BossJumpAttack, efePos, m_rotation, Vector3::One);
+		}
+		//キーの名前が「magic_start」の時。
+		else if (wcscmp(eventName, L"magic_start") == 0)
+		{
+			//マジック中
+			m_magicAttackNow = true;
+		}
+		//キーの名前が「magic_end」の時。
+		else if (wcscmp(eventName, L"magic_end") == 0)
+		{
+			//マジック終了
+			m_magicAttackNow = false;
 		}
 	}
 
@@ -324,6 +361,48 @@ namespace nsBoss
 
 		m_model.SetPosition(m_position);
 		m_charaCon.SetPosition(m_position);
+	}
+
+	void Boss::MagicAttack()
+	{
+		//マジック中じゃないなら返す
+		if (m_magicAttackNow != true)
+		{
+			//エフェクト未作成状態にする
+			m_makeMagicEffe = false;
+			return;
+		}
+
+		//コリジョンオブジェクトを作成する。
+		auto collisionObject = NewGO<CollisionObject>(0);
+		Vector3 collisionPosition = m_position;
+		//座標をプレイヤーの少し前に設定する。
+		collisionPosition += m_forward * 900.0f;
+		collisionPosition.y += 220.0f;
+		//コリジョンを横に倒す
+		Quaternion rot = m_rotation;
+		rot.AddRotationDegX(180.0f);
+		//球状のコリジョンを作成する。
+		collisionObject->CreateCapsule(
+			collisionPosition,		//座標。
+			rot,					//回転。
+			130.0f,					//半径。
+			1000.0f					//高さ。
+		);
+		collisionObject->SetName("magic_attack");
+
+		//エフェクトのポジション設定
+		Vector3 efePos = m_position;
+		efePos += m_forward * 220.0f;
+		efePos.y += 220.0f;
+		if (m_makeMagicEffe == false)
+		{
+			//エフェクト発生
+			PlayEffect(enEffectName_BossMagic, efePos, m_rotation, Vector3::One);
+
+			//エフェクト発生状態にする
+			m_makeMagicEffe = true;
+		}
 	}
 
 	void Boss::SetPlate()

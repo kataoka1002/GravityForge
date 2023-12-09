@@ -12,6 +12,10 @@ enum EffectName
 	enEffectName_ObjectSand,
 	enEffectName_HumanAttack,
 	enEffectName_PlayerPunch,
+	enEffectName_BossMagic,
+	enEffectName_BossPanch,
+	enEffectName_BossSwipe,
+	enEffectName_BossJumpAttack,
 	enEffectName_Num,
 };
 
