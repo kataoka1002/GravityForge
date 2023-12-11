@@ -225,6 +225,26 @@ namespace nsK2EngineLow
 		g_graphicsEngine->SetRaytracingSkyCubeBox(m_iblData.m_texture);
 	}
 
+	void RenderingEngine::CalcViewProjectionMatrixForViewCulling()
+	{
+		Matrix projMatrix;
+		projMatrix.MakeProjectionMatrix(
+			g_camera3D->GetViewAngle() * 1.5f,
+			g_camera3D->GetAspect(),
+			g_camera3D->GetNear(),
+			g_camera3D->GetFar()
+		);
+		m_viewProjMatrixForViewCulling.Multiply(g_camera3D->GetViewMatrix(), projMatrix);
+	}
+
+	void RenderingEngine::Update()
+	{
+		// ビューカリング用のビュープロジェクション行列の計算。
+		CalcViewProjectionMatrixForViewCulling();
+		// シーンのジオメトリ情報の更新。
+		m_sceneGeometryData.Update();
+	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		// シーンライトのデータをコピー。

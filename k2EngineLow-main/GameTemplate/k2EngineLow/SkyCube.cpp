@@ -49,6 +49,8 @@ namespace nsK2EngineLow
 		initData.m_expandConstantBuffer = &m_luminance;
 		initData.m_expandConstantBufferSize = sizeof(m_luminance);
 		m_modelRender.InitSkyCubeModel(initData);
+		m_modelRender.SetShadowCasterFlag(false);
+		m_modelRender.SetDontCulling();
 		m_modelRender.SetTRS(m_position, m_rot, m_scale);
 		m_modelRender.Update();
 

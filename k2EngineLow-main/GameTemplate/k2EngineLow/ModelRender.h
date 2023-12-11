@@ -1,5 +1,9 @@
 #pragma once
 
+#include "geometry/AABB.h"
+#include "GeometryData.h"
+#include "graphics/ComputeAnimationVertexBuffer.h"
+
 namespace nsK2EngineLow
 {
 	class ModelRender : public Noncopyable
@@ -21,7 +25,8 @@ namespace nsK2EngineLow
 			AnimationClip* animationClips = nullptr,
 			int animationClipsNum = 0,
 			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
-			bool isShadowReciever = false);
+			bool isShadowReciever = false,
+			int maxInstance = 1);
 
 		/// <summary>
 		/// 頂点シェーダーのエントリーポイントを指定する
@@ -204,6 +209,46 @@ namespace nsK2EngineLow
 			m_animation.AddAnimationEventListener(eventListener);
 		}
 
+		/// <summary>
+		/// ワールド行列を取得。
+		/// </summary>
+		/// <param name="instanceId">
+		/// インスタンスID。
+		/// この引数はインスタンシング描画が向こうの場合は無視されます。
+		/// </param>
+		/// <returns></returns>
+		const Matrix& GetWorldMatrix(int instanceId) const
+		{
+			/*if (IsInstancingDraw()) {
+				return m_worldMatrixArray[instanceId];
+			}*/
+			return m_zprepassModel.GetWorldMatrix();
+		}
+
+		/// <summary>
+		/// シャドウキャスターのフラグを設定する
+		/// </summary>
+		void SetShadowCasterFlag(bool flag)
+		{
+			m_isShadowCaster = flag;
+		}
+
+		/// <summary>
+		/// シャドウキャスター？
+		/// </summary>
+		/// <returns></returns>
+		bool IsShadowCaster() const
+		{
+			return m_isShadowCaster;
+		}
+
+		/// <summary>
+		/// カリングの対象から外す
+		/// </summary>
+		void SetDontCulling()
+		{
+			m_doCulling = false;
+		}
 
 	private:
 
@@ -241,6 +286,11 @@ namespace nsK2EngineLow
 			m_isRaytracingWorld = flag;
 		}
 
+		/// <summary>
+		/// 幾何学情報を初期化
+		/// </summary>
+		/// <param name="maxInstance">インスタンス数</param>
+		void InitGeometryDatas(int maxInstance);
 
 	private:
 		Model m_zprepassModel;								// ZPrepassで描画されるモデル
@@ -257,7 +307,11 @@ namespace nsK2EngineLow
 		int m_numAnimationClips = 0;						// アニメーションクリップナンバー
 		int m_nowAnimationNumber = -1;						// 今のアニメーションクリップナンバー
 		float m_animationSpeed = 1.0f;						// アニメーションの速さ
-		bool m_isRaytracingWorld = true;					//レイトレワールドに登録する？
+		bool m_isRaytracingWorld = true;					// レイトレワールドに登録する？
+		bool m_isShadowCaster = true;						// シャドウキャスターフラグ
+		bool m_doCulling = true;							// カリングをするかどうか
+
+		std::vector< GemometryData > m_geometryDatas;		// ジオメトリ情報。
 	};
 }
 

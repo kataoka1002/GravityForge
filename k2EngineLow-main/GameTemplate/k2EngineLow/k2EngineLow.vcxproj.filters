@@ -237,6 +237,12 @@
     <ClCompile Include="SpringCamera.cpp" />
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="collision\CollisionObject.cpp" />
+    <ClCompile Include="GeometryData.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGeometryData.cpp">
+      <Filter>geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />
@@ -524,6 +530,12 @@
     <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="collision\CollisionObject.h" />
+    <ClInclude Include="GeometryData.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGeometryData.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="graphics">

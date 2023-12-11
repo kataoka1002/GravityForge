@@ -260,6 +260,7 @@
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="gameObject\Gameobjectmanager.cpp" />
     <ClCompile Include="gameObject\IGameObject.cpp" />
+    <ClCompile Include="GeometryData.cpp" />
     <ClCompile Include="geometry\AABB.cpp" />
     <ClCompile Include="geometry\BSP.cpp" />
     <ClCompile Include="graphics\Animation.cpp" />
@@ -329,6 +330,7 @@
     <ClCompile Include="physics\SphereCollider.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="SceneGeometryData.cpp" />
     <ClCompile Include="SceneLight.cpp" />
     <ClCompile Include="ShadowMapRender.cpp" />
     <ClCompile Include="SkyCube.cpp" />
@@ -356,6 +358,7 @@
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="gameObject\GameObjectManager.h" />
     <ClInclude Include="gameObject\IGameobject.h" />
+    <ClInclude Include="GeometryData.h" />
     <ClInclude Include="geometry\AABB.h" />
     <ClInclude Include="geometry\BSP.h" />
     <ClInclude Include="graphics\Animation.h" />
@@ -432,6 +435,7 @@
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SceneGeometryData.h" />
     <ClInclude Include="SceneLight.h" />
     <ClInclude Include="ShadowMapRender.h" />
     <ClInclude Include="SkyCube.h" />

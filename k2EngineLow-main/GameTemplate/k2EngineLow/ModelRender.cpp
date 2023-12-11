@@ -10,7 +10,16 @@ namespace nsK2EngineLow {
 
 	ModelRender::~ModelRender()
 	{
-
+		if (g_renderingEngine != nullptr) {
+			//g_renderingEngine->RemoveEventListener(this);
+			for (auto& geomData : m_geometryDatas) {
+				// レンダリングエンジンから登録解除
+				g_renderingEngine->UnregisterGeometryData(&geomData);
+			}
+			/*if (m_addRaytracingWorldModel) {
+				g_renderingEngine->RemoveModelFromRaytracingWorld(*m_addRaytracingWorldModel);
+			}*/
+		}
 	}
 
 	void ModelRender::Init(
@@ -18,7 +27,8 @@ namespace nsK2EngineLow {
 		AnimationClip* animationClips,
 		int animationClipsNum,
 		EnModelUpAxis enModelUpAxis,
-		bool isShadowReciever)
+		bool isShadowReciever,
+		int maxInstance)
 	{
 		// スケルトンを初期化。
 		InitSkeleton(filePath);
@@ -31,6 +41,9 @@ namespace nsK2EngineLow {
 
 		// シャドウマップ描画用のモデルを初期化
 		InitShadowDrawModel(filePath, enModelUpAxis);
+
+		// 幾何学データを初期化。
+		InitGeometryDatas(maxInstance);
 
 		// ZPrepass描画用のモデルを初期化
 
@@ -56,7 +69,7 @@ namespace nsK2EngineLow {
 		//アニメーションの設定
 		m_animationClips = animationClips;
 		m_numAnimationClips = numAnimationClips;
-		if (m_animationClips != nullptr) 
+		if (m_animationClips != nullptr)
 		{
 			m_animation.Init(m_skeleton, m_animationClips, numAnimationClips);
 		}
@@ -72,6 +85,18 @@ namespace nsK2EngineLow {
 		else
 		{
 			modelInitData.m_vsEntryPointFunc = "VSMain";
+		}
+	}
+
+	void ModelRender::InitGeometryDatas(int maxInstance)
+	{
+		m_geometryDatas.resize(maxInstance);
+		int instanceId = 0;
+		for (auto& geomData : m_geometryDatas) {
+			geomData.Init(this, instanceId);
+			// レンダリングエンジンに登録。
+			g_renderingEngine->RegisterGeometryData(&geomData);
+			instanceId++;
 		}
 	}
 
@@ -141,7 +166,7 @@ namespace nsK2EngineLow {
 		m_shadowDrawModel[1].UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_shadowDrawModel[2].UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
-		if (m_skeleton.IsInited()) 
+		if (m_skeleton.IsInited())
 		{
 			//スケルトンの更新
 			m_skeleton.Update(m_renderToGBufferModel.GetWorldMatrix());
@@ -153,7 +178,18 @@ namespace nsK2EngineLow {
 
 	void ModelRender::Draw(RenderContext& rc)
 	{
-		g_renderingEngine->AddModelRenderObject(this);	
-		g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
+		//カリングの対象じゃないなら常時表示
+		if (m_doCulling == false)
+		{
+			g_renderingEngine->AddModelRenderObject(this);
+			return;
+		}
+
+		// ビューフラスタムに含まれているなら
+		if (m_geometryDatas[0].IsInViewFrustum()) 
+		{
+			g_renderingEngine->AddModelRenderObject(this);
+			g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
+		}
 	}
 }

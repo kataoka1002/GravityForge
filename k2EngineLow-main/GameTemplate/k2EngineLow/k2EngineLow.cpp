@@ -112,6 +112,8 @@ namespace nsK2EngineLow {
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		//レイトレ用のライトデータを作成
 		//g_graphicsEngine->RaytracingLightDataCopy();
+		// レンダリングエンジンの更新。
+		g_renderingEngine->Update();
 		// レンダリングエンジンの描画処理を実行。
 		g_renderingEngine->Execute(renderContext);
 	}

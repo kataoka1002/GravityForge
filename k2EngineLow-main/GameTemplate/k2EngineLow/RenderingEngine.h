@@ -2,6 +2,7 @@
 #include "SceneLight.h"
 #include "PostEffect.h"
 #include "ShadowMapRender.h"
+#include "SceneGeometryData.h"
 
 namespace nsK2EngineLow
 {
@@ -52,6 +53,8 @@ namespace nsK2EngineLow
 		void InitGBuffer();
 		void InitDefferedLightingSprite();
 		void InitShadow();
+		void CalcViewProjectionMatrixForViewCulling();
+		void Update();
 		void Execute(RenderContext& rc);
 		void RenderToGBuffer(RenderContext& rc);
 		void DrawEffect(RenderContext& rc);
@@ -254,6 +257,32 @@ namespace nsK2EngineLow
 			return m_raytracingLightData;
 		}
 
+		/// <summary>
+		/// ビューカリングのためのビュープロジェクション行列を取得。
+		/// </summary>
+		/// <returns></returns>
+		const Matrix& GetViewProjectionMatrixForViewCulling() const
+		{
+			return m_viewProjMatrixForViewCulling;
+		}
+
+		/// <summary>
+	    /// 幾何学データを登録
+	    /// </summary>
+	    /// <param name="geomData">幾何学データ</param>
+		void RegisterGeometryData(GemometryData* geomData)
+		{
+			m_sceneGeometryData.RegisterGeometryData(geomData);
+		}
+		/// <summary>
+		/// 幾何学データの登録解除。
+		/// </summary>
+		/// <param name="geomData"></param>
+		void UnregisterGeometryData(GemometryData* geomData)
+		{
+			m_sceneGeometryData.UnregisterGeometryData(geomData);
+		}
+
 	private:
 			/// <summary>
 			/// イメージベースドライティング(IBL)のためのデータを初期化する。
@@ -313,6 +342,8 @@ namespace nsK2EngineLow
 		RaytracingLightData m_raytracingLightData;			// レイトレ用のライトデータ
 		SIBLData m_iblData;                                 // IBLデータ。
 		SDeferredLightingCB m_deferredLightingCB;           // ディファードライティング用の定数バッファ
+		Matrix m_viewProjMatrixForViewCulling;              // ビューカリング用のビュープロジェクション行列。
+		SceneGeometryData m_sceneGeometryData;              // シーンのジオメトリ情報。
 
 		std::vector<ModelRender*> ModelRenderObject;	// モデルレンダー
 		std::vector<SpriteRender*> SpriteRenderObject;	// スプライトレンダー
