@@ -21,6 +21,7 @@ namespace nsK2EngineLow
 	void RenderingEngine::Init()
 	{
 		InitMainRenderTarget();
+		InitZPrepassTarget();
 		Init2DSprite();
 		InitCopyToframeBufferSprite();
 		InitGBuffer();
@@ -39,6 +40,20 @@ namespace nsK2EngineLow
 			1,											
 			DXGI_FORMAT_R32G32B32A32_FLOAT,				
 			DXGI_FORMAT_D32_FLOAT						
+		);
+	}
+
+	void RenderingEngine::InitZPrepassTarget()
+	{
+		float clearColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		m_zprepassRenderTarget.Create(
+			g_graphicsEngine->GetFrameBufferWidth(),
+			g_graphicsEngine->GetFrameBufferHeight(),
+			1,
+			1,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT,
+			clearColor
 		);
 	}
 
@@ -251,6 +266,9 @@ namespace nsK2EngineLow
 		m_deferredLightingCB.m_light = m_sceneLight.GetLight();
 		m_deferredLightingCB.m_isEnableRaytracing = IsEnableRaytracing() ? 1 : 0;
 
+		// ZPrepass
+		ZPrepass(rc);
+
 		//GBufferへのレンダリング
 		RenderToGBuffer(rc);
 
@@ -327,6 +345,26 @@ namespace nsK2EngineLow
 		// レンダリングターゲットへの書き込み待ち
 		rc.WaitUntilFinishDrawingToRenderTargets(ARRAYSIZE(rts), rts);
 
+		EndGPUEvent();
+	}
+
+	void RenderingEngine::ZPrepass(RenderContext& rc)
+	{
+		BeginGPUEvent("ZPrepass");
+		// まず、レンダリングターゲットとして設定できるようになるまで待つ
+		rc.WaitUntilToPossibleSetRenderTarget(m_zprepassRenderTarget);
+
+		// レンダリングターゲットを設定
+		rc.SetRenderTargetAndViewport(m_zprepassRenderTarget);
+
+		// レンダリングターゲットをクリア
+		rc.ClearRenderTargetView(m_zprepassRenderTarget);
+
+		for (auto& renderObj : ModelRenderObject) {
+			renderObj->OnZPrepass(rc);
+		}
+
+		rc.WaitUntilFinishDrawingToRenderTarget(m_zprepassRenderTarget);
 		EndGPUEvent();
 	}
 

@@ -180,6 +180,15 @@ namespace nsK2EngineLow
 		}
 
 		/// <summary>
+		/// ZPrepassモデルの描画
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnZPrepass(RenderContext& rc)
+		{
+			m_zprepassModel.Draw(rc);
+		}
+
+		/// <summary>
 		/// スカイキューブの初期化
 		/// </summary>
 		/// <param name="initData"></param>
@@ -274,8 +283,22 @@ namespace nsK2EngineLow
 		/// <param name="isShadowReciever"></param>
 		void InitModelOnRenderGBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis, bool isShadowReciever);
 
-
+		/// <summary>
+		/// シャドウ用のモデルの初期化
+		/// </summary>
+		/// <param name="tkmFilePath"></param>
+		/// <param name="enModelUpAxis"></param>
 		void InitShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis);
+
+		/// <summary>
+		/// ZPrepass描画用のモデルを初期化。
+		/// </summary>
+		/// <param name="renderingEngine"></param>
+		/// <param name="tkmFilePath"></param>
+		void InitModelOnZprepass(
+			const char* tkmFilePath,
+			EnModelUpAxis modelUpAxis
+		);
 
 		/// <summary>
 		/// レイトレワールドに登録するかのフラグを設定する

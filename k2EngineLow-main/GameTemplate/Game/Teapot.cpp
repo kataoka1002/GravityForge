@@ -32,7 +32,6 @@ void Teapot::Update()
 	//“®‚«
 	Move();
 
-
 	m_model.Update();
 }
 

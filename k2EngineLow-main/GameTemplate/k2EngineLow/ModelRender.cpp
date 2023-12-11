@@ -46,6 +46,7 @@ namespace nsK2EngineLow {
 		InitGeometryDatas(maxInstance);
 
 		// ZPrepass描画用のモデルを初期化
+		InitModelOnZprepass(filePath, enModelUpAxis);
 
 		// レイトレワールドに追加
 		if (m_isRaytracingWorld)
@@ -158,6 +159,42 @@ namespace nsK2EngineLow {
 		m_shadowDrawModel[2].Init(sadowDrawModelInitData);
 	}
 
+	void ModelRender::InitModelOnZprepass(
+		const char* tkmFilePath,
+		EnModelUpAxis modelUpAxis
+	)
+	{
+		ModelInitData modelInitData;
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+		modelInitData.m_modelUpAxis = modelUpAxis;
+
+		// 頂点シェーダーのエントリーポイントをセットアップ。
+		//SetupVertexShaderEntryPointFunc(modelInitData);
+		modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+		modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
+
+		if (m_animationClips != nullptr) {
+			// アニメーションあり。
+			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+		}
+		// 頂点の事前計算処理を使う。
+		//modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+
+		if (m_animationClips != nullptr) {
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+		}
+
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		//if (m_isEnableInstancingDraw) {
+		//	// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
+		//	modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+		//}
+
+		m_zprepassModel.Init(modelInitData);
+	}
+
 	void ModelRender::Update()
 	{
 		//モデル側に移動回転拡大を渡す
@@ -165,6 +202,7 @@ namespace nsK2EngineLow {
 		m_shadowDrawModel[0].UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_shadowDrawModel[1].UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_shadowDrawModel[2].UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		m_zprepassModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 		if (m_skeleton.IsInited())
 		{

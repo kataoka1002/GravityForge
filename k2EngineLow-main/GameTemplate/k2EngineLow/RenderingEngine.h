@@ -48,6 +48,7 @@ namespace nsK2EngineLow
 		bool Start();
 		void Init();
 		void InitMainRenderTarget();
+		void InitZPrepassTarget();
 		void Init2DSprite();
 		void InitCopyToframeBufferSprite();
 		void InitGBuffer();
@@ -57,6 +58,7 @@ namespace nsK2EngineLow
 		void Update();
 		void Execute(RenderContext& rc);
 		void RenderToGBuffer(RenderContext& rc);
+		void ZPrepass(RenderContext& rc);
 		void DrawEffect(RenderContext& rc);
 		void DeferredLighting(RenderContext& rc);
 		void SpriteFontDraw(RenderContext& rc);
@@ -327,6 +329,7 @@ namespace nsK2EngineLow
 
 		SceneLight m_sceneLight;							// シーンライト
 		RenderTarget m_mainRenderTarget;					// メインレンダリングターゲット
+		RenderTarget m_zprepassRenderTarget;                // ZPrepass描画用のレンダリングターゲット
 		RenderTarget m_gBuffer[enGBufferNum];				// GBuffer
 		RenderTarget m_2DRenderTarget;						// 2D描画用のターゲット
 		RenderTarget m_shadowMap;							// シャドウマップ
