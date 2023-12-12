@@ -36,6 +36,12 @@ public:
 	/// </summary>
 	void CheckToLand();
 
+	/// <summary>
+	/// プレイヤーから見えているかチェック
+	/// </summary>
+	/// <returns>true : 見える , false : 見えない</returns>
+	bool CheckCanSee();
+
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
@@ -205,6 +211,7 @@ protected:
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
 	bool					m_imSolarPanel = false;						//ソーラーパネルかどうか
+	bool					m_canSeeModel = true;						//モデルを描画するかどうか
 	int						m_smokeEfeInterval = 0;						//煙エフェクトが発生する間隔
 	int						m_sandCount = 0;
 

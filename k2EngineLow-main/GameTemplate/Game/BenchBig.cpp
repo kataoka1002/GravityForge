@@ -95,5 +95,11 @@ void BenchBig::OnDestroy()
 
 void BenchBig::Render(RenderContext& rc)
 {
+	//ƒ‚ƒfƒ‹‚ªŒ©‚¦‚È‚¢ˆÊ’u‚É‚ ‚é‚È‚ç•`‰æ‚µ‚È‚¢
+	if (m_canSeeModel != true)
+	{
+		return;
+	}
+
 	m_model.Draw(rc);
 }

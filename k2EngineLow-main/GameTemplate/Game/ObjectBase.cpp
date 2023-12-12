@@ -34,6 +34,9 @@ namespace
 	//引き寄せれる距離
 	const float ATTRACT_LIMIT = 800.0f;
 
+	//描画する距離
+	const float DRAW_LIMIT = 7000.0f;
+
 	//斜めの角度の最大値
 	const float MAX_DIAGONAL_ROTATION = 20.0f;
 
@@ -487,8 +490,22 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 
 void ObjectBase::CalcAimingDirection()
 {
+	//デフォルトは引き寄せれない
+	m_canAttract = false;
+
+	//デフォルトはモデルを描画する
+	m_canSeeModel = true;
+
 	//プレイヤーとの距離が遠すぎたら早期リターン
 	Vector3 distance = m_player->GetPosition() - m_position;
+
+	if (distance.Length() >= DRAW_LIMIT)
+	{
+		//モデルを描画しない
+		m_canSeeModel = false;
+		return;
+	}
+
 	if (distance.Length() > ATTRACT_LIMIT)
 	{
 		//UIが作成されているなら
@@ -504,8 +521,11 @@ void ObjectBase::CalcAimingDirection()
 		return;
 	}
 
-	//デフォルトは引き寄せれない
-	m_canAttract = false;
+	//カメラから見えているかチェック
+	if (CheckCanSee() == false)
+	{
+		return;
+	}
 
 	//カメラまでの方向を求める
 	Vector3 toCameraDir = g_camera3D->GetPosition() - m_position;
@@ -533,30 +553,6 @@ void ObjectBase::CalcAimingDirection()
 		return;
 	}
 
-	//ソーラーパネルじゃないなら
-	if (m_imSolarPanel != true)
-	{
-		//コライダーの始点と終点
-		btTransform start, end;
-		start.setIdentity();
-		end.setIdentity();
-
-		//始点はオブジェクトの座標
-		start.setOrigin(btVector3(m_position.x, m_position.y + 10.0f, m_position.z));
-		//終点はカメラの座標
-		end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
-
-		//コライダーを始点から終点まで動かして,衝突するかどうかを調べる
-		SweepResultWall callback;
-		PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
-
-		//壁と衝突したら
-		if (callback.isHit == true)
-		{
-			return;
-		}
-	}
-
 	//引き寄せ可能にする
 	m_canAttract = true;
 
@@ -570,6 +566,39 @@ void ObjectBase::CalcAimingDirection()
 		//UI作成済みに変更
 		m_makeTargetUI = true;
 	}
+}
+
+bool ObjectBase::CheckCanSee()
+{
+	//ソーラーパネルなら
+	if (m_imSolarPanel == true)
+	{
+		return true;
+	}
+
+	//コライダーの始点と終点
+	btTransform start, end;
+	start.setIdentity();
+	end.setIdentity();
+
+	//始点はオブジェクトの座標
+	start.setOrigin(btVector3(m_position.x, m_position.y + 10.0f, m_position.z));
+	//終点はカメラの座標
+	end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
+
+	//コライダーを始点から終点まで動かして,衝突するかどうかを調べる
+	SweepResultWall callback;
+	PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+
+	//壁と衝突したら
+	if (callback.isHit == true)
+	{
+		//モデルは描画しない
+		m_canSeeModel = false;
+		return false;
+	}
+
+	return true;
 }
 
 void ObjectBase::PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale)
