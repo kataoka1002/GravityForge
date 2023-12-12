@@ -204,6 +204,7 @@ protected:
 	float					m_fallingTime = 0.0f;						//落下し始めてからの時間
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
+	bool					m_imSolarPanel = false;						//ソーラーパネルかどうか
 	int						m_smokeEfeInterval = 0;						//煙エフェクトが発生する間隔
 	int						m_sandCount = 0;
 

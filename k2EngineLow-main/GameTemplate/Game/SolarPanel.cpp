@@ -54,6 +54,9 @@ void SolarPanel::InitModel()
 	//与えるダメージの設定
 	m_damage = DAMAGE_AMOUNT;
 
+	//自分はソーラーパネルだと教える
+	m_imSolarPanel = true;
+
 	//コリジョンを出す座標の加算量を求める
 	if (CHARACON_RADIUS >= CHARACON_HEIGHT)
 	{
