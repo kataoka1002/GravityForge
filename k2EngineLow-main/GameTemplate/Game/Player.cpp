@@ -18,6 +18,16 @@ namespace
 	const float WALK_SPEED = 250.0f;
 
 	const float MAX_HP = 100.0f;
+
+	const float HUMAN_ATTACK_DAMAGE = 10.0f;
+
+	const float JUMP_ATTACK_DAMAGE = 50.0f;
+
+	const float MAGIC_ATTACK_DAMAGE = 25.0f;
+
+	const float BOSS_PUNCH_DAMAGE = 5.0f;
+
+	const float BOSS_SWIPE_DAMAGE = 10.0f;
 }
 
 /// <summary>
@@ -349,7 +359,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//çUåÇÇ™ìñÇΩÇ¡ÇΩéûÇÃèàóù
-				AttackHitProcess(10.0f);
+				AttackHitProcess(HUMAN_ATTACK_DAMAGE);
 
 				return true;
 			}
@@ -364,7 +374,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//çUåÇÇ™ìñÇΩÇ¡ÇΩéûÇÃèàóù
-				AttackHitProcess(50.0f);
+				AttackHitProcess(JUMP_ATTACK_DAMAGE);
 
 				return true;
 			}
@@ -379,7 +389,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//çUåÇÇ™ìñÇΩÇ¡ÇΩéûÇÃèàóù
-				AttackHitProcess(5.0f);
+				AttackHitProcess(BOSS_SWIPE_DAMAGE);
 
 				return true;
 			}
@@ -394,7 +404,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//çUåÇÇ™ìñÇΩÇ¡ÇΩéûÇÃèàóù
-				AttackHitProcess(5.0f);
+				AttackHitProcess(BOSS_PUNCH_DAMAGE);
 
 				return true;
 			}
@@ -409,7 +419,7 @@ namespace nsPlayer
 			if (collision->IsHit(m_charaCon))
 			{
 				//çUåÇÇ™ìñÇΩÇ¡ÇΩéûÇÃèàóù
-				AttackHitProcess(5.0f);
+				AttackHitProcess(MAGIC_ATTACK_DAMAGE);
 
 				return true;
 			}
