@@ -45,6 +45,12 @@ namespace
 
 	//オブジェクトを落としたときのエフェクトの大きさ
 	const Vector3 DROP_EFFECT_SCALE = { 1.9f,1.9f ,1.9f };
+
+	//オブジェクトがステージにぶつかった時のエフェクトの大きさ
+	const Vector3 HIT_STAGE_EFFECT_SCALE = { 2.9f,2.9f ,2.9f };
+
+	//オブジェクトが飛び出して爆発するまでの時間
+	const float BOMB_TIME = 2.5f;
 }
 
 bool ObjectBase::Start()
@@ -101,6 +107,8 @@ void ObjectBase::Move()
 		BlowAway();
 		//衝突したかどうかの処理
 		CalcCollision();
+		//時間測定
+		CheckFlightTime();
 		break;
 
 		//落下中
@@ -332,8 +340,15 @@ void ObjectBase::InitBlowAway()
 	InitCollision();
 
 	//飛んでいく方向の決定(レティクルの方向)
+	m_flightDir = g_camera3D->GetForward();
 	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
 	m_flightSpeed += g_camera3D->GetRight() * -90.0f;
+
+	//レイの始点と終点を決めてステージとの交点を求める
+	Vector3 start, end;
+	start = m_position;
+	end = m_position += m_flightDir * 7000.0f;
+	PhysicsWorld::GetInstance()->RayTest(start, end, m_crossPosition);
 
 	//吹っ飛びステートに変更
 	m_objectState = enObjectState_Blow;
@@ -360,6 +375,22 @@ void ObjectBase::BlowAway()
 		PlayEffect(enEffectName_ObjectSmoke, m_position, m_player->GetRotation(), Vector3::One);
 
 		m_smokeEfeInterval = 0;
+	}
+}
+
+void ObjectBase::CheckFlightTime()
+{
+	//飛び始めてからの時間計測
+	m_flightTime += g_gameTime->GetFrameDeltaTime();
+
+	//一定時間経過で消える
+	if (m_flightTime >= BOMB_TIME)
+	{
+		//エフェクト発生
+		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, DROP_EFFECT_SCALE);
+
+		//自分が消えるときの処理
+		OnDestroy();
 	}
 }
 
@@ -390,6 +421,26 @@ void ObjectBase::CheckToLand()
 		OnDestroy();
 	}
 }
+
+//衝突したときに呼ばれる関数オブジェクト(壁用)
+struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
+{
+	//衝突フラグ。
+	bool isHit = false;			
+
+	virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		//壁とぶつかってなかったら。
+		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
+			//衝突したのは壁ではない。
+			return 0.0f;
+		}
+
+		//壁とぶつかったらフラグをtrueに。
+		isHit = true;
+		return 0.0f;
+	}
+};
 
 void ObjectBase::CalcCollision()
 {	
@@ -466,27 +517,20 @@ void ObjectBase::CalcCollision()
 
 		return;
 	}
-}
 
-//衝突したときに呼ばれる関数オブジェクト(壁用)
-struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
-{
-	//衝突フラグ。
-	bool isHit = false;			
-
-	virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	//ステージと衝突したかを計算
+	Vector3 length = m_crossPosition - m_position;
+	if (length.Length() <= 100.0f)
 	{
-		//壁とぶつかってなかったら。
-		if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
-			//衝突したのは壁ではない。
-			return 0.0f;
-		}
+		//エフェクト発生
+		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, HIT_STAGE_EFFECT_SCALE);
 
-		//壁とぶつかったらフラグをtrueに。
-		isHit = true;
-		return 0.0f;
+		//自分が消えるときの処理
+		OnDestroy();
+
+		return;
 	}
-};
+}
 
 void ObjectBase::CalcAimingDirection()
 {

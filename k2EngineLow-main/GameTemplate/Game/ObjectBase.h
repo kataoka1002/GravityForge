@@ -42,6 +42,11 @@ public:
 	/// <returns>true : 見える , false : 見えない</returns>
 	bool CheckCanSee();
 
+	/// <summary>
+	/// 飛び始めてからの時間を計算
+	/// </summary>
+	void CheckFlightTime();
+
 	virtual void Render(RenderContext& rc)	= 0;	//描画処理
 	virtual void InitModel()				= 0;	//モデルの初期化
 	virtual void OnDestroy()				= 0;	//消えるときに呼ばれる処理
@@ -201,6 +206,8 @@ protected:
 	Vector3					m_followSpeed = Vector3::Zero;				//追尾の速さ
 	Vector3					m_scale = Vector3::Zero;					//大きさ
 	Vector3					m_collisionPosition = Vector3::Zero;		//コリジョンオブジェクトの座標
+	Vector3					m_flightDir = Vector3::Zero;				//飛んでいく方向
+	Vector3					m_crossPosition = Vector3::Zero;			//レイとの交点の座標
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float					m_degree = 0.0f;							//フワフワ用の角度
@@ -208,6 +215,7 @@ protected:
 	float					m_collisionAddPos = 0.0f;					//コリジョンオブジェクトのY値加算量
 	float					m_diagonalRot = 0.0f;						//斜めの角度
 	float					m_fallingTime = 0.0f;						//落下し始めてからの時間
+	float					m_flightTime = 0.0f;						//飛び始めてからの時間
 	bool					m_canAttract = false;						//引き寄せれるかどうか
 	bool					m_makeTargetUI = false;						//targetUIを作ったかどうか
 	bool					m_imSolarPanel = false;						//ソーラーパネルかどうか
