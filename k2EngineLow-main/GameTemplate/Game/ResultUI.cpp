@@ -8,7 +8,7 @@ namespace
 
 	const float KILL_BOSS_TIME_UP_SPEED = 2.0f;
 
-	const int SCORE_UP_SPEED = 30;
+	const int SCORE_UP_SPEED = 50;
 
 	const float SCORE_SCALE_TARGET = 2.5f;
 }
@@ -74,8 +74,31 @@ bool ResultUI::Start()
 	//倒した敵の数と撃破時間を取得
 	m_killEnemyNum = m_gameInfo->GetKillEnemyNum();
 	m_bossKillTime = m_gameInfo->GetBossKillTime();
+	m_score = CalcScore();
 
 	return true;
+}
+
+float ResultUI::CalcScore()
+{
+	float score = 0.0f;
+	float killEnemyScore = m_gameInfo->GetKillEnemyNum() * 300.0f;
+	float bossKillScore = 5000.0f;
+
+	//時間が経っているほどスコアは低くなる
+	bossKillScore -= m_gameInfo->GetBossKillTime() * 20.0f;
+	bossKillScore = max(0.0f, bossKillScore);
+
+	//ボス戦にすら行ってないなら
+	if (m_gameInfo->GetIsInBossBattle() != true)
+	{
+		bossKillScore = 0.0f;
+	}
+
+	//最終的なスコア
+	score = killEnemyScore + bossKillScore;
+
+	return score;
 }
 
 void ResultUI::Update()

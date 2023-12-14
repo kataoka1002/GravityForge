@@ -34,6 +34,7 @@ public:
 	void GoTitleProcess();
 	void CalcScaleAndAlpha(float& scale, float& alpa);
 	void CalcFontScale(float& scale, enResultUIState next, float target = 2.0f, float origin = 1.0f);
+	float CalcScore();
 	void Render(RenderContext& rc);
 
 	void SetPlayerDead(bool which)
