@@ -9,7 +9,7 @@ namespace
 bool Lighting::Start()
 {
 	//ディレクションライトの方向の設定
-	Vector3 dir = { 1.0f,-1.0f,0.0f };
+	Vector3 dir = { 1.0f,-1.0f,-1.0f };
 	dir.Normalize();
 
 	//ディレクションライトの設定

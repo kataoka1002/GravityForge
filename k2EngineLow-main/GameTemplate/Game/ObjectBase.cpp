@@ -520,7 +520,7 @@ void ObjectBase::CalcCollision()
 
 	//ステージと衝突したかを計算
 	Vector3 length = m_crossPosition - m_position;
-	if (length.Length() <= 100.0f)
+	if (length.Length() <= 80.0f)
 	{
 		//エフェクト発生
 		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, HIT_STAGE_EFFECT_SCALE);

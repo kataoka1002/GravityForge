@@ -103,7 +103,7 @@ namespace nsPlayer
 	void Player::Update()
 	{
 		//ゲーム中以外は操作できない
-		if (m_gameInfo->GetIsInGame() == false)
+		if (m_gameInfo->GetIsInGame() == false || m_gameInfo->GetIsInMovie())
 		{
 			// アニメーションを再生する。
 			PlayAnimation(m_currentAnimationClip);

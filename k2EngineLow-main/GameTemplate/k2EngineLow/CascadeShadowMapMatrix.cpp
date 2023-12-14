@@ -10,7 +10,7 @@ namespace nsK2EngineLow
             // ライトカメラを計算する
             Camera lightCamera;
             Vector3 lightPos;
-            float distLig = g_camera3D->GetFar() * 0.1f;
+            float distLig = g_camera3D->GetFar() * 0.182f;
             lightPos = lightDirection * -distLig;    // ライトまでの距離は外から指定できるようにする
             lightCamera.SetPosition(lightPos);
             lightCamera.SetTarget(0.0f, 0.0f, 0.0f);
@@ -38,8 +38,8 @@ namespace nsK2EngineLow
 
 			// 分割エリアの最大深度値を定義する
 			float cascadeAreaTbl[NUM_SHADOW_MAP] = {
-				g_camera3D->GetFar() * 0.1f,    // 近影を映す最大深度値
-				g_camera3D->GetFar() * 0.4f,     // 中影を映す最大深度値
+				g_camera3D->GetFar() * 0.2f,    // 近影を映す最大深度値
+				g_camera3D->GetFar() * 0.3f,     // 中影を映す最大深度値
 				g_camera3D->GetFar(),            // 遠影を映す最大深度値。3枚目の最大深度はカメラのFarクリップ
 			};
 
