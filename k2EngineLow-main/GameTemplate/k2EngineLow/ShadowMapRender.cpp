@@ -98,7 +98,6 @@ namespace nsK2EngineLow
             }
 
             EndGPUEvent();
-
 		}
 	}
 }

@@ -2,43 +2,95 @@
 // ZPrepass
 ///////////////////////////////////////
 
+// モデル用の定数バッファー
+cbuffer ModelCb : register(b0)
+{
+    float4x4 mWorld;
+    float4x4 mView;
+    float4x4 mProj;
+};
 
-///////////////////////////////////////
-// 構造体。
-///////////////////////////////////////
+//スキニング用の頂点データをひとまとめ。
+struct SSkinVSIn
+{
+    int4 Indices : BLENDINDICES0;
+    float4 Weights : BLENDWEIGHT0;
+};
 
+// 頂点シェーダーへの入力
+struct SVSIn
+{
+    float4 pos : POSITION; // モデルの頂点座標
+    float2 uv : TEXCOORD0; // UV座標
+    SSkinVSIn skinVert; //スキン用のデータ。
+};
 
 // ピクセルシェーダーへの入力
 struct SPSIn
 {
-    float4 pos : SV_POSITION; //座標。
+    float4 pos : SV_POSITION; // スクリーン空間でのピクセルの座標
     float3 depth : TEXCOORD0; //深度値。xにはプロジェクション空間、yにはカメラ空間での正規化されたZ値、zにはカメラ空間でのZ値
 };
 
+///////////////////////////////////////////////////
+// グローバル変数
+///////////////////////////////////////////////////
 
-///////////////////////////////////////
-// 頂点シェーダーの共通処理をインクルードする。
-///////////////////////////////////////
-#include "ModelVSCommon.h"
+StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列
 
-
-///////////////////////////////////////
-// 関数
-///////////////////////////////////////
-
-// モデル用の頂点シェーダーのエントリーポイント
-SPSIn VSMainCore(SVSIn vsIn, float4x4 mWorldLocal, uniform bool isUsePreComputedVertexBuffer)
+//スキン行列を計算する。
+float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
 {
+    float4x4 skinning = 0;
+    float w = 0.0f;
+	[unroll]
+    for (int i = 0; i < 3; i++)
+    {
+        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+        w += skinVert.Weights[i];
+    }
+    
+    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+	
+    return skinning;
+}
+
+/// <summary>
+/// 頂点シェーダー
+/// <summary>
+SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
+{
+    // シャドウマップ描画用の頂点シェーダーを実装
     SPSIn psIn;
-    // 頂点座標をワールド座標系に変換する。
-    psIn.pos = CalcVertexPositionInWorldSpace(vsIn.pos, mWorldLocal, isUsePreComputedVertexBuffer);
-    psIn.pos = mul(mView, psIn.pos); // ワールド座標系からカメラ座標系に変換
+    float4x4 m;
+    if (hasSkin)
+    {
+        m = CalcSkinMatrix(vsIn.skinVert);
+    }
+    else
+    {
+        m = mWorld;
+    }
+    
+    psIn.pos = mul(m, vsIn.pos);
+    psIn.pos = mul(mView, psIn.pos);
     psIn.depth.z = psIn.pos.z;
-    psIn.pos = mul(mProj, psIn.pos); // カメラ座標系からスクリーン座標系に変換
+    psIn.pos = mul(mProj, psIn.pos);
     psIn.depth.x = psIn.pos.z / psIn.pos.w;
     psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
     
     return psIn;
+}
+
+// スキンなしメッシュ用の頂点シェーダーのエントリー関数。
+SPSIn VSMain(SVSIn vsIn)
+{
+    return VSMainCore(vsIn, false);
+}
+// スキンありメッシュの頂点シェーダーのエントリー関数。
+SPSIn VSSkinMain(SVSIn vsIn)
+{
+    return VSMainCore(vsIn, true);
 }
 
 // モデル用のピクセルシェーダーのエントリーポイント
@@ -46,5 +98,3 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 {
     return float4(psIn.pos.z, psIn.depth.y, psIn.depth.z, 1.0f);
 }
-
-

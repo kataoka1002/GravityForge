@@ -170,16 +170,7 @@ namespace nsK2EngineLow {
 		modelInitData.m_modelUpAxis = modelUpAxis;
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
-		//SetupVertexShaderEntryPointFunc(modelInitData);
-		modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
-		modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
-
-		if (m_animationClips != nullptr) {
-			// アニメーションあり。
-			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-		}
-		// 頂点の事前計算処理を使う。
-		//modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+		SetupVertexShaderEntryPointFunc(modelInitData);
 
 		if (m_animationClips != nullptr) {
 			//スケルトンを指定する。

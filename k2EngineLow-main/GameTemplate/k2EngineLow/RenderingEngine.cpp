@@ -266,6 +266,9 @@ namespace nsK2EngineLow
 		m_deferredLightingCB.m_light = m_sceneLight.GetLight();
 		m_deferredLightingCB.m_isEnableRaytracing = IsEnableRaytracing() ? 1 : 0;
 
+		//シャドウマップに影を描画
+		DrawShadowMap(rc);
+
 		// ZPrepass
 		ZPrepass(rc);
 
@@ -274,9 +277,6 @@ namespace nsK2EngineLow
 
 		//エフェクトの描画
 		DrawEffect(rc);
-
-		//シャドウマップに影を描画
-		DrawShadowMap(rc);
 
 		//EyePosはカメラの位置
 		SetEyePosition(g_camera3D->GetPosition());
