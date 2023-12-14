@@ -34,7 +34,7 @@ public:
 	void GoTitleProcess();
 	void CalcScaleAndAlpha(float& scale, float& alpa);
 	void CalcFontScale(float& scale, enResultUIState next, float target = 2.0f, float origin = 1.0f);
-	float CalcScore();
+	int CalcScore();
 	void Render(RenderContext& rc);
 
 	void SetPlayerDead(bool which)
@@ -86,7 +86,7 @@ private:
 	float m_drawTime = 0.0f;			//今表示している,ボス撃破時間
 
 	FontRender m_scoreFont;
-	float m_score = 0.0f;				//スコア
+	int m_score = 0.0f;					//スコア
 	float m_scoreFontScale = 1.5f;		//スコアフォントの大きさ
 	int m_drawScore = 0.0f;				//今表示している,スコア
 

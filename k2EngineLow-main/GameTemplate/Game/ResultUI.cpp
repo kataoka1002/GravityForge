@@ -79,24 +79,28 @@ bool ResultUI::Start()
 	return true;
 }
 
-float ResultUI::CalcScore()
+int ResultUI::CalcScore()
 {
-	float score = 0.0f;
-	float killEnemyScore = m_gameInfo->GetKillEnemyNum() * 300.0f;
-	float bossKillScore = 5000.0f;
+	int score = 0;
+	int killEnemyScore = m_gameInfo->GetKillEnemyNum() * 300.0f;
+	int bossKillScore = 5000;
 
 	//時間が経っているほどスコアは低くなる
 	bossKillScore -= m_gameInfo->GetBossKillTime() * 20.0f;
-	bossKillScore = max(0.0f, bossKillScore);
+	bossKillScore = max(0, bossKillScore);
 
 	//ボス戦にすら行ってないなら
 	if (m_gameInfo->GetIsInBossBattle() != true)
 	{
-		bossKillScore = 0.0f;
+		bossKillScore = 0;
 	}
 
 	//最終的なスコア
 	score = killEnemyScore + bossKillScore;
+
+	//一桁目を切り捨てる
+	score *= 0.1f;
+	score *= 10.0f;
 
 	return score;
 }
