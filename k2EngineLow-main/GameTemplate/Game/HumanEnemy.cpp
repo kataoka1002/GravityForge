@@ -151,6 +151,10 @@ namespace nsHumanEnemy
 		//殺した数を増やす
 		m_gameInfo->AddDefeatEnemyNum();
 
+		//エフェクト発生
+		Vector3 efePos = m_position + m_forward * 50.0f;
+		PlayEffect(enEffectName_EnemyBlood, efePos, m_rotation, Vector3::One);
+
 		//削除
 		DeleteGO(this);
 	}
