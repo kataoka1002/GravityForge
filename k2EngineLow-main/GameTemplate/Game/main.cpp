@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "Title.h"
+#include "MakeSound.h"
 #include "Game.h"
 
 // K2EngineLowのグローバルアクセスポイント。
@@ -20,9 +21,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	g_camera3D->SetPosition(0, 100.0f, 350.0f);
 	g_camera3D->SetTarget(0, 100.0f, 0);
 
-	//Game* m_game = nullptr;
-	//m_game = NewGO<Game>(0, "game");
-
+	//auto makeSound = NewGO<MakeSound>(0, "makesound");
 	auto title = NewGO<Title>(0, "title");
 
 	// ここからゲームループ。

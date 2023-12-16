@@ -75,6 +75,24 @@ namespace nsK2EngineLow {
 			m_sourceVoice->SetVolume(vol);
 		}
 		/// <summary>
+		/// BGMボリュームを設定。
+		/// </summary>
+		/// <param name="vol">ボリューム。</param>
+		void SetBGMVolume(float vol)
+		{
+			vol *= g_soundEngine->GetBgmVolume();
+			m_sourceVoice->SetVolume(vol);
+		}
+		/// <summary>
+		/// SEボリュームを設定。
+		/// </summary>
+		/// <param name="vol">ボリューム。</param>
+		void SetSEVolume(float vol)
+		{
+			vol *= g_soundEngine->GetSeVolume();
+			m_sourceVoice->SetVolume(vol);
+		}
+		/// <summary>
 		/// ボリュームを取得。
 		/// </summary>
 		/// <returns>ボリューム。</returns>

@@ -268,6 +268,7 @@
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeEffect.cpp" />
+    <ClCompile Include="MakeSound.cpp" />
     <ClCompile Include="MissionUI.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="PlantLong.cpp" />
@@ -351,6 +352,7 @@
     <ClInclude Include="IPlayerState.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="MakeEffect.h" />
+    <ClInclude Include="MakeSound.h" />
     <ClInclude Include="MissionUI.h" />
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectCollisionConstants.h" />

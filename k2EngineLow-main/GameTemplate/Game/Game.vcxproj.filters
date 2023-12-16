@@ -259,6 +259,9 @@
     <ClCompile Include="Wall.cpp">
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="MakeSound.cpp">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -491,6 +494,9 @@
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClInclude>
     <ClInclude Include="Wall.h">
+      <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="MakeSound.h">
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClInclude>
   </ItemGroup>

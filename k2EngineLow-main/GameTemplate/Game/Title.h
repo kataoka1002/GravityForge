@@ -50,5 +50,7 @@ private:
 	float m_trianglePosX = 0.0f;							//矢印のX座標
 	float m_openAlpha = 1.0f;								//最初の画像のα値
 	bool m_makeFade = false;								//フェードが作られているかどうか
+
+	SoundSource* m_titleBGM = nullptr;						//タイトルのBGM
 };
 

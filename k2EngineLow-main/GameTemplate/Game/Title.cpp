@@ -93,6 +93,12 @@ bool Title::Start()
 	m_SEBackSprite.SetPivot(SE_SPRITE_PIVOT);
 	m_SEBackSprite.Update();
 
+	//BGMの設定と再生
+	//m_titleBGM = NewGO<SoundSource>(0);			//一回再生すると終わりなのでインスタンスを保持させない為にここでNewGOする
+	//m_titleBGM->Init(enSoundName);				//初期化
+	//m_titleBGM->SetVolume(1.5f * m_game->GetSEVol());	//音量調整
+	//m_titleBGM->Play(false);
+
 	return true;
 }
 
@@ -253,6 +259,9 @@ void Title::ToGameStartOption()
 	//三角の透明度を上げる
 	m_triangleSprite.SetMulColor(TRIANGLE_AFTER_COLOR);
 	m_triangleSprite.Update();
+
+	//サウンドエンジンにボリュームを教える
+	g_soundEngine->SetBgmAndSeVolume(m_BGMScale, m_SEScale);
 }
 
 void Title::ToBGMSE()

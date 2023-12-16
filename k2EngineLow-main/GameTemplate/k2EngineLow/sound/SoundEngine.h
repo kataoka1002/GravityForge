@@ -123,6 +123,36 @@ namespace nsK2EngineLow {
 		{
 			m_waveFileBank.Resist(number, filePath);
 		}
+
+		/// <summary>
+		/// 音量の設定
+		/// </summary>
+		/// <param name="bgm"></param>
+		/// <param name="se"></param>
+		void SetBgmAndSeVolume(float bgm, float se)
+		{
+			m_BGMvolume = bgm;
+			m_SEvolume = se;
+		}
+
+		/// <summary>
+		/// BGMの倍率の取得
+		/// </summary>
+		/// <returns></returns>
+		const float GetBgmVolume() const
+		{
+			return m_BGMvolume;
+		}
+
+		/// <summary>
+		/// SEの大きさの取得
+		/// </summary>
+		/// <returns></returns>
+		const float GetSeVolume() const
+		{
+			return m_SEvolume;
+		}
+
 	private:
 		IXAudio2* m_xAudio2 = nullptr;
 		IXAudio2MasteringVoice* m_masteringVoice = nullptr;
@@ -141,6 +171,8 @@ namespace nsK2EngineLow {
 		std::list<SoundSource*>		m_3dSoundSource;					//3Dサウンドのサウンドソース。
 		X3DAUDIO_CONE				m_emitterCone;
 		WaveFileBank				m_waveFileBank;						//波形データのバンク。
+		float						m_BGMvolume = 1.0f;					//BGMの倍率
+		float						m_SEvolume = 1.0f;					//SEの倍率
 	};
 
 	extern SoundEngine* g_soundEngine;	//TKエンジン。
