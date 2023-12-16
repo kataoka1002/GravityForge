@@ -19,7 +19,7 @@ BackGround::~BackGround()
 bool BackGround::Start()
 {
 	//”wŒiƒ‚ƒfƒ‹‚Ì‰Šú‰»
-	m_bgModel.Init("Assets/modelData/map/map3.tkm", nullptr, 0, enModelUpAxisZ, true);
+	m_bgModel.Init("Assets/modelData/map/map4.tkm", nullptr, 0, enModelUpAxisZ, true);
 	m_bgModel.SetPosition(m_position);
 	m_bgModel.SetScale(m_scale);
 	m_bgModel.SetRotation(m_rotation);
