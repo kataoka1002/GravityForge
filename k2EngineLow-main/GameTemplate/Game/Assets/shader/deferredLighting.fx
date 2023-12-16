@@ -682,6 +682,17 @@ float CalcShadowPow(float isShadowReceiver, float3 worldPos)
 {
     float shadow = 0.0f;
     
+    //影を受けないなら
+    if(isShadowReceiver == false)
+    {
+        return shadow;
+    }
+    //クリアカラーなら
+    else if (worldPos.x == 10000.0f, worldPos.y == 10000.0f, worldPos.z == 10000.0f)
+    {
+        return shadow;
+    }
+    
     for (int cascadeIndex = 0; cascadeIndex < NUM_SHADOW_MAP; cascadeIndex++)
     {
         float4 posInLVP = mul(mLVP[cascadeIndex], float4(worldPos, 1.0f));

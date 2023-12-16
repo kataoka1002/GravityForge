@@ -389,7 +389,7 @@ void Game::SetSkyCube()
 {
 	m_skyCube = NewGO<SkyCube>(0, "skycube");
 	m_skyCube->SetLuminance(1.0f);
-	m_skyCube->SetScale(2000.0f);
+	m_skyCube->SetScale(2500.0f);
 	m_skyCube->SetPosition({-5000.0f,500.0f,6000.0f});
 	m_skyCube->SetType((EnSkyCubeType)enSkyCubeType_Day);
 

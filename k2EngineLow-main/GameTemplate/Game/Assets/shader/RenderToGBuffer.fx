@@ -150,13 +150,13 @@ SPSOut PSMainCore(SPSIn psIn, uniform bool isShadowReceiver)
     return psOut;
 }
 
-//影を落とすし落とされるほう
+//影を落とさないし受けない
 SPSOut PSMain(SPSIn psIn) : SV_Target0
 {
     return PSMainCore(psIn, false);
 }
 
-//シャドウレシーバー(影を落とさず受けるだけの方)のエントリーポイント
+//影を落とすし落とされるほう            シャドウレシーバー(影を落とさず受けるだけの方)のエントリーポイント
 SPSOut PSShadowMain(SPSIn psIn) : SV_Target0
 {
     return PSMainCore(psIn, true);
