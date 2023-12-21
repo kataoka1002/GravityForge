@@ -37,6 +37,7 @@ struct SPSIn
 ///////////////////////////////////////////////////
 
 StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列
+StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ワールド行列の配列。インスタンシング描画の際に有効。
 
 //スキン行列を計算する。
 float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
@@ -82,6 +83,21 @@ SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
     return psIn;
 }
 
+// インスタンシングモデル用の頂点シェーダーのエントリーポイント
+SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
+{
+    SPSIn psIn;
+    float4x4 m = g_worldMatrixArray[instanceId];
+    psIn.pos = mul(m, vsIn.pos);
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.depth.z = psIn.pos.z;
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.depth.x = psIn.pos.z / psIn.pos.w;
+    psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
+    
+    return psIn;
+}
+
 // スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 SPSIn VSMain(SVSIn vsIn)
 {
@@ -98,3 +114,5 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 {
     return float4(psIn.pos.z, psIn.depth.y, psIn.depth.z, 1.0f);
 }
+
+

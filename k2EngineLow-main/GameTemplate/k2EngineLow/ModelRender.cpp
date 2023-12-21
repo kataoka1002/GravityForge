@@ -56,6 +56,93 @@ namespace nsK2EngineLow {
 		}
 	}
 
+	void ModelRender::InitInstancing(
+		const char* filePath,
+		AnimationClip* animationClips,
+		int animationClipsNum,
+		EnModelUpAxis enModelUpAxis,
+		bool isShadowReciever,
+		int maxInstance)
+	{
+		// インスタンシング描画用のデータを初期化。
+		InitInstancingDraw(maxInstance);
+
+		// スケルトンを初期化。
+		InitSkeleton(filePath);
+
+		ModelInitData modelInitData;
+		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
+
+		// 頂点シェーダーのエントリーポイントをセットアップ。
+		modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		// ピクセルシェーダーのエントリーポイントをセットアップ。
+		modelInitData.m_psEntryPointFunc = "PSShadowMain";
+		
+		//モデルの上方向を指定する。
+		modelInitData.m_modelUpAxis = enModelUpAxis;
+
+		modelInitData.m_tkmFilePath = filePath;
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
+		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
+		modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+		m_renderToGBufferModel.Init(modelInitData);
+
+
+		// シャドウマップ描画用のモデルを初期化
+		//InitShadowDrawModel(filePath, enModelUpAxis);
+
+		// 幾何学データを初期化。
+		InitGeometryDatas(maxInstance);
+
+		// ZPrepass描画用のモデルを初期化
+		//InitModelOnZprepass(filePath, enModelUpAxis);
+		ModelInitData modelInitDataZ;
+		modelInitDataZ.m_tkmFilePath = filePath;
+		modelInitDataZ.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+		modelInitDataZ.m_modelUpAxis = enModelUpAxis;
+
+		// 頂点シェーダーのエントリーポイントをセットアップ。
+		modelInitDataZ.m_vsEntryPointFunc = "VSMainCoreInstancing";
+
+		if (m_animationClips != nullptr) {
+			//スケルトンを指定する。
+			modelInitDataZ.m_skeleton = &m_skeleton;
+		}
+
+		modelInitDataZ.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		if (m_isEnableInstancingDraw) {
+			// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
+			modelInitDataZ.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+		}
+
+		m_zprepassModel.Init(modelInitDataZ);
+	}
+
+	void ModelRender::InitInstancingDraw(int maxInstance)
+	{
+		m_maxInstance = maxInstance;
+		if (m_maxInstance > 1) {
+			// インスタンシング描画を行うので、それ用のデータを構築する。
+			// ワールド行列の配列のメモリを確保する。
+			m_worldMatrixArray = std::make_unique<Matrix[]>(m_maxInstance);
+			// ワールド行列をGPUに転送するためのストラクチャードバッファを確保。
+			m_worldMatrixArraySB.Init(
+				sizeof(Matrix),
+				m_maxInstance,
+				nullptr
+			);
+			m_isEnableInstancingDraw = true;
+			// インスタンス番号からワールド行列の配列のインデックスに変換するテーブルを初期化する。
+			m_instanceNoToWorldMatrixArrayIndexTable = std::make_unique<int[]>(m_maxInstance);
+			for (int instanceNo = 0; instanceNo < m_maxInstance; instanceNo++) {
+				m_instanceNoToWorldMatrixArrayIndexTable[instanceNo] = instanceNo;
+			}
+		}
+	}
+
 	void ModelRender::InitSkeleton(const char* filePath)
 	{
 		//スケルトンのデータを読み込み。
@@ -188,6 +275,10 @@ namespace nsK2EngineLow {
 
 	void ModelRender::Update()
 	{
+		if (m_isEnableInstancingDraw) {
+			return;
+		}
+
 		//モデル側に移動回転拡大を渡す
 		m_renderToGBufferModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_shadowDrawModel[0].UpdateWorldMatrix(m_position, m_rotation, m_scale);
@@ -205,6 +296,45 @@ namespace nsK2EngineLow {
 		m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 	}
 
+	void ModelRender::RemoveInstance(int instanceNo)
+	{
+		int matrixIndex = m_instanceNoToWorldMatrixArrayIndexTable[instanceNo];
+
+		m_worldMatrixArray[matrixIndex] = g_matZero;
+	}
+
+	void ModelRender::UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+	{
+		K2_ASSERT(instanceNo < m_maxInstance, "インスタンス番号が不正です。");
+		if (!m_isEnableInstancingDraw) {
+			return;
+		}
+		Matrix worldMatrix;
+		//if (m_translucentModel.IsInited()) {
+		//	// 半透明モデルはZPrepassモデルを初期化していないので、こちらを使う。
+		//	worldMatrix = m_translucentModel.CalcWorldMatrix(pos, rot, scale);
+		//}
+		/*else */{
+			worldMatrix = m_zprepassModel.CalcWorldMatrix(pos, rot, scale);
+		}
+		// インスタンス番号から行列のインデックスを取得する。
+		int matrixArrayIndex = m_instanceNoToWorldMatrixArrayIndexTable[instanceNo];
+		// インスタンシング描画を行う。
+		m_worldMatrixArray[matrixArrayIndex] = worldMatrix;
+		if (m_numInstance == 0) {
+			//インスタンス数が0の場合のみアニメーション関係の更新を行う。
+			// スケルトンを更新。
+			// 各インスタンスのワールド空間への変換は、
+			// インスタンスごとに行う必要があるので、頂点シェーダーで行う。
+			// なので、単位行列を渡して、モデル空間でボーン行列を構築する。
+			m_skeleton.Update(g_matIdentity);
+			//アニメーションを進める。
+			//m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
+		}
+		m_numInstance++;
+	}
+
+	int g_hoge = 0;
 	void ModelRender::Draw(RenderContext& rc)
 	{
 		//カリングの対象じゃないなら常時表示
@@ -214,11 +344,24 @@ namespace nsK2EngineLow {
 			return;
 		}
 
-		// ビューフラスタムに含まれているなら
-		if (m_geometryDatas[0].IsInViewFrustum()) 
-		{
+		if (m_isEnableInstancingDraw) {
+			// インスタンシング描画はビューフラスタムカリングは行わない。
 			g_renderingEngine->AddModelRenderObject(this);
-			g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
+			m_worldMatrixArraySB.Update(m_worldMatrixArray.get());
+			m_numInstance = 0;
 		}
+		else {
+			// 通常描画
+			if (m_geometryDatas[0].IsInViewFrustum()) {
+				g_renderingEngine->AddModelRenderObject(this);
+				g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
+			}
+		}
+
+		//// ビューフラスタムに含まれているなら
+		//if (m_geometryDatas[0].IsInViewFrustum()) 
+		//{
+		//g_hoge++;
+		//}
 	}
 }

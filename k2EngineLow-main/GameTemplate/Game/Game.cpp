@@ -59,6 +59,7 @@ bool Game::Start()
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
+	int AirNum = 0;
 	m_levelRender.Init("Assets/modelData/level/newLevel.tkl",
 		[&](LevelObjectData& objData)
 		{
@@ -120,9 +121,12 @@ bool Game::Start()
 				m_air = NewGO<Air>(0, "air");
 
 				SetLevel(m_air, objData);
+				m_air->SetInstanceNo(AirNum);
 
 				//リストに追加
 				m_objectList.emplace_back(m_air);
+
+				AirNum++;
 				return true;
 			}
 			else if (objData.EqualObjectName(L"barrierFence") == true)
@@ -299,6 +303,10 @@ bool Game::Start()
 
 			return true;
 		});
+
+		//Starレンダラーを作成。
+		airRender = NewGO<AirRender>(0, "airrender");
+		airRender->SetMaxAir(AirNum);
 	
 	//スカイキューブの作成
 	SetSkyCube();

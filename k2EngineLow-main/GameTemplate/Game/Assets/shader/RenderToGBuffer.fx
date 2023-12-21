@@ -52,6 +52,7 @@ Texture2D<float4> g_albedo : register(t0);              // アルベドマップ
 Texture2D<float4> g_normalMap : register(t1);           // 法線マップ
 Texture2D<float4> g_metallicSmoothMap : register(t2);   // メタリックスムース(スペキュラ)マップ。rにメタリック、aにスムース
 StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列
+StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ワールド行列の配列。インスタンシング描画の際に有効。
 
 //サンプラーステート
 sampler g_sampler : register(s0);
@@ -95,6 +96,25 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
     psIn.pos = mul(mProj, psIn.pos);                // カメラ座標系からスクリーン座標系に変換
     psIn.normal = normalize(mul(m, vsIn.normal));
     psIn.normalInView = mul(mView, psIn.normal);    // カメラ空間の法線を求める
+    psIn.tangent = normalize(mul(m, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
+    psIn.biNomal = normalize(mul(m, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
+
+    psIn.uv = vsIn.uv;
+    
+    return psIn;
+}
+
+// インスタンシングモデル用の頂点シェーダーのエントリーポイント
+SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
+{
+    SPSIn psIn;
+    float4x4 m = g_worldMatrixArray[instanceId];
+    psIn.pos = mul(m, vsIn.pos);
+    psIn.worldPos = psIn.pos;
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.normal = normalize(mul(m, vsIn.normal));
+    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
     psIn.tangent = normalize(mul(m, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
     psIn.biNomal = normalize(mul(m, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
 

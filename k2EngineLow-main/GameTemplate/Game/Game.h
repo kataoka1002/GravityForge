@@ -34,6 +34,9 @@
 #include "MissionUI.h"
 #include "MakeEffect.h"
 
+#include "AirRender.h"
+
+
 class Game : public IGameObject, Noncopyable
 {
 public:
@@ -135,6 +138,8 @@ private:
 	BlackFade* m_blackFade = nullptr;
 	MissionUI* m_missionUI = nullptr;
 	MakeEffect* m_makeEfe = nullptr;
+
+	AirRender* airRender = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

@@ -6,7 +6,9 @@
 
 // K2EngineLowのグローバルアクセスポイント。
 K2EngineLow* g_k2EngineLow = nullptr;
-
+namespace nsK2EngineLow {
+	extern int g_hoge;
+}
 /// <summary>
 /// メイン関数
 /// </summary>
@@ -23,10 +25,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	//auto makeSound = NewGO<MakeSound>(0, "makesound");
 	auto title = NewGO<Title>(0, "title");
-
+	
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+		nsK2EngineLow::g_hoge = 0;
 		// フレームの開始時に呼び出す必要がある処理を実行
 		g_k2EngineLow->BeginFrame();
 
@@ -41,6 +44,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		// フレームの終了時に呼び出す必要がある処理を実行。
 		g_k2EngineLow->EndFrame();
+		K2_LOG("描画オブジェクト数 = %d\n", nsK2EngineLow::g_hoge);
+
 	}
 
 	delete g_k2EngineLow;

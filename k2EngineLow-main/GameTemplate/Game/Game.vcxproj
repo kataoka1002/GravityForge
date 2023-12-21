@@ -224,6 +224,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Air.cpp" />
+    <ClCompile Include="AirRender.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BarrierFence.cpp" />
     <ClCompile Include="BenchBig.cpp" />
@@ -304,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Air.h" />
+    <ClInclude Include="AirRender.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BarrierFence.h" />
     <ClInclude Include="BenchBig.h" />

@@ -113,6 +113,15 @@ public:
 	{
 		return m_canAttract;
 	}
+
+	/// <summary>
+	/// インスタンス番号を設定。
+	/// </summary>
+	/// <param name="instanceNo"></param>
+	void SetInstanceNo(int instanceNo)
+	{
+		m_instanceNo = instanceNo;
+	}
 	
 protected:
 
@@ -222,6 +231,7 @@ protected:
 	bool					m_canSeeModel = true;						//モデルを描画するかどうか
 	int						m_smokeEfeInterval = 0;						//煙エフェクトが発生する間隔
 	int						m_sandCount = 0;
+	int						m_instanceNo = 0;							// インスタンス番号。
 
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;

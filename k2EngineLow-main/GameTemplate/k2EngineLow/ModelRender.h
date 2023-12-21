@@ -29,6 +29,29 @@ namespace nsK2EngineLow
 			int maxInstance = 1);
 
 		/// <summary>
+		/// インスタンシング描画用のモデルの初期化
+		/// </summary>
+		/// <param name="filePath">ファイルパス</param>
+		/// <param name="animationClips">アニメーションクリップ</param>
+		/// <param name="animationClipsNum">アニメーションクリップの数</param>
+		/// <param name="enModelUpAxis">モデルの上方向</param>
+		/// <param name="isShadowReciever">影を受けるかどうか</param>
+		/// <param name="maxInstance">インスタンスの最大数</param>
+		void InitInstancing(
+			const char* filePath,
+			AnimationClip* animationClips = nullptr,
+			int animationClipsNum = 0,
+			EnModelUpAxis enModelUpAxis = enModelUpAxisZ,
+			bool isShadowReciever = false,
+			int maxInstance = 1);
+
+		/// <summary>
+		/// インスタンシング描画用の初期化処理を実行。
+		/// </summary>
+		/// <param name="maxInstance">最大インスタンス数</param>
+		void InitInstancingDraw(int maxInstance);
+
+		/// <summary>
 		/// 頂点シェーダーのエントリーポイントを指定する
 		/// </summary>
 		/// <param name="modelInitData">モデルイニットデータ</param>
@@ -38,6 +61,24 @@ namespace nsK2EngineLow
 		/// 更新処理
 		/// </summary>
 		void Update();
+
+		/// <summary>
+		/// インスタンシングデータの更新。
+		/// </summary>
+		/// <param name="instanceNo">インスタンス番号</param>
+		/// <param name="pos">座標</param>
+		/// <param name="rot">回転</param>
+		/// <param name="scale">拡大率</param>
+		void UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+
+		/// <summary>
+		/// インスタンスを除去。
+		/// </summary>
+		/// <remark>
+		/// インスタンス描画を利用している際に、そのインスタンスをシーンから除去したい場合に利用してください。
+		/// </remark>
+		/// <param name="instanceNo">インスタンス番号</param>
+		void RemoveInstance(int instanceNo);
 
 		/// <summary>
 		/// 描画処理
@@ -167,7 +208,7 @@ namespace nsK2EngineLow
 		/// <param name="rc"></param>
 		void OnDraw(RenderContext& rc)
 		{
-			m_renderToGBufferModel.Draw(rc);
+			m_renderToGBufferModel.Draw(rc, m_maxInstance);
 		}
 
 		/// <summary>
@@ -185,7 +226,7 @@ namespace nsK2EngineLow
 		/// <param name="rc"></param>
 		void OnZPrepass(RenderContext& rc)
 		{
-			m_zprepassModel.Draw(rc);
+			m_zprepassModel.Draw(rc, m_maxInstance);
 		}
 
 		/// <summary>
@@ -219,6 +260,15 @@ namespace nsK2EngineLow
 		}
 
 		/// <summary>
+		/// インスタンシング描画を行う？
+		/// </summary>
+		/// <returns></returns>
+		bool IsInstancingDraw() const
+		{
+			return m_isEnableInstancingDraw;
+		}
+
+		/// <summary>
 		/// ワールド行列を取得。
 		/// </summary>
 		/// <param name="instanceId">
@@ -228,9 +278,9 @@ namespace nsK2EngineLow
 		/// <returns></returns>
 		const Matrix& GetWorldMatrix(int instanceId) const
 		{
-			/*if (IsInstancingDraw()) {
+			if (IsInstancingDraw()) {
 				return m_worldMatrixArray[instanceId];
-			}*/
+			}
 			return m_zprepassModel.GetWorldMatrix();
 		}
 
@@ -329,12 +379,18 @@ namespace nsK2EngineLow
 		Skeleton m_skeleton;								// スケルトン
 		int m_numAnimationClips = 0;						// アニメーションクリップナンバー
 		int m_nowAnimationNumber = -1;						// 今のアニメーションクリップナンバー
+		int	m_numInstance = 0;								// インスタンスの数。
+		int	m_maxInstance = 1;								// 最大インスタンス数。
 		float m_animationSpeed = 1.0f;						// アニメーションの速さ
 		bool m_isRaytracingWorld = true;					// レイトレワールドに登録する？
 		bool m_isShadowCaster = true;						// シャドウキャスターフラグ
 		bool m_doCulling = true;							// カリングをするかどうか
+		bool m_isEnableInstancingDraw = false;				// インスタンシング描画が有効？
 
 		std::vector< GemometryData > m_geometryDatas;		// ジオメトリ情報。
+		std::unique_ptr<Matrix[]>	 m_worldMatrixArray;	// ワールド行列の配列。
+		StructuredBuffer			 m_worldMatrixArraySB;	// ワールド行列の配列のストラクチャードバッファ。
+		std::unique_ptr<int[]> m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
 	};
 }
 

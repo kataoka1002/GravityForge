@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Air.h"
 #include "Game.h"
+#include "AirRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ Air::Air()
 Air::~Air()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto airRender = FindGO<AirRender>("airrender");
+	if (airRender) {
+		airRender->RemoveInstance(m_instanceNo);
+	}
 }
 
 void Air::Update()
@@ -32,16 +38,25 @@ void Air::Update()
 	//動き
 	Move();
 
-	m_model.Update();
+	//m_model.Update();
+
+	m_airRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void Air::InitModel()
 {
-	m_model.Init("Assets/modelData/object/air.tkm");
+	m_airRender = FindGO<AirRender>("airrender");
+
+	/*m_model.Init("Assets/modelData/object/air.tkm");
 	m_model.SetPosition(m_position);
 	m_model.SetRotation(m_rotation);
 	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_model.Update();*/
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -100,5 +115,5 @@ void Air::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

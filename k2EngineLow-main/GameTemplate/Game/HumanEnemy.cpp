@@ -274,7 +274,7 @@ namespace nsHumanEnemy
 
 		m_humanEnemyState->Enter();
 	}
-
+	
 	void HumanEnemy::Render(RenderContext& rc)
 	{
 		m_model.Draw(rc);

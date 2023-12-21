@@ -262,6 +262,9 @@
     <ClCompile Include="MakeSound.cpp">
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="AirRender.cpp">
+      <Filter>MyCode\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -498,6 +501,9 @@
     </ClInclude>
     <ClInclude Include="MakeSound.h">
       <Filter>MyCode\MainGame\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="AirRender.h">
+      <Filter>MyCode\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

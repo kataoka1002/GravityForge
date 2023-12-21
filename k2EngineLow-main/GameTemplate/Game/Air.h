@@ -1,4 +1,5 @@
 #pragma once
+class AirRender;
 #include "ObjectBase.h"
 
 class Air : public ObjectBase
@@ -16,6 +17,7 @@ public:
 	void InitCollision()			override;	//ƒRƒŠƒWƒ‡ƒ“‚Ì‰Šú‰»
 
 private:
+	AirRender* m_airRender = nullptr;
 
 };
 

@@ -132,7 +132,7 @@ void ObjectBase::Move()
 
 	//çXêV
 	m_charaCon.SetPosition(m_position);
-	m_model.SetPosition(m_position);
+	//m_model.SetPosition(m_position);
 }
 
 void ObjectBase::IdleMove()
