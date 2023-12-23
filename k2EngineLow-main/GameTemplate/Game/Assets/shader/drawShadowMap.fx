@@ -42,8 +42,10 @@ struct SPSIn
 
 Texture2D<float4> g_albedo : register(t0); // アルベドマップ
 StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列
-Texture2D<float4> g_shadowMap : register(t10); // シャドウマップ
+//Texture2D<float4> g_shadowMap : register(t10); // シャドウマップ
 sampler g_sampler : register(s0); // サンプラーステート
+StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ワールド行列の配列。インスタンシング描画の際に有効。
+
 
 //スキン行列を計算する。
 float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
@@ -84,6 +86,21 @@ SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
     psIn.pos = mul(mProj, psIn.pos);
     psIn.uv = vsIn.uv;
     psIn.normal = mul(m, vsIn.normal);
+    return psIn;
+}
+
+// インスタンシングモデル用の頂点シェーダーのエントリーポイント
+SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
+{
+    SPSIn psIn;
+    
+    float4x4 m = g_worldMatrixArray[instanceId];
+    psIn.pos = mul(m, vsIn.pos);
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.uv = vsIn.uv;
+    psIn.normal = mul(m, vsIn.normal);
+    
     return psIn;
 }
 

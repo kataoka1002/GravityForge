@@ -71,10 +71,13 @@ namespace nsK2EngineLow
 
                 for (auto& model : m_modelsArray[shadowMapNo])
                 {
+                    //インスタンス数の取得
+                    int numInstance = model->GetInstanceNum();
                     model->Draw(
                         rc,
                         g_matIdentity,
-                        m_cascadeShadowMapMatrix.GetLightViewProjectionCropMatrix(shadowMapNo)
+                        m_cascadeShadowMapMatrix.GetLightViewProjectionCropMatrix(shadowMapNo),
+                        numInstance
                     );
                 }
 

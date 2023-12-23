@@ -220,6 +220,14 @@ namespace nsK2EngineLow
 			//m_shadowDrawModel.Draw(rc, g_renderingEngine->GetLightCamera());
 		}
 
+		void UpdateShadowCameraParam(int shadowMapNo)
+		{
+			Vector4 cameraParam;
+			cameraParam.x = g_camera3D->GetNear();
+			cameraParam.y = g_camera3D->GetFar();
+			m_drawShadowMapCameraParamCB[shadowMapNo].CopyToVRAM(cameraParam);
+		}
+
 		/// <summary>
 		/// ZPrepassモデルの描画
 		/// </summary>
@@ -351,6 +359,31 @@ namespace nsK2EngineLow
 		);
 
 		/// <summary>
+		/// インスタンシング描画用のモデルの初期化
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitInstancingModelOnRenderGBuffer(
+			const char* filePath,
+			EnModelUpAxis enModelUpAxis = enModelUpAxisZ);
+
+		/// <summary>
+		/// インスタンシング描画用のZPpepassモデルの初期化
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitInstancingModelOnZprepass(
+			const char* filePath,
+			EnModelUpAxis enModelUpAxis);
+
+		/// <summary>
+		/// インスタンシング描画用のシャドウモデル
+		/// </summary>
+		/// <param name="tkmFilePath"></param>
+		/// <param name="enModelUpAxis"></param>
+		void InitInstancingShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis);
+
+		/// <summary>
 		/// レイトレワールドに登録するかのフラグを設定する
 		/// 頻繁に生成するモデル（弾など）をInitする前に引数falseで実行してください。
 		/// </summary>
@@ -391,6 +424,7 @@ namespace nsK2EngineLow
 		std::unique_ptr<Matrix[]>	 m_worldMatrixArray;	// ワールド行列の配列。
 		StructuredBuffer			 m_worldMatrixArraySB;	// ワールド行列の配列のストラクチャードバッファ。
 		std::unique_ptr<int[]> m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
+		ConstantBuffer m_drawShadowMapCameraParamCB[NUM_SHADOW_MAP];		// シャドウマップ作成時に必要なカメラパラメータ用の定数バッファ。
 	};
 }
 

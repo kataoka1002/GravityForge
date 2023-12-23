@@ -70,17 +70,30 @@ namespace nsK2EngineLow {
 		// スケルトンを初期化。
 		InitSkeleton(filePath);
 
+		// GBuffer描画用のモデルを初期化
+		InitInstancingModelOnRenderGBuffer(filePath, enModelUpAxis);
+
+		// シャドウマップ描画用のモデルを初期化
+		InitInstancingShadowDrawModel(filePath, enModelUpAxis);
+
+		// 幾何学データを初期化。
+		InitGeometryDatas(maxInstance);
+
+		// ZPrepass描画用のモデルを初期化
+		InitInstancingModelOnZprepass(filePath, enModelUpAxis);
+	}
+
+	void ModelRender::InitInstancingModelOnRenderGBuffer(const char* filePath, EnModelUpAxis enModelUpAxis)
+	{
 		ModelInitData modelInitData;
 		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
 
-		// 頂点シェーダーのエントリーポイントをセットアップ。
+		// エントリーポイントをセットアップ。
 		modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
-		// ピクセルシェーダーのエントリーポイントをセットアップ。
 		modelInitData.m_psEntryPointFunc = "PSShadowMain";
-		
+
 		//モデルの上方向を指定する。
 		modelInitData.m_modelUpAxis = enModelUpAxis;
-
 		modelInitData.m_tkmFilePath = filePath;
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
@@ -89,36 +102,64 @@ namespace nsK2EngineLow {
 		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
 		modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 		m_renderToGBufferModel.Init(modelInitData);
+	}
 
-
-		// シャドウマップ描画用のモデルを初期化
-		//InitShadowDrawModel(filePath, enModelUpAxis);
-
-		// 幾何学データを初期化。
-		InitGeometryDatas(maxInstance);
-
-		// ZPrepass描画用のモデルを初期化
-		//InitModelOnZprepass(filePath, enModelUpAxis);
-		ModelInitData modelInitDataZ;
-		modelInitDataZ.m_tkmFilePath = filePath;
-		modelInitDataZ.m_fxFilePath = "Assets/shader/ZPrepass.fx";
-		modelInitDataZ.m_modelUpAxis = enModelUpAxis;
+	void ModelRender::InitInstancingModelOnZprepass(const char* filePath, EnModelUpAxis enModelUpAxis)
+	{
+		ModelInitData modelInitData;
+		modelInitData.m_tkmFilePath = filePath;
+		modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+		modelInitData.m_modelUpAxis = enModelUpAxis;
 
 		// 頂点シェーダーのエントリーポイントをセットアップ。
-		modelInitDataZ.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 
-		if (m_animationClips != nullptr) {
-			//スケルトンを指定する。
-			modelInitDataZ.m_skeleton = &m_skeleton;
-		}
+		//if (m_animationClips != nullptr) {
+		//	//スケルトンを指定する。
+		//	modelInitData.m_skeleton = &m_skeleton;
+		//}
 
-		modelInitDataZ.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		if (m_isEnableInstancingDraw) {
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		if (m_isEnableInstancingDraw) 
+		{
 			// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
-			modelInitDataZ.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+			modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 		}
 
-		m_zprepassModel.Init(modelInitDataZ);
+		m_zprepassModel.Init(modelInitData);
+	}
+
+	void ModelRender::InitInstancingShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
+	{
+		//シャドウマップに書きこむモデルの設定
+		ModelInitData sadowDrawModelInitData;
+		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
+		sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
+		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
+		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+
+		//スケルトンを指定する。
+		if (m_animationClips != nullptr)
+		{
+			sadowDrawModelInitData.m_skeleton = &m_skeleton;
+		}
+
+		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
+		sadowDrawModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+
+		for (int ligNo = 0; ligNo < 1; ligNo++)
+		{
+			for (int shadowMapNo = 0; shadowMapNo < NUM_SHADOW_MAP; shadowMapNo++) 
+			{
+				m_drawShadowMapCameraParamCB[shadowMapNo].Init(sizeof(Vector4), nullptr);
+				sadowDrawModelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB[shadowMapNo];
+				sadowDrawModelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+				m_shadowDrawModel[shadowMapNo].Init(sadowDrawModelInitData);
+				//インスタンス数の設定
+				m_shadowDrawModel[shadowMapNo].SetInstanceNum(m_maxInstance);
+			}
+		}
 	}
 
 	void ModelRender::InitInstancingDraw(int maxInstance)
@@ -265,10 +306,6 @@ namespace nsK2EngineLow {
 		}
 
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		//if (m_isEnableInstancingDraw) {
-		//	// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
-		//	modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
-		//}
 
 		m_zprepassModel.Init(modelInitData);
 	}
@@ -347,6 +384,17 @@ namespace nsK2EngineLow {
 		if (m_isEnableInstancingDraw) {
 			// インスタンシング描画はビューフラスタムカリングは行わない。
 			g_renderingEngine->AddModelRenderObject(this);
+
+			for (int shadowMapNo = 0; shadowMapNo < 3; shadowMapNo++)
+			{
+				if (m_shadowDrawModel[shadowMapNo].IsInited())
+				{
+					UpdateShadowCameraParam(shadowMapNo);
+				}
+				
+			}
+			g_renderingEngine->Add3DModelToRenderToShadowMap(m_shadowDrawModel[0], m_shadowDrawModel[1], m_shadowDrawModel[2]);
+			
 			m_worldMatrixArraySB.Update(m_worldMatrixArray.get());
 			m_numInstance = 0;
 		}

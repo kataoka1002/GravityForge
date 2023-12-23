@@ -227,6 +227,18 @@ namespace nsK2EngineLow {
 		/// </remark>
 		/// <param name="reInitData">再初期化データ。</param>
 		void ReInitMaterials(MaterialReInitData& reInitData);
+		/// <summary>
+		/// インスタンス数の設定と取得
+		/// </summary>
+		/// <param name="num"></param>
+		void SetInstanceNum(int num)
+		{
+			m_instanceNum = num;
+		}
+		const int GetInstanceNum() const
+		{
+			return m_instanceNum;
+		}
 	private:
 		bool m_isInited = false;							// 初期化されている？
 		Matrix m_worldMatrix;								// ワールド行列。
@@ -235,5 +247,6 @@ namespace nsK2EngineLow {
 		MeshParts m_meshParts;								// メッシュパーツ。
 		EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		// モデルの上方向。
 		Model* m_computedAnimationVertexBuffer = nullptr;	// アニメーション後頂点バッファを計算済みのモデル。
+		int m_instanceNum = 1;								// インスタンスの数
 	};
 }
