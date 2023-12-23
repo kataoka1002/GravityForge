@@ -1,5 +1,6 @@
 #pragma once
 #include "ObjectBase.h"
+class BushBigRender;
 
 class BushBig : public ObjectBase
 {
@@ -16,6 +17,6 @@ public:
 	void InitCollision()			override;	//ƒRƒŠƒWƒ‡ƒ“‚Ì‰Šú‰»
 
 private:
-
+	BushBigRender* m_bushBigRender = nullptr;
 };
 

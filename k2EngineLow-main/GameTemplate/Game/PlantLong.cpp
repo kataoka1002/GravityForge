@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlantLong.h"
 #include "Game.h"
+#include "PlantLongRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ PlantLong::PlantLong()
 PlantLong::~PlantLong()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<PlantLongRender>("plantlongrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void PlantLong::Update()
@@ -32,17 +38,26 @@ void PlantLong::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_plantLongRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void PlantLong::InitModel()
 {
-	m_model.Init("Assets/modelData/object/plant_long.tkm");
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
-	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_plantLongRender = FindGO<PlantLongRender>("plantlongrender");
+
+	//m_model.Init("Assets/modelData/object/plant_long.tkm");
+	//m_model.SetPosition(m_position);
+	//m_model.SetRotation(m_rotation);
+	//m_model.SetScale(m_scale);
+	//m_model.Update();
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -101,5 +116,5 @@ void PlantLong::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

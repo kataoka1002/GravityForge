@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BushBig.h"
 #include "Game.h"
+#include "BushBigRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ BushBig::BushBig()
 BushBig::~BushBig()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<BushBigRender>("bushbigrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void BushBig::Update()
@@ -32,17 +38,26 @@ void BushBig::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_bushBigRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void BushBig::InitModel()
 {
-	m_model.Init("Assets/modelData/object/bush_big.tkm");
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
-	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_bushBigRender = FindGO<BushBigRender>("bushbigrender");
+
+	//m_model.Init("Assets/modelData/object/bush_big.tkm");
+	//m_model.SetPosition(m_position);
+	//m_model.SetRotation(m_rotation);
+	//m_model.SetScale(m_scale);
+	//m_model.Update();
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -101,5 +116,5 @@ void BushBig::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

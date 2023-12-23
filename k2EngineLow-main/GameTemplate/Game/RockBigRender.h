@@ -1,5 +1,6 @@
 #pragma once
-class AirRender : public IGameObject
+
+class RockBigRender : public IGameObject
 {
 public:
 	bool Start();
@@ -9,10 +10,10 @@ public:
 	/// <summary>
 	/// 最大数を設定する。
 	/// </summary>
-	/// <param name="numAir"></param>
-	void SetMaxAir(int maxAir)
+	/// <param name="numModel"></param>
+	void SetMaxModel(int maxModel)
 	{
-		m_maxAir = maxAir;
+		m_maxModel = maxModel;
 	}
 	/// <summary>
 	/// インスタンスを除去。
@@ -40,6 +41,5 @@ public:
 
 private:
 	ModelRender	m_modelRender;	// モデルレンダラー
-	int			m_maxAir = 0;	// モデルの数
+	int			m_maxModel = 0;	// モデルの数
 };
-

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SolarPanel.h"
 #include "Game.h"
+#include "SolarPanelRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ SolarPanel::SolarPanel()
 SolarPanel::~SolarPanel()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<SolarPanelRender>("solarpanelrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void SolarPanel::Update()
@@ -32,17 +38,26 @@ void SolarPanel::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_solarPanelRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void SolarPanel::InitModel()
 {
-	m_model.Init("Assets/modelData/object/solarPanel.tkm");
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
-	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_solarPanelRender = FindGO<SolarPanelRender>("solarpanelrender");
+
+	//m_model.Init("Assets/modelData/object/solarPanel.tkm");
+	//m_model.SetPosition(m_position);
+	//m_model.SetRotation(m_rotation);
+	//m_model.SetScale(m_scale);
+	//m_model.Update();
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -104,5 +119,5 @@ void SolarPanel::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

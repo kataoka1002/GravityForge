@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Hydrant.h"
 #include "Game.h"
+#include "HydrantRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ Hydrant::Hydrant()
 Hydrant::~Hydrant()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<HydrantRender>("hydrantrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void Hydrant::Update()
@@ -32,17 +38,26 @@ void Hydrant::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_hydrantRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void Hydrant::InitModel()
 {
-	m_model.Init("Assets/modelData/object/hydrant.tkm");
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
-	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_hydrantRender = FindGO<HydrantRender>("hydrantrender");
+
+	//m_model.Init("Assets/modelData/object/hydrant.tkm");
+	//m_model.SetPosition(m_position);
+	//m_model.SetRotation(m_rotation);
+	//m_model.SetScale(m_scale);
+	//m_model.Update();
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -101,5 +116,5 @@ void Hydrant::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

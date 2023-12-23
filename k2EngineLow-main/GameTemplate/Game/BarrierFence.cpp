@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BarrierFence.h"
 #include "Game.h"
+#include "BarrierFenceRender.h"
 
 namespace
 {
@@ -25,6 +26,12 @@ BarrierFence::BarrierFence()
 BarrierFence::~BarrierFence()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto barrierFenceRender = FindGO<BarrierFenceRender>("barrierfencerender");
+	if (barrierFenceRender) {
+		barrierFenceRender->RemoveInstance(m_instanceNo);
+	}
+
 }
 
 void BarrierFence::Update()
@@ -33,16 +40,26 @@ void BarrierFence::Update()
 	Move();
 
 
-	m_model.Update();
+	//m_model.Update();
+	
+	//モデルの更新処理
+	m_barrierFenceRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void BarrierFence::InitModel()
 {
-	m_model.Init("Assets/modelData/object/barrierFence.tkm");
-	m_model.SetPosition(m_position);
-	m_model.SetRotation(m_rotation);
-	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_barrierFenceRender = FindGO<BarrierFenceRender>("barrierfencerender");
+
+	//m_model.Init("Assets/modelData/object/barrierFence.tkm");
+	//m_model.SetPosition(m_position);
+	//m_model.SetRotation(m_rotation);
+	//m_model.SetScale(m_scale);
+	//m_model.Update();
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -101,5 +118,5 @@ void BarrierFence::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

@@ -227,9 +227,13 @@
     <ClCompile Include="AirRender.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BarrierFence.cpp" />
+    <ClCompile Include="BarrierFenceRender.cpp" />
     <ClCompile Include="BenchBig.cpp" />
+    <ClCompile Include="BenchiBigRender.cpp" />
+    <ClCompile Include="BenchiSmallRender.cpp" />
     <ClCompile Include="BenchSmall.cpp" />
     <ClCompile Include="BillboardSmall.cpp" />
+    <ClCompile Include="BillboardSmallRender.cpp" />
     <ClCompile Include="BlackFade.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="BossDeadState.cpp" />
@@ -243,12 +247,16 @@
     <ClCompile Include="BossUI.cpp" />
     <ClCompile Include="BossWalkState.cpp" />
     <ClCompile Include="BushBig.cpp" />
+    <ClCompile Include="BushBigRender.cpp" />
     <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="ConeRender.cpp" />
     <ClCompile Include="Dustbin.cpp" />
+    <ClCompile Include="DustbinRender.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyUI.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Fence.cpp" />
+    <ClCompile Include="FenceRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameClear.cpp" />
@@ -266,6 +274,7 @@
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
     <ClCompile Include="HumanEnemyWalkState.cpp" />
     <ClCompile Include="Hydrant.cpp" />
+    <ClCompile Include="HydrantRender.cpp" />
     <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MakeEffect.cpp" />
@@ -273,7 +282,9 @@
     <ClCompile Include="MissionUI.cpp" />
     <ClCompile Include="ObjectBase.cpp" />
     <ClCompile Include="PlantLong.cpp" />
+    <ClCompile Include="PlantLongRender.cpp" />
     <ClCompile Include="PlantLow.cpp" />
+    <ClCompile Include="PlantLowRender.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttackState.cpp" />
     <ClCompile Include="PlayerAttractState.cpp" />
@@ -291,7 +302,9 @@
     <ClCompile Include="ResultUI.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="RockBig.cpp" />
+    <ClCompile Include="RockBigRender.cpp" />
     <ClCompile Include="SolarPanel.cpp" />
+    <ClCompile Include="SolarPanelRender.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -308,9 +321,13 @@
     <ClInclude Include="AirRender.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="BarrierFence.h" />
+    <ClInclude Include="BarrierFenceRender.h" />
     <ClInclude Include="BenchBig.h" />
+    <ClInclude Include="BenchiBigRender.h" />
+    <ClInclude Include="BenchiSmallRender.h" />
     <ClInclude Include="BenchSmall.h" />
     <ClInclude Include="BillboardSmall.h" />
+    <ClInclude Include="BillboardSmallRender.h" />
     <ClInclude Include="BlackFade.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="BossConstants.h" />
@@ -325,12 +342,16 @@
     <ClInclude Include="BossUI.h" />
     <ClInclude Include="BossWalkState.h" />
     <ClInclude Include="BushBig.h" />
+    <ClInclude Include="BushBigRender.h" />
     <ClInclude Include="Cone.h" />
+    <ClInclude Include="ConeRender.h" />
     <ClInclude Include="Dustbin.h" />
+    <ClInclude Include="DustbinRender.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyUI.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="Fence.h" />
+    <ClInclude Include="FenceRender.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameClear.h" />
@@ -349,6 +370,7 @@
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="HumanEnemyWalkState.h" />
     <ClInclude Include="Hydrant.h" />
+    <ClInclude Include="HydrantRender.h" />
     <ClInclude Include="IBossState.h" />
     <ClInclude Include="IHumanEnemyState.h" />
     <ClInclude Include="IPlayerState.h" />
@@ -359,7 +381,9 @@
     <ClInclude Include="ObjectBase.h" />
     <ClInclude Include="ObjectCollisionConstants.h" />
     <ClInclude Include="PlantLong.h" />
+    <ClInclude Include="PlantLongRender.h" />
     <ClInclude Include="PlantLow.h" />
+    <ClInclude Include="PlantLowRender.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttackState.h" />
     <ClInclude Include="PlayerAttractState.h" />
@@ -377,7 +401,9 @@
     <ClInclude Include="ResultUI.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="RockBig.h" />
+    <ClInclude Include="RockBigRender.h" />
     <ClInclude Include="SolarPanel.h" />
+    <ClInclude Include="SolarPanelRender.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TargetUI.h" />

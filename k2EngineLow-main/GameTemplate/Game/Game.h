@@ -35,6 +35,19 @@
 #include "MakeEffect.h"
 
 #include "AirRender.h"
+#include "BarrierFenceRender.h"
+#include "BenchiBigRender.h"
+#include "BenchiSmallRender.h"
+#include "BillboardSmallRender.h"
+#include "BushBigRender.h"
+#include "ConeRender.h"
+#include "DustbinRender.h"
+#include "FenceRender.h"
+#include "HydrantRender.h"
+#include "PlantLongRender.h"
+#include "PlantLowRender.h"
+#include "RockBigRender.h"
+#include "SolarPanelRender.h"
 
 
 class Game : public IGameObject, Noncopyable
@@ -139,7 +152,21 @@ private:
 	MissionUI* m_missionUI = nullptr;
 	MakeEffect* m_makeEfe = nullptr;
 
-	AirRender* airRender = nullptr;
+	//インスタンシング描画用のレンダラー
+	AirRender* m_airRender = nullptr;
+	BarrierFenceRender* m_barrierFenceRender = nullptr;
+	BenchiBigRender* m_benchBigRender = nullptr;
+	BenchiSmallRender* m_benchSmallRender = nullptr;
+	BillboardSmallRender* m_billboardSmallRender = nullptr;
+	BushBigRender* m_bushBigRender = nullptr;
+	ConeRender* m_coneRender = nullptr;
+	DustbinRender* m_dustbinRender = nullptr;
+	FenceRender* m_fenceRender = nullptr;
+	HydrantRender* m_hydrantRender = nullptr;
+	PlantLongRender* m_plantLongRender = nullptr;
+	PlantLowRender* m_plantLowRender = nullptr;
+	RockBigRender* m_rockBigRender = nullptr;
+	SolarPanelRender* m_solarPanelRender = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

@@ -44,6 +44,21 @@ Game::~Game()
 	DeleteGO(m_blackFade);
 	DeleteGO(m_missionUI);
 	DeleteGO(m_makeEfe);
+
+	DeleteGO(m_airRender);
+	DeleteGO(m_barrierFenceRender);
+	DeleteGO(m_benchBigRender);
+	DeleteGO(m_benchSmallRender);
+	DeleteGO(m_billboardSmallRender);
+	DeleteGO(m_bushBigRender);
+	DeleteGO(m_coneRender);
+	DeleteGO(m_dustbinRender);
+	DeleteGO(m_fenceRender);
+	DeleteGO(m_hydrantRender);
+	DeleteGO(m_plantLongRender);
+	DeleteGO(m_plantLowRender);
+	DeleteGO(m_rockBigRender);
+	DeleteGO(m_solarPanelRender);
 }
 
 bool Game::Start()
@@ -59,7 +74,11 @@ bool Game::Start()
 
 	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
-	int AirNum = 0;
+	//インスタンス数
+	int AirNum = 0, barrierFenceNum = 0, benchBigNum = 0, benchSmallNum = 0,
+		billboardSmallNum = 0, bushBigNum = 0, coneNum = 0, dustbinNum = 0, fenceNum = 0,
+		hydrantNum = 0, plantLongNum = 0, plantLowNum = 0, rockBigNum = 0, solarPanelNum = 0;
+
 	m_levelRender.Init("Assets/modelData/level/newLevel.tkl",
 		[&](LevelObjectData& objData)
 		{
@@ -122,11 +141,11 @@ bool Game::Start()
 
 				SetLevel(m_air, objData);
 				m_air->SetInstanceNo(AirNum);
+				AirNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_air);
 
-				AirNum++;
 				return true;
 			}
 			else if (objData.EqualObjectName(L"barrierFence") == true)
@@ -135,6 +154,8 @@ bool Game::Start()
 				m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
 
 				SetLevel(m_barrierFence, objData);
+				m_barrierFence->SetInstanceNo(barrierFenceNum);
+				barrierFenceNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_barrierFence);
@@ -146,6 +167,8 @@ bool Game::Start()
 				m_benchBig = NewGO<BenchBig>(0, "benchbig");
 
 				SetLevel(m_benchBig, objData);
+				m_benchBig->SetInstanceNo(benchBigNum);
+				benchBigNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_benchBig);
@@ -157,6 +180,8 @@ bool Game::Start()
 				m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
 
 				SetLevel(m_benchSmall, objData);
+				m_benchSmall->SetInstanceNo(benchSmallNum);
+				benchSmallNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_benchSmall);
@@ -168,6 +193,8 @@ bool Game::Start()
 				m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
 
 				SetLevel(m_billboardSmall, objData);
+				m_billboardSmall->SetInstanceNo(billboardSmallNum);
+				billboardSmallNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_billboardSmall);
@@ -179,6 +206,8 @@ bool Game::Start()
 				m_bushBig = NewGO<BushBig>(0, "bushbig");
 
 				SetLevel(m_bushBig, objData);
+				m_bushBig->SetInstanceNo(bushBigNum);
+				bushBigNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_bushBig);
@@ -190,6 +219,8 @@ bool Game::Start()
 				m_cone = NewGO<Cone>(0, "cone");
 
 				SetLevel(m_cone, objData);
+				m_cone->SetInstanceNo(coneNum);
+				coneNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_cone);
@@ -201,6 +232,8 @@ bool Game::Start()
 				m_dustbin = NewGO<Dustbin>(0, "dustbin");
 
 				SetLevel(m_dustbin, objData);
+				m_dustbin->SetInstanceNo(dustbinNum);
+				dustbinNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_dustbin);
@@ -212,6 +245,8 @@ bool Game::Start()
 				m_fence = NewGO<Fence>(0, "fence");
 
 				SetLevel(m_fence, objData);
+				m_fence->SetInstanceNo(fenceNum);
+				fenceNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_fence);
@@ -223,6 +258,8 @@ bool Game::Start()
 				m_hydrant = NewGO<Hydrant>(0, "hydrant");
 
 				SetLevel(m_hydrant, objData);
+				m_hydrant->SetInstanceNo(hydrantNum);
+				hydrantNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_hydrant);
@@ -234,6 +271,8 @@ bool Game::Start()
 				m_plantLong = NewGO<PlantLong>(0, "plantlong");
 
 				SetLevel(m_plantLong, objData);
+				m_plantLong->SetInstanceNo(plantLongNum);
+				plantLongNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_plantLong);
@@ -245,6 +284,8 @@ bool Game::Start()
 				m_plantLow = NewGO<PlantLow>(0, "plantlow");
 
 				SetLevel(m_plantLow, objData);
+				m_plantLow->SetInstanceNo(plantLowNum);
+				plantLowNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_plantLow);
@@ -256,6 +297,8 @@ bool Game::Start()
 				m_rockBig = NewGO<RockBig>(0, "rockbig");
 
 				SetLevel(m_rockBig, objData);
+				m_rockBig->SetInstanceNo(rockBigNum);
+				rockBigNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_rockBig);
@@ -267,6 +310,8 @@ bool Game::Start()
 				m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
 
 				SetLevel(m_solarPanel, objData);
+				m_solarPanel->SetInstanceNo(solarPanelNum);
+				solarPanelNum++;
 
 				//リストに追加
 				m_objectList.emplace_back(m_solarPanel);
@@ -304,9 +349,35 @@ bool Game::Start()
 			return true;
 		});
 
-		//Starレンダラーを作成。
-		airRender = NewGO<AirRender>(0, "airrender");
-		airRender->SetMaxAir(AirNum);
+	//レンダラーを作成
+	m_airRender = NewGO<AirRender>(0, "airrender");
+	m_airRender->SetMaxAir(AirNum);
+	m_barrierFenceRender = NewGO<BarrierFenceRender>(0, "barrierfencerender");
+	m_barrierFenceRender->SetMaxModel(barrierFenceNum);
+	m_benchBigRender = NewGO<BenchiBigRender>(0, "benchibigrender");
+	m_benchBigRender->SetMaxModel(benchBigNum);
+	m_benchSmallRender = NewGO<BenchiSmallRender>(0, "benchismallrender");
+	m_benchSmallRender->SetMaxModel(benchSmallNum);
+	m_billboardSmallRender = NewGO<BillboardSmallRender>(0, "billboardsmallrender");
+	m_billboardSmallRender->SetMaxModel(billboardSmallNum);
+	m_bushBigRender = NewGO<BushBigRender>(0, "bushbigrender");
+	m_bushBigRender->SetMaxModel(bushBigNum);
+	m_coneRender = NewGO<ConeRender>(0, "conerender");
+	m_coneRender->SetMaxModel(coneNum);
+	m_dustbinRender = NewGO<DustbinRender>(0, "dustbinrender");
+	m_dustbinRender->SetMaxModel(dustbinNum);
+	m_fenceRender = NewGO<FenceRender>(0, "fencerender");
+	m_fenceRender->SetMaxModel(fenceNum);
+	m_hydrantRender = NewGO<HydrantRender>(0, "hydrantrender");
+	m_hydrantRender->SetMaxModel(hydrantNum);
+	m_plantLongRender = NewGO<PlantLongRender>(0, "plantlongrender");
+	m_plantLongRender->SetMaxModel(plantLongNum);
+	m_plantLowRender = NewGO<PlantLowRender>(0, "plantlowrender");
+	m_plantLowRender->SetMaxModel(plantLowNum);
+	m_rockBigRender = NewGO<RockBigRender>(0, "rockbigrender");
+	m_rockBigRender->SetMaxModel(rockBigNum);
+	m_solarPanelRender = NewGO<SolarPanelRender>(0, "solarpanelrender");
+	m_solarPanelRender->SetMaxModel(solarPanelNum);
 	
 	//スカイキューブの作成
 	SetSkyCube();

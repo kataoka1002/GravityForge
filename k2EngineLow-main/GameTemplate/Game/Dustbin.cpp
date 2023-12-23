@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Dustbin.h"
 #include "Game.h"
+#include "DustbinRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ Dustbin::Dustbin()
 Dustbin::~Dustbin()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<DustbinRender>("dustbinrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void Dustbin::Update()
@@ -32,12 +38,21 @@ void Dustbin::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_dustbinRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void Dustbin::InitModel()
 {
+	m_dustbinRender = FindGO<DustbinRender>("dustbinrender");
+
 	m_model.Init("Assets/modelData/object/dustbin.tkm");
 	m_model.SetPosition(m_position);
 	m_model.SetRotation(m_rotation);
@@ -101,5 +116,5 @@ void Dustbin::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

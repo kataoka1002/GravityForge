@@ -1,5 +1,6 @@
 #pragma once
 #include "ObjectBase.h"
+class BenchiBigRender;
 
 class BenchBig : public ObjectBase
 {
@@ -16,6 +17,6 @@ public:
 	void InitCollision()			override;	//ƒRƒŠƒWƒ‡ƒ“‚Ì‰Šú‰»
 
 private:
-
+	BenchiBigRender* m_benchBigRender = nullptr;
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "ObjectBase.h"
+class FenceRender;
 
 class Fence : public ObjectBase
 {
@@ -16,6 +17,6 @@ public:
 	void InitCollision()			override;	//ƒRƒŠƒWƒ‡ƒ“‚Ì‰Šú‰»
 
 private:
-
+	FenceRender* m_fenceRender = nullptr;
 };
 

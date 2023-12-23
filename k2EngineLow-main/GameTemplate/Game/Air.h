@@ -1,6 +1,6 @@
 #pragma once
-class AirRender;
 #include "ObjectBase.h"
+class AirRender;
 
 class Air : public ObjectBase
 {
@@ -18,6 +18,5 @@ public:
 
 private:
 	AirRender* m_airRender = nullptr;
-
 };
 

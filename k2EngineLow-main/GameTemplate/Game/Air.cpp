@@ -27,9 +27,9 @@ Air::~Air()
 {
 	DeleteGO(m_collisionObject);
 	// 先に死んでいるかもしれないので、検索してnullチェックをする。
-	auto airRender = FindGO<AirRender>("airrender");
-	if (airRender) {
-		airRender->RemoveInstance(m_instanceNo);
+	auto render = FindGO<AirRender>("airrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
 	}
 }
 
@@ -40,6 +40,7 @@ void Air::Update()
 
 	//m_model.Update();
 
+	//モデルの更新処理
 	m_airRender->UpdateInstancingData(
 		m_instanceNo,
 		m_position,

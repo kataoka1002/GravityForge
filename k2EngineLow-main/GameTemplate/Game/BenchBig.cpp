@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BenchBig.h"
 #include "Game.h"
+#include "BenchiBigRender.h"
 
 namespace
 {
@@ -25,6 +26,11 @@ BenchBig::BenchBig()
 BenchBig::~BenchBig()
 {
 	DeleteGO(m_collisionObject);
+	// 先に死んでいるかもしれないので、検索してnullチェックをする。
+	auto render = FindGO<BenchiBigRender>("benchibigrender");
+	if (render) {
+		render->RemoveInstance(m_instanceNo);
+	}
 }
 
 void BenchBig::Update()
@@ -32,17 +38,26 @@ void BenchBig::Update()
 	//動き
 	Move();
 
+	//m_model.Update();
 
-	m_model.Update();
+	//モデルの更新処理
+	m_benchBigRender->UpdateInstancingData(
+		m_instanceNo,
+		m_position,
+		m_rotation,
+		m_scale
+	);
 }
 
 void BenchBig::InitModel()
 {
-	m_model.Init("Assets/modelData/object/bench_big.tkm");
+	m_benchBigRender = FindGO<BenchiBigRender>("benchibigrender");
+
+	/*m_model.Init("Assets/modelData/object/bench_big.tkm");
 	m_model.SetPosition(m_position);
 	m_model.SetRotation(m_rotation);
 	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_model.Update();*/
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(
@@ -101,5 +116,5 @@ void BenchBig::Render(RenderContext& rc)
 		return;
 	}
 
-	m_model.Draw(rc);
+	//m_model.Draw(rc);
 }

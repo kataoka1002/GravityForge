@@ -40,6 +40,9 @@
     <Filter Include="MyCode\MainGame\Title">
       <UniqueIdentifier>{39cb52d8-2b83-403e-94a1-930231b5f757}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\ObjectRender">
+      <UniqueIdentifier>{394b25ed-a721-40d9-b583-224ab372749c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -262,8 +265,47 @@
     <ClCompile Include="MakeSound.cpp">
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClCompile>
+    <ClCompile Include="BarrierFenceRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="BenchiBigRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="BenchiSmallRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="BillboardSmallRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="BushBigRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="ConeRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="DustbinRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="FenceRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="HydrantRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="PlantLongRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="PlantLowRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="RockBigRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
+    <ClCompile Include="SolarPanelRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
     <ClCompile Include="AirRender.cpp">
-      <Filter>MyCode\Object</Filter>
+      <Filter>MyCode\ObjectRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,8 +544,47 @@
     <ClInclude Include="MakeSound.h">
       <Filter>MyCode\MainGame\InGame</Filter>
     </ClInclude>
+    <ClInclude Include="BarrierFenceRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchiBigRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="BenchiSmallRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="BillboardSmallRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="BushBigRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="ConeRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="DustbinRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="FenceRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="HydrantRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="PlantLongRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="PlantLowRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="RockBigRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="SolarPanelRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
     <ClInclude Include="AirRender.h">
-      <Filter>MyCode\Object</Filter>
+      <Filter>MyCode\ObjectRender</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
