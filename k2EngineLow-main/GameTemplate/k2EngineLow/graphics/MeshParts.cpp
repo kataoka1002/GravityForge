@@ -36,7 +36,8 @@ namespace nsK2EngineLow {
 		bool isDepthWrite,
 		bool isDepthTest,
 		D3D12_CULL_MODE cullMode,
-		ComputeAnimationVertexBuffer* computedAnimationVertexBuffer
+		ComputeAnimationVertexBuffer* computedAnimationVertexBuffer,
+		const char* tkmFilePath
 	)
 	{
 		m_meshs.resize(tkmFile.GetNumMesh());
@@ -57,7 +58,8 @@ namespace nsK2EngineLow {
 				isDepthWrite,
 				isDepthTest,
 				cullMode,
-				computedAnimationVertexBuffer
+				computedAnimationVertexBuffer,
+				tkmFilePath
 			);
 			meshNo++;
 		});
@@ -122,7 +124,7 @@ namespace nsK2EngineLow {
 				cbNo += NUM_CBV_ONE_MATERIAL;
 			}
 		}
-		m_descriptorHeap.Commit();
+			m_descriptorHeap.Commit();
 	}
 	void MeshParts::CreateMeshFromTkmMesh(
 		const TkmFile::SMesh& tkmMesh,
@@ -137,7 +139,8 @@ namespace nsK2EngineLow {
 		bool isDepthWrite,
 		bool isDepthTest,
 		D3D12_CULL_MODE cullMode,
-		ComputeAnimationVertexBuffer* computedAnimationVertexBuffer
+		ComputeAnimationVertexBuffer* computedAnimationVertexBuffer,
+		const char* tkmFilePath
 	) {
 		//1. 頂点バッファを作成。
 		int numVertex = (int)tkmMesh.vertexBuffer.size();
@@ -201,11 +204,12 @@ namespace nsK2EngineLow {
 		auto& materialBank = GetMaterialBank();
 		mesh->m_materials.reserve(tkmMesh.materials.size());
 		for (auto& tkmMat : tkmMesh.materials) {
-			char materiayKey[MAX_PATH];
+			static const int maxKey = 1024;
+			static char materiayKey[maxKey];
 			sprintf_s(
 				materiayKey,
-				MAX_PATH,
-				"%s, %s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s",
+				maxKey,
+				"%s, %s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s %s",
 				fxFilePath,
 				vsEntryPointFunc,
 				vsSkinEntryPointFunc,
@@ -224,7 +228,8 @@ namespace nsK2EngineLow {
 				cullMode,
 				tkmMat.albedoMapFileName.empty() ? "none" : tkmMat.albedoMapFileName.c_str(),
 				tkmMat.normalMapFileName.empty() ? "none" : tkmMat.normalMapFileName.c_str(),
-				tkmMat.specularMapFileName.empty() ? "none" : tkmMat.specularMapFileName.c_str()
+				tkmMat.specularMapFileName.empty() ? "none" : tkmMat.specularMapFileName.c_str(),
+				tkmFilePath
 			);
 			auto mat = materialBank.Get(materiayKey);
 			if (mat == nullptr) {

@@ -122,18 +122,18 @@ bool Game::Start()
 				m_boss->SetRotation(objData.rotation);
 				return true;
 			}
-			////名前がteapotだったら。
-			//else if (objData.EqualObjectName(L"teapot") == true)
-			//{
-			//	//ティーポットオブジェクトを作成する。
-			//	m_teapot = NewGO<Teapot>(0, "teapot");
+			//名前がteapotだったら。
+			else if (objData.EqualObjectName(L"teapot") == true)
+			{
+				//ティーポットオブジェクトを作成する。
+				m_teapot = NewGO<Teapot>(0, "teapot");
 
-			//	SetLevel(m_teapot, objData);
+				SetLevel(m_teapot, objData);
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_teapot);
-			//	return true;
-			//}
+				//リストに追加
+				m_objectList.emplace_back(m_teapot);
+				return true;
+			}
 			else if (objData.EqualObjectName(L"air") == true)
 			{
 				//換気扇オブジェクトを作成する。

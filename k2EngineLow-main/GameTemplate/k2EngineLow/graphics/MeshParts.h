@@ -70,7 +70,8 @@ namespace nsK2EngineLow {
 			bool isDepthWrite,
 			bool isDepthTest,
 			D3D12_CULL_MODE cullMode,
-			ComputeAnimationVertexBuffer* computedAnimationVertexBuffer
+			ComputeAnimationVertexBuffer* computedAnimationVertexBuffer,
+			const char* tkmFilePath
 		);
 		/// <summary>
 		/// ï`âÊÅB
@@ -180,7 +181,8 @@ namespace nsK2EngineLow {
 			bool isDepthWrite,
 			bool isDepthTest,
 			D3D12_CULL_MODE cullMode,
-			ComputeAnimationVertexBuffer* computedAnimationVertexBuffer
+			ComputeAnimationVertexBuffer* computedAnimationVertexBuffer,
+			const char* tkmFilePath
 		);
 
 
