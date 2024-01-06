@@ -92,111 +92,123 @@ namespace nsK2EngineLow {
 	void ModelRender::InitInstancingModelOnRenderGBuffer(const char* filePath, EnModelUpAxis enModelUpAxis)
 	{
 		ModelInitData modelInitData;
+
+		//ファイルパスの設定
+		modelInitData.m_tkmFilePath = filePath;
 		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
 
-		// エントリーポイントをセットアップ。
+		//エントリー関数の設定
 		modelInitData.m_psEntryPointFunc = "PSShadowMain";
+		modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+		modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
 
 		//モデルの上方向を指定する。
 		modelInitData.m_modelUpAxis = enModelUpAxis;
-		modelInitData.m_tkmFilePath = filePath;
+
+		//カラーバッファーフォーマットの設定
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
 		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
 
+		// 頂点の事前計算処理を使う。
+		modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+		
+		//アニメーションがあるならスケルトンを指定する
 		if (m_animationClips != nullptr)
 		{
-			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
-			//コンピュートシェーダー用のエントリー関数
-			modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer"; 
-			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-			//modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
-			
-			// 頂点の事前計算処理を使う。
-			modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
-		}
-		else
-		{
-			modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 		}
 
 		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
-		modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+		if (m_isEnableInstancingDraw)
+		{
+			modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+		}
+
+		//初期化
 		m_renderToGBufferModel.Init(modelInitData);
 	}
 
 	void ModelRender::InitInstancingModelOnZprepass(const char* filePath, EnModelUpAxis enModelUpAxis)
 	{
 		ModelInitData modelInitData;
+
+		//ファイルパスの設定
 		modelInitData.m_tkmFilePath = filePath;
 		modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
+
+		//エントリー関数の設定
+		modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+		modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+
+		//モデルの上方向を指定する。
 		modelInitData.m_modelUpAxis = enModelUpAxis;
 
+		// 頂点の事前計算処理を使う。
+		modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+
+		//カラーバッファーフォーマットの設定
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		 
+		//アニメーションがあるならスケルトンを指定する
 		if (m_animationClips != nullptr)
 		{
-			//スケルトンを指定する。
 			modelInitData.m_skeleton = &m_skeleton;
-			//コンピュートシェーダー用のエントリー関数
-			modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-			//modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
-
-			// 頂点の事前計算処理を使う。
-			modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
-		}
-		else
-		{
-			modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 		}
 
-		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		//インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
 		if (m_isEnableInstancingDraw) 
 		{
-			// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
 			modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 		}
 
+		//初期化
 		m_zprepassModel.Init(modelInitData);
 	}
 
 	void ModelRender::InitInstancingShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
 	{
 		//シャドウマップに書きこむモデルの設定
-		ModelInitData sadowDrawModelInitData;
-		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
-		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
-		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
-		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+		ModelInitData modelInitData;
 
+		//ファイルパスの設定
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
+
+		//エントリー関数の設定
+		modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+		modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+
+		//モデルの上方向を指定する。
+		modelInitData.m_modelUpAxis = enModelUpAxis;
+
+		//カラーバッファーフォーマットの設定
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+
+		// 頂点の事前計算処理を使う。
+		modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+
+		//アニメーションがあるならスケルトンを指定する
 		if (m_animationClips != nullptr)
 		{
-			//スケルトンを指定する。
-			sadowDrawModelInitData.m_skeleton = &m_skeleton;
-			//コンピュートシェーダー用のエントリー関数
-			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-			sadowDrawModelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
-			//sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
-
-			// 頂点の事前計算処理を使う。
-			sadowDrawModelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+			modelInitData.m_skeleton = &m_skeleton;
 		}
-		else
+
+		//インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
+		if (m_isEnableInstancingDraw)
 		{
-			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+			modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 		}
 
-		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
-		sadowDrawModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
-
+		//初期化
 		for (int ligNo = 0; ligNo < 1; ligNo++)
 		{
 			for (int shadowMapNo = 0; shadowMapNo < NUM_SHADOW_MAP; shadowMapNo++) 
 			{
 				m_drawShadowMapCameraParamCB[shadowMapNo].Init(sizeof(Vector4), nullptr);
-				sadowDrawModelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB[shadowMapNo];
-				sadowDrawModelInitData.m_expandConstantBufferSize = sizeof(Vector4);
-				m_shadowDrawModel[shadowMapNo].Init(sadowDrawModelInitData);
+				modelInitData.m_expandConstantBuffer = &m_drawShadowMapCameraParamCB[shadowMapNo];
+				modelInitData.m_expandConstantBufferSize = sizeof(Vector4);
+				m_shadowDrawModel[shadowMapNo].Init(modelInitData);
 				//インスタンス数の設定
 				m_shadowDrawModel[shadowMapNo].SetInstanceNum(m_maxInstance);
 			}

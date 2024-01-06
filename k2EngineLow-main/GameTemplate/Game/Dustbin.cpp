@@ -53,11 +53,11 @@ void Dustbin::InitModel()
 {
 	m_dustbinRender = FindGO<DustbinRender>("dustbinrender");
 
-	m_model.Init("Assets/modelData/object/dustbin.tkm");
+	/*m_model.Init("Assets/modelData/object/dustbin.tkm");
 	m_model.SetPosition(m_position);
 	m_model.SetRotation(m_rotation);
 	m_model.SetScale(m_scale);
-	m_model.Update();
+	m_model.Update();*/
 
 	//キャラクターコントローラーを初期化
 	m_charaCon.Init(

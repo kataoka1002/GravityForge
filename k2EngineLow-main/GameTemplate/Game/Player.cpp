@@ -87,7 +87,7 @@ namespace nsPlayer
 			});
 
 		//プレイヤーモデルの初期化
-		m_playerModel.Init("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		m_playerModel.InitInstancing("Assets/modelData/player/player.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
 		m_playerModel.SetPosition(m_position);
 		m_playerModel.SetRotation(m_rotation);
 		m_playerModel.SetScale(m_scale);

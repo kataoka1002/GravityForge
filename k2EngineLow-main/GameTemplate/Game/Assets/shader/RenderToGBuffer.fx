@@ -60,42 +60,42 @@ sampler g_sampler : register(s0);
 float3 CalcNormal(SPSIn psIn);
 
 //スキン行列を計算する。
-float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-{
-    float4x4 skinning = 0;
-    float w = 0.0f;
-	[unroll]
-    for (int i = 0; i < 3; i++)
-    {
-        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-        w += skinVert.Weights[i];
-    }
+//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+//{
+//    float4x4 skinning = 0;
+//    float w = 0.0f;
+//	[unroll]
+//    for (int i = 0; i < 3; i++)
+//    {
+//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+//        w += skinVert.Weights[i];
+//    }
     
-    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-    return skinning;
-}
+//    return skinning;
+//}
 
 //モデル用の頂点シェーダーのエントリーポイント
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 {
     SPSIn psIn;
     float4x4 m;
-    if (hasSkin)
-    {
-        m = CalcSkinMatrix(vsIn.skinVert);
-    }
-    else
+    //if (hasSkin)
+    //{
+    //    m = CalcSkinMatrix(vsIn.skinVert);
+    //}
+    //else
     {
         m = mWorld;
     }
 
-    psIn.pos = mul(m, vsIn.pos);                    // モデルの頂点をワールド座標系に変換
+    psIn.pos = mul(m, vsIn.pos); // モデルの頂点をワールド座標系に変換
     psIn.worldPos = psIn.pos;
-    psIn.pos = mul(mView, psIn.pos);                // ワールド座標系からカメラ座標系に変換
-    psIn.pos = mul(mProj, psIn.pos);                // カメラ座標系からスクリーン座標系に変換
+    psIn.pos = mul(mView, psIn.pos); // ワールド座標系からカメラ座標系に変換
+    psIn.pos = mul(mProj, psIn.pos); // カメラ座標系からスクリーン座標系に変換
     psIn.normal = normalize(mul(m, vsIn.normal));
-    psIn.normalInView = mul(mView, psIn.normal);    // カメラ空間の法線を求める
+    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
     psIn.tangent = normalize(mul(m, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
     psIn.biNomal = normalize(mul(m, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
 
@@ -123,8 +123,6 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
     return psIn;
 }
 
-
-
 /// 事前計算済みの頂点バッファを使う頂点シェーダーのエントリー関数。
 SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
 {
@@ -134,10 +132,10 @@ SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
     psIn.worldPos = psIn.pos;
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);
-    psIn.normal = normalize(mul((float4x4) 0, vsIn.normal));
+    psIn.normal = vsIn.normal;
     psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
-    psIn.tangent = normalize(mul((float4x4) 0, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
-    psIn.biNomal = normalize(mul((float4x4) 0, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
+    psIn.tangent = vsIn.tangent; // 接ベクトルをワールド空間に変換する
+    psIn.biNomal = vsIn.biNomal; // 従ベクトルをワールド空間に変換する
     psIn.uv = vsIn.uv;
     
     return psIn;

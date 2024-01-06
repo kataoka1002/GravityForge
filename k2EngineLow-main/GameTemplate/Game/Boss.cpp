@@ -47,7 +47,7 @@ namespace nsBoss
 
 	void Boss::InitModel()
 	{
-		m_model.Init("Assets/modelData/Boss/Boss.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		m_model.InitInstancing("Assets/modelData/Boss/Boss.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
 		m_model.SetPosition(m_position);
 		m_model.SetRotation(m_rotation);
 		m_model.SetScale(m_scale);

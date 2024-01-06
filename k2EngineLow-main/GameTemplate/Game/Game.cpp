@@ -110,18 +110,18 @@ bool Game::Start()
 				return true;
 			}
 			//名前がbossだったら。
-			//else if (objData.EqualObjectName(L"boss") == true)
-			//{
-			//	//ボスオブジェクトを作成する。
-			//	m_boss = NewGO<nsBoss::Boss>(0, "boss");
-			//	//座標を設定する。
-			//	m_boss->SetPosition(objData.position);
-			//	//大きさを設定する。
-			//	m_boss->SetScale(objData.scale);
-			//	//回転を設定する。
-			//	m_boss->SetRotation(objData.rotation);
-			//	return true;
-			//}
+			else if (objData.EqualObjectName(L"boss") == true)
+			{
+				//ボスオブジェクトを作成する。
+				m_boss = NewGO<nsBoss::Boss>(0, "boss");
+				//座標を設定する。
+				m_boss->SetPosition(objData.position);
+				//大きさを設定する。
+				m_boss->SetScale(objData.scale);
+				//回転を設定する。
+				m_boss->SetRotation(objData.rotation);
+				return true;
+			}
 			////名前がteapotだったら。
 			//else if (objData.EqualObjectName(L"teapot") == true)
 			//{
@@ -148,175 +148,175 @@ bool Game::Start()
 
 				return true;
 			}
-			//else if (objData.EqualObjectName(L"barrierFence") == true)
-			//{
-			//	//工事の柵オブジェクトを作成する。
-			//	m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
+			else if (objData.EqualObjectName(L"barrierFence") == true)
+			{
+				//工事の柵オブジェクトを作成する。
+				m_barrierFence = NewGO<BarrierFence>(0, "barrierfence");
 
-			//	SetLevel(m_barrierFence, objData);
-			//	m_barrierFence->SetInstanceNo(barrierFenceNum);
-			//	barrierFenceNum++;
+				SetLevel(m_barrierFence, objData);
+				m_barrierFence->SetInstanceNo(barrierFenceNum);
+				barrierFenceNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_barrierFence);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"bench_big") == true)
-			//{
-			//	//でかいベンチオブジェクトを作成する。
-			//	m_benchBig = NewGO<BenchBig>(0, "benchbig");
+				//リストに追加
+				m_objectList.emplace_back(m_barrierFence);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bench_big") == true)
+			{
+				//でかいベンチオブジェクトを作成する。
+				m_benchBig = NewGO<BenchBig>(0, "benchbig");
 
-			//	SetLevel(m_benchBig, objData);
-			//	m_benchBig->SetInstanceNo(benchBigNum);
-			//	benchBigNum++;
+				SetLevel(m_benchBig, objData);
+				m_benchBig->SetInstanceNo(benchBigNum);
+				benchBigNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_benchBig);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"bench_small") == true)
-			//{
-			//	//小さいベンチオブジェクトを作成する。
-			//	m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
+				//リストに追加
+				m_objectList.emplace_back(m_benchBig);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bench_small") == true)
+			{
+				//小さいベンチオブジェクトを作成する。
+				m_benchSmall = NewGO<BenchSmall>(0, "benchsmall");
 
-			//	SetLevel(m_benchSmall, objData);
-			//	m_benchSmall->SetInstanceNo(benchSmallNum);
-			//	benchSmallNum++;
+				SetLevel(m_benchSmall, objData);
+				m_benchSmall->SetInstanceNo(benchSmallNum);
+				benchSmallNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_benchSmall);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"billboard_small") == true)
-			//{
-			//	//看板オブジェクトを作成する。
-			//	m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
+				//リストに追加
+				m_objectList.emplace_back(m_benchSmall);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"billboard_small") == true)
+			{
+				//看板オブジェクトを作成する。
+				m_billboardSmall = NewGO<BillboardSmall>(0, "billboardsmall");
 
-			//	SetLevel(m_billboardSmall, objData);
-			//	m_billboardSmall->SetInstanceNo(billboardSmallNum);
-			//	billboardSmallNum++;
+				SetLevel(m_billboardSmall, objData);
+				m_billboardSmall->SetInstanceNo(billboardSmallNum);
+				billboardSmallNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_billboardSmall);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"bush_big") == true)
-			//{
-			//	//草オブジェクトを作成する。
-			//	m_bushBig = NewGO<BushBig>(0, "bushbig");
+				//リストに追加
+				m_objectList.emplace_back(m_billboardSmall);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"bush_big") == true)
+			{
+				//草オブジェクトを作成する。
+				m_bushBig = NewGO<BushBig>(0, "bushbig");
 
-			//	SetLevel(m_bushBig, objData);
-			//	m_bushBig->SetInstanceNo(bushBigNum);
-			//	bushBigNum++;
+				SetLevel(m_bushBig, objData);
+				m_bushBig->SetInstanceNo(bushBigNum);
+				bushBigNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_bushBig);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"cone") == true)
-			//{
-			//	//三角コーンオブジェクトを作成する。
-			//	m_cone = NewGO<Cone>(0, "cone");
+				//リストに追加
+				m_objectList.emplace_back(m_bushBig);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"cone") == true)
+			{
+				//三角コーンオブジェクトを作成する。
+				m_cone = NewGO<Cone>(0, "cone");
 
-			//	SetLevel(m_cone, objData);
-			//	m_cone->SetInstanceNo(coneNum);
-			//	coneNum++;
+				SetLevel(m_cone, objData);
+				m_cone->SetInstanceNo(coneNum);
+				coneNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_cone);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"dustbin") == true)
-			//{
-			//	//ゴミ箱オブジェクトを作成する。
-			//	m_dustbin = NewGO<Dustbin>(0, "dustbin");
+				//リストに追加
+				m_objectList.emplace_back(m_cone);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"dustbin") == true)
+			{
+				//ゴミ箱オブジェクトを作成する。
+				m_dustbin = NewGO<Dustbin>(0, "dustbin");
 
-			//	SetLevel(m_dustbin, objData);
-			//	m_dustbin->SetInstanceNo(dustbinNum);
-			//	dustbinNum++;
+				SetLevel(m_dustbin, objData);
+				m_dustbin->SetInstanceNo(dustbinNum);
+				dustbinNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_dustbin);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"fence") == true)
-			//{
-			//	//フェンスオブジェクトを作成する。
-			//	m_fence = NewGO<Fence>(0, "fence");
+				//リストに追加
+				m_objectList.emplace_back(m_dustbin);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"fence") == true)
+			{
+				//フェンスオブジェクトを作成する。
+				m_fence = NewGO<Fence>(0, "fence");
 
-			//	SetLevel(m_fence, objData);
-			//	m_fence->SetInstanceNo(fenceNum);
-			//	fenceNum++;
+				SetLevel(m_fence, objData);
+				m_fence->SetInstanceNo(fenceNum);
+				fenceNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_fence);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"hydrant") == true)
-			//{
-			//	//消火栓オブジェクトを作成する。
-			//	m_hydrant = NewGO<Hydrant>(0, "hydrant");
+				//リストに追加
+				m_objectList.emplace_back(m_fence);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"hydrant") == true)
+			{
+				//消火栓オブジェクトを作成する。
+				m_hydrant = NewGO<Hydrant>(0, "hydrant");
 
-			//	SetLevel(m_hydrant, objData);
-			//	m_hydrant->SetInstanceNo(hydrantNum);
-			//	hydrantNum++;
+				SetLevel(m_hydrant, objData);
+				m_hydrant->SetInstanceNo(hydrantNum);
+				hydrantNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_hydrant);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"plant_long") == true)
-			//{
-			//	//大花瓶オブジェクトを作成する。
-			//	m_plantLong = NewGO<PlantLong>(0, "plantlong");
+				//リストに追加
+				m_objectList.emplace_back(m_hydrant);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"plant_long") == true)
+			{
+				//大花瓶オブジェクトを作成する。
+				m_plantLong = NewGO<PlantLong>(0, "plantlong");
 
-			//	SetLevel(m_plantLong, objData);
-			//	m_plantLong->SetInstanceNo(plantLongNum);
-			//	plantLongNum++;
+				SetLevel(m_plantLong, objData);
+				m_plantLong->SetInstanceNo(plantLongNum);
+				plantLongNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_plantLong);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"plant_low") == true)
-			//{
-			//	//小花瓶オブジェクトを作成する。
-			//	m_plantLow = NewGO<PlantLow>(0, "plantlow");
+				//リストに追加
+				m_objectList.emplace_back(m_plantLong);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"plant_low") == true)
+			{
+				//小花瓶オブジェクトを作成する。
+				m_plantLow = NewGO<PlantLow>(0, "plantlow");
 
-			//	SetLevel(m_plantLow, objData);
-			//	m_plantLow->SetInstanceNo(plantLowNum);
-			//	plantLowNum++;
+				SetLevel(m_plantLow, objData);
+				m_plantLow->SetInstanceNo(plantLowNum);
+				plantLowNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_plantLow);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"rock_big") == true)
-			//{
-			//	//岩オブジェクトを作成する。
-			//	m_rockBig = NewGO<RockBig>(0, "rockbig");
+				//リストに追加
+				m_objectList.emplace_back(m_plantLow);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"rock_big") == true)
+			{
+				//岩オブジェクトを作成する。
+				m_rockBig = NewGO<RockBig>(0, "rockbig");
 
-			//	SetLevel(m_rockBig, objData);
-			//	m_rockBig->SetInstanceNo(rockBigNum);
-			//	rockBigNum++;
+				SetLevel(m_rockBig, objData);
+				m_rockBig->SetInstanceNo(rockBigNum);
+				rockBigNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_rockBig);
-			//	return true;
-			//}
-			//else if (objData.EqualObjectName(L"solarPanel") == true)
-			//{
-			//	//ソーラーパネルオブジェクトを作成する。
-			//	m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
+				//リストに追加
+				m_objectList.emplace_back(m_rockBig);
+				return true;
+			}
+			else if (objData.EqualObjectName(L"solarPanel") == true)
+			{
+				//ソーラーパネルオブジェクトを作成する。
+				m_solarPanel = NewGO<SolarPanel>(0, "solarpanel");
 
-			//	SetLevel(m_solarPanel, objData);
-			//	m_solarPanel->SetInstanceNo(solarPanelNum);
-			//	solarPanelNum++;
+				SetLevel(m_solarPanel, objData);
+				m_solarPanel->SetInstanceNo(solarPanelNum);
+				solarPanelNum++;
 
-			//	//リストに追加
-			//	m_objectList.emplace_back(m_solarPanel);
-			//	return true;
-			//}
+				//リストに追加
+				m_objectList.emplace_back(m_solarPanel);
+				return true;
+			}
 			//名前がhumanEnemyだったら。
 			else if (objData.EqualObjectName(L"humanEnemy") == true)
 			{
@@ -356,32 +356,32 @@ bool Game::Start()
 	//レンダラーを作成
 	m_airRender = NewGO<AirRender>(0, "airrender");
 	m_airRender->SetMaxAir(AirNum);
-	//m_barrierFenceRender = NewGO<BarrierFenceRender>(0, "barrierfencerender");
-	//m_barrierFenceRender->SetMaxModel(barrierFenceNum);
-	//m_benchBigRender = NewGO<BenchiBigRender>(0, "benchibigrender");
-	//m_benchBigRender->SetMaxModel(benchBigNum);
-	//m_benchSmallRender = NewGO<BenchiSmallRender>(0, "benchismallrender");
-	//m_benchSmallRender->SetMaxModel(benchSmallNum);
-	//m_billboardSmallRender = NewGO<BillboardSmallRender>(0, "billboardsmallrender");
-	//m_billboardSmallRender->SetMaxModel(billboardSmallNum);
-	//m_bushBigRender = NewGO<BushBigRender>(0, "bushbigrender");
-	//m_bushBigRender->SetMaxModel(bushBigNum);
-	//m_coneRender = NewGO<ConeRender>(0, "conerender");
-	//m_coneRender->SetMaxModel(coneNum);
-	//m_dustbinRender = NewGO<DustbinRender>(0, "dustbinrender");
-	//m_dustbinRender->SetMaxModel(dustbinNum);
-	//m_fenceRender = NewGO<FenceRender>(0, "fencerender");
-	//m_fenceRender->SetMaxModel(fenceNum);
-	//m_hydrantRender = NewGO<HydrantRender>(0, "hydrantrender");
-	//m_hydrantRender->SetMaxModel(hydrantNum);
-	//m_plantLongRender = NewGO<PlantLongRender>(0, "plantlongrender");
-	//m_plantLongRender->SetMaxModel(plantLongNum);
-	//m_plantLowRender = NewGO<PlantLowRender>(0, "plantlowrender");
-	//m_plantLowRender->SetMaxModel(plantLowNum);
-	//m_rockBigRender = NewGO<RockBigRender>(0, "rockbigrender");
-	//m_rockBigRender->SetMaxModel(rockBigNum);
-	//m_solarPanelRender = NewGO<SolarPanelRender>(0, "solarpanelrender");
-	//m_solarPanelRender->SetMaxModel(solarPanelNum);
+	m_barrierFenceRender = NewGO<BarrierFenceRender>(0, "barrierfencerender");
+	m_barrierFenceRender->SetMaxModel(barrierFenceNum);
+	m_benchBigRender = NewGO<BenchiBigRender>(0, "benchibigrender");
+	m_benchBigRender->SetMaxModel(benchBigNum);
+	m_benchSmallRender = NewGO<BenchiSmallRender>(0, "benchismallrender");
+	m_benchSmallRender->SetMaxModel(benchSmallNum);
+	m_billboardSmallRender = NewGO<BillboardSmallRender>(0, "billboardsmallrender");
+	m_billboardSmallRender->SetMaxModel(billboardSmallNum);
+	m_bushBigRender = NewGO<BushBigRender>(0, "bushbigrender");
+	m_bushBigRender->SetMaxModel(bushBigNum);
+	m_coneRender = NewGO<ConeRender>(0, "conerender");
+	m_coneRender->SetMaxModel(coneNum);
+	m_dustbinRender = NewGO<DustbinRender>(0, "dustbinrender");
+	m_dustbinRender->SetMaxModel(dustbinNum);
+	m_fenceRender = NewGO<FenceRender>(0, "fencerender");
+	m_fenceRender->SetMaxModel(fenceNum);
+	m_hydrantRender = NewGO<HydrantRender>(0, "hydrantrender");
+	m_hydrantRender->SetMaxModel(hydrantNum);
+	m_plantLongRender = NewGO<PlantLongRender>(0, "plantlongrender");
+	m_plantLongRender->SetMaxModel(plantLongNum);
+	m_plantLowRender = NewGO<PlantLowRender>(0, "plantlowrender");
+	m_plantLowRender->SetMaxModel(plantLowNum);
+	m_rockBigRender = NewGO<RockBigRender>(0, "rockbigrender");
+	m_rockBigRender->SetMaxModel(rockBigNum);
+	m_solarPanelRender = NewGO<SolarPanelRender>(0, "solarpanelrender");
+	m_solarPanelRender->SetMaxModel(solarPanelNum);
 	m_humanEnemyRender = NewGO<nsHumanEnemy::HumanEnemyRender>(0, "humanenemyrender");
 	m_humanEnemyRender->SetMaxHumanEnemy(humanEnemyNum);
 	

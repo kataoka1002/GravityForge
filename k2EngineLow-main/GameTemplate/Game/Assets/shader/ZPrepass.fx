@@ -40,21 +40,21 @@ StructuredBuffer<float4x4> g_boneMatrix : register(t3); // ボーン行列
 StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ワールド行列の配列。インスタンシング描画の際に有効。
 
 //スキン行列を計算する。
-float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-{
-    float4x4 skinning = 0;
-    float w = 0.0f;
-	[unroll]
-    for (int i = 0; i < 3; i++)
-    {
-        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-        w += skinVert.Weights[i];
-    }
+//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+//{
+//    float4x4 skinning = 0;
+//    float w = 0.0f;
+//	[unroll]
+//    for (int i = 0; i < 3; i++)
+//    {
+//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+//        w += skinVert.Weights[i];
+//    }
     
-    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-    return skinning;
-}
+//    return skinning;
+//}
 
 /// <summary>
 /// 頂点シェーダー
@@ -64,11 +64,11 @@ SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
     // シャドウマップ描画用の頂点シェーダーを実装
     SPSIn psIn;
     float4x4 m;
-    if (hasSkin)
-    {
-        m = CalcSkinMatrix(vsIn.skinVert);
-    }
-    else
+    //if (hasSkin)
+    //{
+    //    m = CalcSkinMatrix(vsIn.skinVert);
+    //}
+    //else
     {
         m = mWorld;
     }
@@ -99,20 +99,20 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
 }
 
 // インスタンシングモデル用の頂点シェーダーのエントリーポイント
-SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
-{
-    SPSIn psIn;
-    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
-    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
-    psIn.pos = mul(mWorldLocal, vsIn.pos);
-    psIn.pos = mul(mView, psIn.pos);
-    psIn.depth.z = psIn.pos.z;
-    psIn.pos = mul(mProj, psIn.pos);
-    psIn.depth.x = psIn.pos.z / psIn.pos.w;
-    psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
+//SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
+//{
+//    SPSIn psIn;
+//    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
+//    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
+//    psIn.pos = mul(mWorldLocal, vsIn.pos);
+//    psIn.pos = mul(mView, psIn.pos);
+//    psIn.depth.z = psIn.pos.z;
+//    psIn.pos = mul(mProj, psIn.pos);
+//    psIn.depth.x = psIn.pos.z / psIn.pos.w;
+//    psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
     
-    return psIn;
-}
+//    return psIn;
+//}
 
 /// 事前計算済みの頂点バッファを使う頂点シェーダーのエントリー関数。
 SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)

@@ -48,21 +48,21 @@ StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ÉèÅ[ÉãÉhçsóÒÇÃî
 
 
 //ÉXÉLÉìçsóÒÇåvéZÇ∑ÇÈÅB
-float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-{
-    float4x4 skinning = 0;
-    float w = 0.0f;
-	[unroll]
-    for (int i = 0; i < 3; i++)
-    {
-        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-        w += skinVert.Weights[i];
-    }
+//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+//{
+//    float4x4 skinning = 0;
+//    float w = 0.0f;
+//	[unroll]
+//    for (int i = 0; i < 3; i++)
+//    {
+//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+//        w += skinVert.Weights[i];
+//    }
     
-    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-    return skinning;
-}
+//    return skinning;
+//}
 
 /// <summary>
 /// í∏ì_ÉVÉFÅ[É_Å[
@@ -72,11 +72,11 @@ SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
     // ÉVÉÉÉhÉEÉ}ÉbÉvï`âÊópÇÃí∏ì_ÉVÉFÅ[É_Å[Çé¿ëï
     SPSIn psIn;
     float4x4 m;
-    if (hasSkin)
-    {
-        m = CalcSkinMatrix(vsIn.skinVert);
-    }
-    else
+    //if (hasSkin)
+    //{
+    //    m = CalcSkinMatrix(vsIn.skinVert);
+    //}
+    //else
     {
         m = mWorld;
     }
@@ -104,19 +104,19 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
     return psIn;
 }
 
-SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
-{
-    SPSIn psIn;
-    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
-    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
-    psIn.pos = mul(mWorldLocal, vsIn.pos);
-    psIn.pos = mul(mView, psIn.pos);
-    psIn.pos = mul(mProj, psIn.pos);
-    psIn.uv = vsIn.uv;
-    psIn.normal = mul(mWorldLocal, vsIn.normal);
+//SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
+//{
+//    SPSIn psIn;
+//    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
+//    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
+//    psIn.pos = mul(mWorldLocal, vsIn.pos);
+//    psIn.pos = mul(mView, psIn.pos);
+//    psIn.pos = mul(mProj, psIn.pos);
+//    psIn.uv = vsIn.uv;
+//    psIn.normal = mul(mWorldLocal, vsIn.normal);
     
-    return psIn;
-}
+//    return psIn;
+//}
 
 /// éñëOåvéZçœÇ›ÇÃí∏ì_ÉoÉbÉtÉ@ÇégÇ§í∏ì_ÉVÉFÅ[É_Å[ÇÃÉGÉìÉgÉäÅ[ä÷êîÅB
 SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
@@ -127,7 +127,7 @@ SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);
     psIn.uv = vsIn.uv;
-    psIn.normal = mul((float4x4) 0, vsIn.normal);
+    psIn.normal = vsIn.normal;
     
     return psIn;
 }
