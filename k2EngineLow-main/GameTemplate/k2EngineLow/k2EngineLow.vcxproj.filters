@@ -243,6 +243,7 @@
     <ClCompile Include="SceneGeometryData.cpp">
       <Filter>geometry</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ComputeAnimationVertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="k2EngineLowPreCompile.h" />

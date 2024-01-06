@@ -33,6 +33,7 @@
 #include "BlackFade.h"
 #include "MissionUI.h"
 #include "MakeEffect.h"
+#include "HumanEnemyRender.h"
 
 #include "AirRender.h"
 #include "BarrierFenceRender.h"
@@ -145,6 +146,7 @@ private:
 	SolarPanel* m_solarPanel = nullptr;
 
 	nsHumanEnemy::HumanEnemy* m_humanEnemy = nullptr;
+	nsHumanEnemy::HumanEnemyRender* m_humanEnemyRender = nullptr;
 	House* m_house = nullptr;
 	Wall* m_wall = nullptr;
 	GameInformation* m_gameInfo = nullptr;

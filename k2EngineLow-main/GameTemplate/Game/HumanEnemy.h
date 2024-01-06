@@ -9,6 +9,7 @@ namespace nsHumanEnemy
 {
 	//前方宣言
 	class IHumanEnemyState;
+	class HumanEnemyRender;
 
 	class HumanEnemy : public EnemyBase
 	{
@@ -98,14 +99,25 @@ namespace nsHumanEnemy
 			return toPlayerLen;
 		}
 
+		/// <summary>
+		/// インスタンス番号を設定。
+		/// </summary>
+		/// <param name="instanceNo"></param>
+		void SetInstanceNo(int instanceNo)
+		{
+			m_instanceNo = instanceNo;
+		}
+
 	protected:
 
 		AnimationClip		animationClips[enAnimClip_Num];			// アニメーションクリップ
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IHumanEnemyState*	m_humanEnemyState = nullptr;			// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		int					m_instanceNo = 0;						// インスタンス番号。
 		bool				m_isSetDeadState = false;				// 半死にステートをセットしたか
 		bool				m_isSetDieState = false;				// 死亡ステートをセットしたか
 		EnemyUI*			m_enemyUI = nullptr;
+		HumanEnemyRender*   m_humanEnemyRender = nullptr;
 	};
 }

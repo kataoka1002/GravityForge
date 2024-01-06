@@ -102,7 +102,7 @@ namespace nsK2EngineLow {
 		});
 
 		// シェーダーをロード。
-		const char* fxFilePath = "Assets/shader/preProcess/ComputeAnimationVertexBuffer.fx";
+		const char* fxFilePath = "Assets/shader/ComputeAnimationVertexBuffer.fx";
 		const char* entryPoint = "CSMain";
 		m_shader = g_engine->GetShaderFromBank(fxFilePath, entryPoint);
 		if (m_shader == nullptr) {

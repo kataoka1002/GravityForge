@@ -307,6 +307,9 @@
     <ClCompile Include="AirRender.cpp">
       <Filter>MyCode\ObjectRender</Filter>
     </ClCompile>
+    <ClCompile Include="HumanEnemyRender.cpp">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -585,6 +588,9 @@
     </ClInclude>
     <ClInclude Include="AirRender.h">
       <Filter>MyCode\ObjectRender</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanEnemyRender.h">
+      <Filter>MyCode\Enemy\HumanEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

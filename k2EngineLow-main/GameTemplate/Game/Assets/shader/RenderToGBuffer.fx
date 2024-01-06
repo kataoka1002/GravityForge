@@ -114,10 +114,30 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);
     psIn.normal = normalize(mul(m, vsIn.normal));
-    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
+    psIn.normalInView = mul(mView, psIn.normal);    // カメラ空間の法線を求める
     psIn.tangent = normalize(mul(m, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
     psIn.biNomal = normalize(mul(m, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
 
+    psIn.uv = vsIn.uv;
+    
+    return psIn;
+}
+
+
+
+/// 事前計算済みの頂点バッファを使う頂点シェーダーのエントリー関数。
+SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
+{
+    SPSIn psIn;
+    
+    psIn.pos = vsIn.pos;
+    psIn.worldPos = psIn.pos;
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.normal = normalize(mul((float4x4) 0, vsIn.normal));
+    psIn.normalInView = mul(mView, psIn.normal); // カメラ空間の法線を求める
+    psIn.tangent = normalize(mul((float4x4) 0, vsIn.tangent)); // 接ベクトルをワールド空間に変換する
+    psIn.biNomal = normalize(mul((float4x4) 0, vsIn.biNomal)); // 従ベクトルをワールド空間に変換する
     psIn.uv = vsIn.uv;
     
     return psIn;

@@ -260,11 +260,21 @@ namespace nsK2EngineLow
 		m_sceneGeometryData.Update();
 	}
 
+	void RenderingEngine::ComputeAnimatedVertex(RenderContext& rc)
+	{
+		for (auto& renderObj : ModelRenderObject) {
+			renderObj->OnComputeVertex(rc);
+		}
+	}
+
 	void RenderingEngine::Execute(RenderContext& rc)
 	{
 		// シーンライトのデータをコピー。
 		m_deferredLightingCB.m_light = m_sceneLight.GetLight();
 		m_deferredLightingCB.m_isEnableRaytracing = IsEnableRaytracing() ? 1 : 0;
+
+		// アニメーション済み頂点の計算。
+		ComputeAnimatedVertex(rc);
 
 		//シャドウマップに影を描画
 		DrawShadowMap(rc);

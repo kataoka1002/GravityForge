@@ -285,6 +285,14 @@ namespace nsK2EngineLow
 			m_sceneGeometryData.UnregisterGeometryData(geomData);
 		}
 
+		/// <summary>
+		/// アニメーション済み頂点の計算。
+		/// </summary>
+		/// <remark>
+		/// </remark>
+		/// <param name="rc">レンダリングコンテキスト</param>
+		void ComputeAnimatedVertex(RenderContext& rc);
+
 	private:
 			/// <summary>
 			/// イメージベースドライティング(IBL)のためのデータを初期化する。

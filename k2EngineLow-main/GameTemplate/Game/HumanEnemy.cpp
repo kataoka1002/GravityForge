@@ -8,6 +8,7 @@
 #include "HumanEnemyReactionState.h"
 #include "HumanEnemyDieState.h"
 #include "EnemyUI.h"
+#include "HumanEnemyRender.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -39,16 +40,24 @@ namespace nsHumanEnemy
 	{
 		DeleteGO(m_collisionObject);
 		DeleteGO(m_enemyUI);
+
+		// 先に死んでいるかもしれないので、検索してnullチェックをする。
+		auto render = FindGO<HumanEnemyRender>("humanenemyrender");
+		if (render) {
+			render->RemoveInstance(m_instanceNo);
+		}
 	}
 
 	void HumanEnemy::InitModel()
 	{
+		m_humanEnemyRender = FindGO<HumanEnemyRender>("humanenemyrender");
+
 		//モデルの初期化
-		m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
-		m_model.SetPosition(m_position);
-		m_model.SetRotation(m_rotation);
-		m_model.SetScale(m_scale);
-		m_model.Update();
+		//m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		//m_model.SetPosition(m_position);
+		//m_model.SetRotation(m_rotation);
+		//m_model.SetScale(m_scale);
+		//m_model.Update();
 
 		//アニメーションイベント用の関数を設定する
 		m_model.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -68,7 +77,7 @@ namespace nsHumanEnemy
 
 		// 初期ステートを設定
 		m_humanEnemyState = new HumanEnemyIdleState(this);
-		m_humanEnemyState->Enter();
+		//m_humanEnemyState->Enter();
 
 		//UIの作成
 		m_enemyUI = NewGO<EnemyUI>(0, "enemyui");
@@ -89,6 +98,7 @@ namespace nsHumanEnemy
 			m_humanEnemyState->Enter();
 		}
 
+
 		//プレイヤーの攻撃が当たったかを判定する(投げ物はObjectクラスで判定)
 		DidAttackHit();
 
@@ -103,6 +113,16 @@ namespace nsHumanEnemy
 
 		// モデルを更新する。
 		m_model.Update();
+		
+		m_charaCon.SetPosition(m_position);
+
+		//モデルの更新処理
+		m_humanEnemyRender->UpdateInstancingData(
+			m_instanceNo,
+			m_position,
+			m_rotation,
+			m_scale
+		);
 	}
 
 	void HumanEnemy::FollowPlayer()
@@ -277,6 +297,6 @@ namespace nsHumanEnemy
 	
 	void HumanEnemy::Render(RenderContext& rc)
 	{
-		m_model.Draw(rc);
+		//m_model.Draw(rc);
 	}
 }

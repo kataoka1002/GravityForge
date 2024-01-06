@@ -271,6 +271,7 @@
     <ClCompile Include="HumanEnemyDieState.cpp" />
     <ClCompile Include="HumanEnemyIdleState.cpp" />
     <ClCompile Include="HumanEnemyReactionState.cpp" />
+    <ClCompile Include="HumanEnemyRender.cpp" />
     <ClCompile Include="HumanEnemyTrembleState.cpp" />
     <ClCompile Include="HumanEnemyWalkState.cpp" />
     <ClCompile Include="Hydrant.cpp" />
@@ -367,6 +368,7 @@
     <ClInclude Include="HumanEnemyDieState.h" />
     <ClInclude Include="HumanEnemyIdleState.h" />
     <ClInclude Include="HumanEnemyReactionState.h" />
+    <ClInclude Include="HumanEnemyRender.h" />
     <ClInclude Include="HumanEnemyTrembleState.h" />
     <ClInclude Include="HumanEnemyWalkState.h" />
     <ClInclude Include="Hydrant.h" />

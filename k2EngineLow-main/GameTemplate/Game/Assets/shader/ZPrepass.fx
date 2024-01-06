@@ -98,6 +98,37 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
     return psIn;
 }
 
+// インスタンシングモデル用の頂点シェーダーのエントリーポイント
+SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
+{
+    SPSIn psIn;
+    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
+    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
+    psIn.pos = mul(mWorldLocal, vsIn.pos);
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.depth.z = psIn.pos.z;
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.depth.x = psIn.pos.z / psIn.pos.w;
+    psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
+    
+    return psIn;
+}
+
+/// 事前計算済みの頂点バッファを使う頂点シェーダーのエントリー関数。
+SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
+{
+    SPSIn psIn;
+    
+    psIn.pos = vsIn.pos;
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.depth.z = psIn.pos.z;
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.depth.x = psIn.pos.z / psIn.pos.w;
+    psIn.depth.y = saturate(psIn.pos.w / 1000.0f);
+  
+    return psIn;
+}
+
 // スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 SPSIn VSMain(SVSIn vsIn)
 {

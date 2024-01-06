@@ -72,6 +72,13 @@ namespace nsK2EngineLow
 		void UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
 		/// <summary>
+		/// アニメーション済み頂点バッファの計算処理を初期化。
+		/// </summary>
+		/// <param name="tkmFilePath">tkmファイルのファイルパス</param>
+		/// <param name="enModelUpAxis">モデルの上軸</param>
+		void InitComputeAnimatoinVertexBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis);
+
+		/// <summary>
 		/// インスタンスを除去。
 		/// </summary>
 		/// <remark>
@@ -79,6 +86,12 @@ namespace nsK2EngineLow
 		/// </remark>
 		/// <param name="instanceNo">インスタンス番号</param>
 		void RemoveInstance(int instanceNo);
+
+		/// <summary>
+		/// 頂点計算パスから呼び出される処理。
+		/// </summary>
+		/// <param name="rc"></param>
+		void OnComputeVertex(RenderContext& rc);
 
 		/// <summary>
 		/// 描画処理
@@ -208,7 +221,7 @@ namespace nsK2EngineLow
 		/// <param name="rc"></param>
 		void OnDraw(RenderContext& rc)
 		{
-			m_renderToGBufferModel.Draw(rc, m_maxInstance);
+			m_renderToGBufferModel.Draw(rc, 1);
 		}
 
 		/// <summary>
@@ -234,7 +247,7 @@ namespace nsK2EngineLow
 		/// <param name="rc"></param>
 		void OnZPrepass(RenderContext& rc)
 		{
-			m_zprepassModel.Draw(rc, m_maxInstance);
+			m_zprepassModel.Draw(rc, 1);
 		}
 
 		/// <summary>
@@ -425,6 +438,7 @@ namespace nsK2EngineLow
 		StructuredBuffer			 m_worldMatrixArraySB;	// ワールド行列の配列のストラクチャードバッファ。
 		std::unique_ptr<int[]> m_instanceNoToWorldMatrixArrayIndexTable;	// インスタンス番号からワールド行列の配列のインデックスに変換するテーブル。
 		ConstantBuffer m_drawShadowMapCameraParamCB[NUM_SHADOW_MAP];		// シャドウマップ作成時に必要なカメラパラメータ用の定数バッファ。
+		ComputeAnimationVertexBuffer m_computeAnimationVertexBuffer;		// アニメーション済み頂点バッファの計算処理。
 	};
 }
 

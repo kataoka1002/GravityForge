@@ -104,6 +104,34 @@ SPSIn VSMainCoreInstancing(SVSIn vsIn, uint instanceId : SV_InstanceID)
     return psIn;
 }
 
+SPSIn VSMainCoreInstancingAnim(SVSIn vsIn, uint instanceId : SV_InstanceID)
+{
+    SPSIn psIn;
+    float4x4 mWorldLocal = CalcSkinMatrix(vsIn.skinVert);
+    mWorldLocal = mul(g_worldMatrixArray[instanceId], mWorldLocal);
+    psIn.pos = mul(mWorldLocal, vsIn.pos);
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.uv = vsIn.uv;
+    psIn.normal = mul(mWorldLocal, vsIn.normal);
+    
+    return psIn;
+}
+
+/// 事前計算済みの頂点バッファを使う頂点シェーダーのエントリー関数。
+SPSIn VSMainSkinUsePreComputedVertexBuffer(SVSIn vsIn)
+{
+    SPSIn psIn;
+    
+    psIn.pos = vsIn.pos;
+    psIn.pos = mul(mView, psIn.pos);
+    psIn.pos = mul(mProj, psIn.pos);
+    psIn.uv = vsIn.uv;
+    psIn.normal = mul((float4x4) 0, vsIn.normal);
+    
+    return psIn;
+}
+
 // スキンなしメッシュ用の頂点シェーダーのエントリー関数。
 SPSIn VSMain(SVSIn vsIn)
 {

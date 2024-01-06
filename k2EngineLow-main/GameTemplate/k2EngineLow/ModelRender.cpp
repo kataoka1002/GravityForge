@@ -70,6 +70,12 @@ namespace nsK2EngineLow {
 		// スケルトンを初期化。
 		InitSkeleton(filePath);
 
+		// アニメーションを初期化。
+		InitAnimation(animationClips, animationClipsNum, enModelUpAxis);
+
+		// アニメーション済み頂点バッファの計算処理を初期化。
+		InitComputeAnimatoinVertexBuffer(filePath, enModelUpAxis);
+
 		// GBuffer描画用のモデルを初期化
 		InitInstancingModelOnRenderGBuffer(filePath, enModelUpAxis);
 
@@ -89,7 +95,6 @@ namespace nsK2EngineLow {
 		modelInitData.m_fxFilePath = "Assets/shader/RenderToGBuffer.fx";
 
 		// エントリーポイントをセットアップ。
-		modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 		modelInitData.m_psEntryPointFunc = "PSShadowMain";
 
 		//モデルの上方向を指定する。
@@ -98,6 +103,23 @@ namespace nsK2EngineLow {
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		modelInitData.m_colorBufferFormat[1] = DXGI_FORMAT_R8G8B8A8_SNORM;
 		modelInitData.m_colorBufferFormat[2] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		if (m_animationClips != nullptr)
+		{
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+			//コンピュートシェーダー用のエントリー関数
+			modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer"; 
+			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+			//modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
+			
+			// 頂点の事前計算処理を使う。
+			modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+		}
+		else
+		{
+			modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		}
 
 		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
 		modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
@@ -111,13 +133,22 @@ namespace nsK2EngineLow {
 		modelInitData.m_fxFilePath = "Assets/shader/ZPrepass.fx";
 		modelInitData.m_modelUpAxis = enModelUpAxis;
 
-		// 頂点シェーダーのエントリーポイントをセットアップ。
-		modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		if (m_animationClips != nullptr)
+		{
+			//スケルトンを指定する。
+			modelInitData.m_skeleton = &m_skeleton;
+			//コンピュートシェーダー用のエントリー関数
+			modelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+			//modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
 
-		//if (m_animationClips != nullptr) {
-		//	//スケルトンを指定する。
-		//	modelInitData.m_skeleton = &m_skeleton;
-		//}
+			// 頂点の事前計算処理を使う。
+			modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+		}
+		else
+		{
+			modelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
+		}
 
 		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		if (m_isEnableInstancingDraw) 
@@ -134,15 +165,25 @@ namespace nsK2EngineLow {
 		//シャドウマップに書きこむモデルの設定
 		ModelInitData sadowDrawModelInitData;
 		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
-		sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
 		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
 		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 
-		//スケルトンを指定する。
 		if (m_animationClips != nullptr)
 		{
+			//スケルトンを指定する。
 			sadowDrawModelInitData.m_skeleton = &m_skeleton;
+			//コンピュートシェーダー用のエントリー関数
+			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+			sadowDrawModelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
+			//sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancingAnim";
+
+			// 頂点の事前計算処理を使う。
+			sadowDrawModelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
+		}
+		else
+		{
+			sadowDrawModelInitData.m_vsEntryPointFunc = "VSMainCoreInstancing";
 		}
 
 		// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
@@ -366,9 +407,37 @@ namespace nsK2EngineLow {
 			// なので、単位行列を渡して、モデル空間でボーン行列を構築する。
 			m_skeleton.Update(g_matIdentity);
 			//アニメーションを進める。
-			//m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
+			m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
 		}
 		m_numInstance++;
+	}
+
+	void ModelRender::InitComputeAnimatoinVertexBuffer(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
+	{
+		StructuredBuffer* worldMatrxiArraySB = nullptr;
+		if (m_isEnableInstancingDraw) {
+			worldMatrxiArraySB = &m_worldMatrixArraySB;
+		}
+
+		m_computeAnimationVertexBuffer.Init(
+			tkmFilePath,
+			m_skeleton.GetNumBones(),
+			m_skeleton.GetBoneMatricesTopAddress(),
+			enModelUpAxis,
+			m_maxInstance,
+			worldMatrxiArraySB
+		);
+	}
+
+	void ModelRender::OnComputeVertex(RenderContext& rc)
+	{
+		// 頂点の事前計算処理をディスパッチする。
+		if (m_isEnableInstancingDraw) {
+			m_computeAnimationVertexBuffer.Dispatch(rc, m_zprepassModel.GetWorldMatrix(), m_maxInstance);
+		}
+		else {
+			m_computeAnimationVertexBuffer.Dispatch(rc, m_zprepassModel.GetWorldMatrix(), 1);
+		}
 	}
 
 	int g_hoge = 0;
