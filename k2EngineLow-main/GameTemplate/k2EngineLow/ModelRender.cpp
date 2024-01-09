@@ -393,6 +393,11 @@ namespace nsK2EngineLow {
 		m_worldMatrixArray[matrixIndex] = g_matZero;
 	}
 
+	void ModelRender::ResetInstance(int instanceNo)
+	{
+
+	}
+
 	void ModelRender::UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 	{
 		K2_ASSERT(instanceNo < m_maxInstance, "インスタンス番号が不正です。");

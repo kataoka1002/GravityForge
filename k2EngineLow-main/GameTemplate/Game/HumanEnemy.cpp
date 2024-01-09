@@ -109,10 +109,10 @@ namespace nsHumanEnemy
 		m_humanEnemyState->Update();
 
 		// アニメーションを再生する。
-		PlayAnimation(m_currentAnimationClip);
+		//PlayAnimation(m_currentAnimationClip);
 
 		// モデルを更新する。
-		m_model.Update();
+		//m_model.Update();
 		
 		m_charaCon.SetPosition(m_position);
 

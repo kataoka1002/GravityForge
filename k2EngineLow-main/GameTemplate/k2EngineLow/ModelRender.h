@@ -87,6 +87,8 @@ namespace nsK2EngineLow
 		/// <param name="instanceNo">インスタンス番号</param>
 		void RemoveInstance(int instanceNo);
 
+		void ResetInstance(int instanceNo);
+
 		/// <summary>
 		/// 頂点計算パスから呼び出される処理。
 		/// </summary>
