@@ -319,25 +319,25 @@ namespace nsK2EngineLow {
 	void ModelRender::InitShadowDrawModel(const char* tkmFilePath, EnModelUpAxis enModelUpAxis)
 	{
 		//シャドウマップに書きこむモデルの設定
-		ModelInitData sadowDrawModelInitData;
-		sadowDrawModelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
-		sadowDrawModelInitData.m_psEntryPointFunc = "PSMain";
-		sadowDrawModelInitData.m_tkmFilePath = tkmFilePath;
-		sadowDrawModelInitData.m_modelUpAxis = enModelUpAxis;
-		sadowDrawModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+		ModelInitData modelInitData;
+		modelInitData.m_fxFilePath = "Assets/shader/drawShadowMap.fx";
+		modelInitData.m_psEntryPointFunc = "PSMain";
+		modelInitData.m_tkmFilePath = tkmFilePath;
+		modelInitData.m_modelUpAxis = enModelUpAxis;
+		modelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 
 		//スケルトンを指定する。
 		if (m_animationClips != nullptr)
 		{
-			sadowDrawModelInitData.m_skeleton = &m_skeleton;
+			modelInitData.m_skeleton = &m_skeleton;
 		}
 
 		//頂点シェーダーのエントリーポイントを設定
-		SetupVertexShaderEntryPointFunc(sadowDrawModelInitData);
+		SetupVertexShaderEntryPointFunc(modelInitData);
 
-		m_shadowDrawModel[0].Init(sadowDrawModelInitData);
-		m_shadowDrawModel[1].Init(sadowDrawModelInitData);
-		m_shadowDrawModel[2].Init(sadowDrawModelInitData);
+		m_shadowDrawModel[0].Init(modelInitData);
+		m_shadowDrawModel[1].Init(modelInitData);
+		m_shadowDrawModel[2].Init(modelInitData);
 	}
 
 	void ModelRender::InitModelOnZprepass(

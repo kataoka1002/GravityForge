@@ -565,6 +565,6 @@ namespace nsPlayer
 
 	void Player::Render(RenderContext& rc)
 	{
-		//m_playerModel.Draw(rc);
+		m_playerModel.Draw(rc);
 	}
 }
