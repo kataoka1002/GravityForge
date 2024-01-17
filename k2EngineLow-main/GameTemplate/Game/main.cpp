@@ -23,7 +23,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	g_camera3D->SetPosition(0, 100.0f, 350.0f);
 	g_camera3D->SetTarget(0, 100.0f, 0);
 
-	//auto makeSound = NewGO<MakeSound>(0, "makesound");
+	auto makeSound = NewGO<MakeSound>(0, "makesound");
 	auto title = NewGO<Title>(0, "title");
 	
 	// ここからゲームループ。

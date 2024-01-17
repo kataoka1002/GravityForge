@@ -6,6 +6,9 @@
 enum SoundName
 {
 	enSoundName_TitleBGM,
+	enSoundName_TitleClick,
+	enSoundName_TitleCancel,
+	enSoundName_TitleMove,
 	enSoundName_Num,
 };
 

@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Fade.h"
 #include "GameStart.h"
+#include "MakeSound.h"
 
 namespace
 {
@@ -41,7 +42,7 @@ namespace
 
 Title::~Title()
 {
-
+	DeleteGO(m_titleBGM);
 }
 
 bool Title::Start()
@@ -94,11 +95,11 @@ bool Title::Start()
 	m_SEBackSprite.Update();
 
 	//BGMの設定と再生
-	//m_titleBGM = NewGO<SoundSource>(0);			//一回再生すると終わりなのでインスタンスを保持させない為にここでNewGOする
-	//m_titleBGM->Init(enSoundName);				//初期化
-	//m_titleBGM->SetVolume(1.5f * m_game->GetSEVol());	//音量調整
-	//m_titleBGM->Play(false);
-
+	m_titleBGM = NewGO<SoundSource>(0);								
+	m_titleBGM->Init(enSoundName_TitleBGM);							//初期化
+	m_titleBGM->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	m_titleBGM->Play(true);
+	
 	return true;
 }
 
@@ -148,6 +149,12 @@ void Title::ManageState()
 
 			//矢印をゲームスタートへ
 			TriangleChange("Assets/spriteData/title/GameStartSankaku.dds", enTitleState_GameStart);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* clickSE = NewGO<SoundSource>(0);
+			clickSE->Init(enSoundName_TitleClick);						//初期化
+			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->Play(false);
 		}
 
 		break;
@@ -159,6 +166,12 @@ void Title::ManageState()
 		{
 			//フェードステートに変更
 			m_titleState = enTitleState_Fade;
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* clickSE = NewGO<SoundSource>(0);
+			clickSE->Init(enSoundName_TitleClick);						//初期化
+			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->Play(false);
 		}
 
 		//下ボタンでステート変更
@@ -166,6 +179,12 @@ void Title::ManageState()
 		{
 			//矢印をオプションへ
 			TriangleChange("Assets/spriteData/title/OptionSankaku.dds", enTitleState_Option);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleMove);						//初期化
+			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		break;
@@ -177,6 +196,12 @@ void Title::ManageState()
 		{
 			//矢印をゲームスタートへ
 			TriangleChange("Assets/spriteData/title/GameStartSankaku.dds", enTitleState_GameStart);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleMove);						//初期化
+			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		// Aボタンでステート変更
@@ -187,6 +212,12 @@ void Title::ManageState()
 
 			//矢印をBGMへ
 			TriangleChange("Assets/spriteData/title/BGMSankaku.dds", enTitleState_BGM);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* clickSE = NewGO<SoundSource>(0);
+			clickSE->Init(enSoundName_TitleClick);						//初期化
+			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->Play(false);
 		}
 
 		break;
@@ -198,6 +229,12 @@ void Title::ManageState()
 		{
 			//矢印をSEへ
 			TriangleChange("Assets/spriteData/title/SESankaku.dds", enTitleState_SE);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleMove);						//初期化
+			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		//Bボタンでステート変更
@@ -208,6 +245,12 @@ void Title::ManageState()
 
 			//矢印をオプションへ
 			TriangleChange("Assets/spriteData/title/OptionSankaku.dds", enTitleState_Option);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleCancel);						//初期化
+			moveSE->SetVolume(2.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		//BGMの大きさ設定
@@ -221,6 +264,12 @@ void Title::ManageState()
 		if (g_pad[0]->IsTrigger(enButtonUp))
 		{
 			TriangleChange("Assets/spriteData/title/BGMSankaku.dds", enTitleState_BGM);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleMove);						//初期化
+			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		//Bボタンでステート変更
@@ -231,6 +280,12 @@ void Title::ManageState()
 
 			//矢印をオプションへ
 			TriangleChange("Assets/spriteData/title/OptionSankaku.dds", enTitleState_Option);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* moveSE = NewGO<SoundSource>(0);
+			moveSE->Init(enSoundName_TitleCancel);						//初期化
+			moveSE->SetVolume(2.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->Play(false);
 		}
 
 		//SEの大きさ設定

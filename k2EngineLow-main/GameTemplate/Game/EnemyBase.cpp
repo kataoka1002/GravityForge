@@ -4,7 +4,6 @@
 #include "GameInformation.h"
 #include "GameCamera.h"
 
-
 bool EnemyBase::Start()
 {
 	m_game = FindGO<Game>("game");
