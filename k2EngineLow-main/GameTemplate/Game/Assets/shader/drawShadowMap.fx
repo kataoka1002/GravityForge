@@ -48,21 +48,21 @@ StructuredBuffer<float4x4> g_worldMatrixArray : register(t10); //ƒ[ƒ‹ƒhs—ñ‚Ì”
 
 
 //ƒXƒLƒ“s—ñ‚ğŒvZ‚·‚éB
-//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-//{
-//    float4x4 skinning = 0;
-//    float w = 0.0f;
-//	[unroll]
-//    for (int i = 0; i < 3; i++)
-//    {
-//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-//        w += skinVert.Weights[i];
-//    }
+float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+{
+    float4x4 skinning = 0;
+    float w = 0.0f;
+	[unroll]
+    for (int i = 0; i < 3; i++)
+    {
+        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+        w += skinVert.Weights[i];
+    }
     
-//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-//    return skinning;
-//}
+    return skinning;
+}
 
 /// <summary>
 /// ’¸“_ƒVƒF[ƒ_[
@@ -72,11 +72,11 @@ SPSIn VSMainCore(SVSIn vsIn, bool hasSkin)
     // ƒVƒƒƒhƒEƒ}ƒbƒv•`‰æ—p‚Ì’¸“_ƒVƒF[ƒ_[‚ğÀ‘•
     SPSIn psIn;
     float4x4 m;
-    //if (hasSkin)
-    //{
-    //    m = CalcSkinMatrix(vsIn.skinVert);
-    //}
-    //else
+    if (hasSkin)
+    {
+        m = CalcSkinMatrix(vsIn.skinVert);
+    }
+    else
     {
         m = mWorld;
     }
