@@ -39,6 +39,7 @@ namespace nsHumanEnemy
 		void HandleAttackHit();
 		void CheckHP();
 		void CheckDistance();
+		void TurnWhileAttack();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -55,6 +56,15 @@ namespace nsHumanEnemy
 		{
 			m_currentAnimationClip = enAnimationClip;
 			m_complementTime = complementTime;
+		}
+
+		/// <summary>
+		/// アニメーション速度を変更する
+		/// </summary>
+		/// <param name="speed"></param>
+		void SetAnimationSpeed(float speed)
+		{
+			m_animationSpeed = speed;
 		}
 
 		/// <summary>
@@ -115,6 +125,7 @@ namespace nsHumanEnemy
 		EnAnimationClip		m_currentAnimationClip;					// 現在設定されているアニメーションクリップ
 		IHumanEnemyState*	m_humanEnemyState = nullptr;			// ステート	
 		float				m_complementTime = 0.0f;				// アニメーションの補完時間
+		float				m_animationSpeed = 1.0f;				// アニメーションの速さ
 		int					m_instanceNo = 0;						// インスタンス番号。
 		bool				m_isSetDeadState = false;				// 半死にステートをセットしたか
 		bool				m_isSetDieState = false;				// 死亡ステートをセットしたか

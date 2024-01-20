@@ -18,6 +18,8 @@ namespace nsHumanEnemy
 	{
 		// 再生するアニメーションを設定。
 		m_enemy->SetAnimation(HumanEnemy::enAnimClip_Attack, 0.2f);
+		//アニメーション速度を上げる
+		m_enemy->SetAnimationSpeed(2.0f);
 	}
 
 	IHumanEnemyState* HumanEnemyAttackState::StateChange()
@@ -25,6 +27,9 @@ namespace nsHumanEnemy
 		//アニメーションの再生が終わったら
 		if (m_enemy->GetIsPlayingAnimation() == false)
 		{
+			//アニメーション速度をもとにもどす
+			m_enemy->SetAnimationSpeed(1.0f);
+
 			return new HumanEnemyIdleState(m_enemy);
 		}
 
@@ -34,6 +39,7 @@ namespace nsHumanEnemy
 
 	void HumanEnemyAttackState::Update()
 	{
-		
+		//回転処理
+		m_enemy->TurnWhileAttack();
 	}
 }

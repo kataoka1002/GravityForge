@@ -54,7 +54,7 @@ namespace nsHumanEnemy
 		//m_humanEnemyRender = FindGO<HumanEnemyRender>("humanenemyrender");
 
 		//モデルの初期化
-		m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		m_model.Init("Assets/modelData/enemy/humanEnemy2.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
 		m_model.SetPosition(m_position);
 		m_model.SetRotation(m_rotation);
 		m_model.SetScale(m_scale);
@@ -90,6 +90,7 @@ namespace nsHumanEnemy
 
 	void HumanEnemy::Update()
 	{
+		
 		// ステートを変更するか
 		IHumanEnemyState* enemyState = m_humanEnemyState->StateChange();
 
@@ -170,6 +171,32 @@ namespace nsHumanEnemy
 		m_model.SetRotation(m_rotation);
 	}
 
+	void HumanEnemy::TurnWhileAttack()
+	{
+		Vector3 toPlayer = m_player->GetPosition() - m_position;
+		toPlayer.Normalize();
+
+		//移動速度から回転を求める
+		m_rotMove = Math::Lerp(g_gameTime->GetFrameDeltaTime() * 3.0f, m_rotMove, toPlayer * 10.0f);
+
+		//前方向の設定
+		m_forward = m_rotMove;
+		m_forward.Normalize();
+
+		//回転を設定する
+		m_rotation.SetRotationYFromDirectionXZ(m_rotMove);
+		m_model.SetRotation(m_rotation);
+
+		//プレイヤーを追従するようにした
+		m_moveSpeed += toPlayer * 0.5f;
+
+		//キャラクターコントローラーを使用して座標を更新
+		m_position = m_charaCon.Execute(m_moveSpeed, g_gameTime->GetFrameDeltaTime());
+
+		//座標を設定
+		m_model.SetPosition(m_position);
+	}
+
 	void HumanEnemy::OnDestroy()
 	{
 		//リストから削除
@@ -195,6 +222,7 @@ namespace nsHumanEnemy
 	void HumanEnemy::PlayAnimation(EnAnimationClip currentAnimationClip)
 	{
 		// アニメーションを再生
+		m_model.SetAnimationSpeed(m_animationSpeed);
 		m_model.PlayAnimation(currentAnimationClip, m_complementTime);
 	}
 

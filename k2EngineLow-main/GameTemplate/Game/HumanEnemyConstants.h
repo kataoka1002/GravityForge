@@ -12,7 +12,7 @@ namespace
 	const float DEAD_LINE = 0.0f;
 
 	//’Ç‚¢‚©‚¯‚Ä‚­‚é‚æ‚¤‚É‚È‚é‹——£
-	const float CHASE_RANGE = 1000.0f;
+	const float CHASE_RANGE = 1500.0f;
 
 	//’Ç‚¢‚©‚¯‚Ä‚­‚é‚æ‚¤‚É‚È‚é‹——£(Žl‚Â‚ñ”‡‚¢)
 	const float CHASE_RANGE_KNEELING = 1000.0f;

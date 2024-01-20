@@ -332,6 +332,11 @@ namespace nsK2EngineLow
 			m_doCulling = false;
 		}
 
+		void SetAnimationSpeed(float speed)
+		{
+			m_animationSpeed = speed;
+		}
+
 	private:
 
 		/// <summary>
