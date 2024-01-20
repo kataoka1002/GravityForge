@@ -38,11 +38,12 @@ namespace nsHumanEnemy
 		void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);// アニメーションイベント用の関数。
 		void HandleAttackHit();
 		void CheckHP();
+		void CheckDistance();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
 		void InitModel()				override;	//モデルの初期化
-		void PlayReaction() override;
+		void PlayReaction()				override;
 		void Render(RenderContext& rc)	override;	//描画処理
 
 		/// <summary>
@@ -117,7 +118,9 @@ namespace nsHumanEnemy
 		int					m_instanceNo = 0;						// インスタンス番号。
 		bool				m_isSetDeadState = false;				// 半死にステートをセットしたか
 		bool				m_isSetDieState = false;				// 死亡ステートをセットしたか
+		bool				m_isWithinRange = false;
 		EnemyUI*			m_enemyUI = nullptr;
 		HumanEnemyRender*   m_humanEnemyRender = nullptr;
+		SphereCollider		m_sphereCollider;						//遮蔽物確認用のコライダー
 	};
 }

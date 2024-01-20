@@ -72,6 +72,9 @@ namespace nsHumanEnemy
 			m_position		//座標
 		);
 
+		//壁に隠れているかを判定するためのコライダ
+		m_sphereCollider.Create(1.0f);
+
 		// HPの設定
 		m_hp = MAX_HP;
 		m_hpMax = MAX_HP;
@@ -111,6 +114,9 @@ namespace nsHumanEnemy
 
 		// アニメーションを再生する。
 		PlayAnimation(m_currentAnimationClip);
+
+		// プレイヤーとの距離を計算する
+		CheckDistance();
 
 		// モデルを更新する。
 		m_model.Update();
@@ -178,7 +184,7 @@ namespace nsHumanEnemy
 
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* deadSE = NewGO<SoundSource>(0);
-		deadSE->Init(enSoundName_HumanEnemyDead);					//初期化
+		deadSE->Init(enSoundName_HumanEnemyDead);				//初期化
 		deadSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		deadSE->Play(false);
 
@@ -307,9 +313,73 @@ namespace nsHumanEnemy
 
 		m_humanEnemyState->Enter();
 	}
+
+	//衝突したときに呼ばれる関数オブジェクト(壁用)
+	struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
+	{
+		//衝突フラグ。
+		bool isHit = false;
+
+		virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+		{
+			//壁とぶつかってなかったら。
+			if (convexResult.m_hitCollisionObject->getUserIndex() != enCollisionAttr_Wall) {
+				//衝突したのは壁ではない。
+				return 0.0f;
+			}
+
+			//壁とぶつかったらフラグをtrueに。
+			isHit = true;
+			return 0.0f;
+		}
+	};
+
+	void HumanEnemy::CheckDistance()
+	{
+		Vector3 toPlayerVec = m_player->GetPosition() - m_position;
+
+		float distance = toPlayerVec.Length();
+
+		if (distance <= 5000.0f)
+		{
+			//描画する
+			m_isWithinRange = true;
+		}
+		else
+		{
+			//描画しない
+			m_isWithinRange = false;
+			return;
+		}
+
+		//コライダーの始点と終点
+		btTransform start, end;
+		start.setIdentity();
+		end.setIdentity();
+
+		//始点はオブジェクトの座標
+		start.setOrigin(btVector3(m_position.x, m_position.y + 30.0f, m_position.z));
+		//終点はカメラの座標
+		end.setOrigin(btVector3(g_camera3D->GetPosition().x, g_camera3D->GetPosition().y, g_camera3D->GetPosition().z));
+
+		//コライダーを始点から終点まで動かして,衝突するかどうかを調べる
+		SweepResultWall callback;
+		PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_sphereCollider.GetBody(), start, end, callback);
+
+		//壁と衝突したら
+		if (callback.isHit == true)
+		{
+			//モデルは描画しない
+			m_isWithinRange = false;
+		}
+	}
 	
 	void HumanEnemy::Render(RenderContext& rc)
 	{
-		m_model.Draw(rc);
+		//カリングの範囲内なら
+		if (m_isWithinRange)
+		{
+			m_model.Draw(rc);
+		}		
 	}
 }
