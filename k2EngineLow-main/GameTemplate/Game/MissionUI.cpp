@@ -43,7 +43,11 @@ void MissionUI::Render(RenderContext& rc)
 	if (m_gameInfo->GetIsInGame())
 	{
 		m_missionSprite.Draw(rc);
-		m_missionZombie.Draw(rc);
+
+		if (m_gameInfo->GetIsInBossBattle() == false)
+		{
+			m_missionZombie.Draw(rc);
+		}
 	}
 
 	if (m_gameInfo->GetIsInBossBattle())

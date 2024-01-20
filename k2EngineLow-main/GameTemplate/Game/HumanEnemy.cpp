@@ -9,6 +9,7 @@
 #include "HumanEnemyDieState.h"
 #include "EnemyUI.h"
 #include "HumanEnemyRender.h"
+#include "MakeSound.h"
 
 /// <summary>
 /// ヒューマンエネミーの名前空間
@@ -50,14 +51,14 @@ namespace nsHumanEnemy
 
 	void HumanEnemy::InitModel()
 	{
-		m_humanEnemyRender = FindGO<HumanEnemyRender>("humanenemyrender");
+		//m_humanEnemyRender = FindGO<HumanEnemyRender>("humanenemyrender");
 
 		//モデルの初期化
-		//m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
-		//m_model.SetPosition(m_position);
-		//m_model.SetRotation(m_rotation);
-		//m_model.SetScale(m_scale);
-		//m_model.Update();
+		m_model.Init("Assets/modelData/enemy/humanEnemy.tkm", animationClips, enAnimClip_Num, enModelUpAxisZ);
+		m_model.SetPosition(m_position);
+		m_model.SetRotation(m_rotation);
+		m_model.SetScale(m_scale);
+		m_model.Update();
 
 		//アニメーションイベント用の関数を設定する
 		m_model.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -77,7 +78,7 @@ namespace nsHumanEnemy
 
 		// 初期ステートを設定
 		m_humanEnemyState = new HumanEnemyIdleState(this);
-		//m_humanEnemyState->Enter();
+		m_humanEnemyState->Enter();
 
 		//UIの作成
 		m_enemyUI = NewGO<EnemyUI>(0, "enemyui");
@@ -109,20 +110,20 @@ namespace nsHumanEnemy
 		m_humanEnemyState->Update();
 
 		// アニメーションを再生する。
-		//PlayAnimation(m_currentAnimationClip);
+		PlayAnimation(m_currentAnimationClip);
 
 		// モデルを更新する。
-		//m_model.Update();
+		m_model.Update();
 		
 		m_charaCon.SetPosition(m_position);
 
 		//モデルの更新処理
-		m_humanEnemyRender->UpdateInstancingData(
+		/*m_humanEnemyRender->UpdateInstancingData(
 			m_instanceNo,
 			m_position,
 			m_rotation,
 			m_scale
-		);
+		);*/
 	}
 
 	void HumanEnemy::FollowPlayer()
@@ -239,6 +240,12 @@ namespace nsHumanEnemy
 
 			//エフェクト発生
 			PlayEffect(enEffectName_HumanAttack, collisionPosition, m_rotation, Vector3::One);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* attackSE = NewGO<SoundSource>(0);
+			attackSE->Init(enSoundName_HumanEnemyAttack);				//初期化
+			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->Play(false);
 		}
 		//キーの名前が「attack_end」の時。
 		else if (wcscmp(eventName, L"attack_end") == 0)
@@ -297,6 +304,6 @@ namespace nsHumanEnemy
 	
 	void HumanEnemy::Render(RenderContext& rc)
 	{
-		//m_model.Draw(rc);
+		m_model.Draw(rc);
 	}
 }

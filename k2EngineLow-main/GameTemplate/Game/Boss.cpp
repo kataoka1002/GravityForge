@@ -6,10 +6,12 @@
 #include "BossJumpState.h"
 #include "BossHitReactionState.h"
 #include "BossDeadState.h"
+#include "BossWalkState.h"
 #include "BossConstants.h"
 #include "BossUI.h"
 #include "GameInformation.h"
 #include "GameCamera.h"
+#include "MakeSound.h"
 
 /// <summary>
 /// ボスの名前空間
@@ -78,6 +80,11 @@ namespace nsBoss
 
 		//UIを作成
 		m_ui = NewGO<BossUI>(0, "bossui");
+
+		//SEの設定と再生
+		m_walkSE = NewGO<SoundSource>(0);
+		m_walkSE->Init(enSoundName_BossWalk);							//初期化
+		m_walkSE->SetVolume(1.5f * g_soundEngine->GetBgmVolume());		//音量調整	
 	}
 
 	void Boss::Update()
@@ -86,6 +93,9 @@ namespace nsBoss
 		{
 			return;
 		}
+
+		//歩いていない状態で初期化
+		m_isWalking = false;
 
 		// ステートを変更するか
 		IBossState* bossState = m_bossState->StateChange();
@@ -99,10 +109,10 @@ namespace nsBoss
 			m_bossState->Enter();
 		}
 
-		//プレイヤーの攻撃が当たったかを判定する(投げ物はObjectクラスで判定)
+		// プレイヤーの攻撃が当たったかを判定する(投げ物はObjectクラスで判定)
 		DidAttackHit();
 
-		//体力のチェックをして生きているかを確認する
+		// 体力のチェックをして生きているかを確認する
 		CheckHP();
 
 		// 各ステートの更新処理を実行。
@@ -110,6 +120,9 @@ namespace nsBoss
 
 		// アニメーションを再生する。
 		PlayAnimation(m_currentAnimationClip);
+
+		// 足音の処理
+		WalkSEProcess();
 
 		// モデルを更新する。
 		m_model.Update();
@@ -131,6 +144,9 @@ namespace nsBoss
 
 		//重力の処理
 		Gravity(1.0f);
+
+		//歩行中
+		m_isWalking = true;
 	}
 
 	void Boss::Gravity(float pow)
@@ -228,6 +244,12 @@ namespace nsBoss
 
 			//エフェクト発生
 			PlayEffect(enEffectName_BossSwipe, collisionPosition, m_rotation, Vector3::One);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* attackSE = NewGO<SoundSource>(0);
+			attackSE->Init(enSoundName_BossSlash);						//初期化
+			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->Play(false);
 		}
 		//キーの名前が「punch_start」の時。
 		else if (wcscmp(eventName, L"punch_start") == 0)
@@ -248,6 +270,12 @@ namespace nsBoss
 
 			//エフェクト発生
 			PlayEffect(enEffectName_BossPanch, collisionPosition, m_rotation, Vector3::One);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* attackSE = NewGO<SoundSource>(0);
+			attackSE->Init(enSoundName_BossPunch);						//初期化
+			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->Play(false);
 		}
 		//キーの名前が「jump_start」の時。
 		else if (wcscmp(eventName, L"jump_start") == 0)
@@ -260,6 +288,12 @@ namespace nsBoss
 			m_isJumping = false;
 
 			m_gameCamera->SetVibFlag(true);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* attackSE = NewGO<SoundSource>(0);
+			attackSE->Init(enSoundName_BossJumpAttack);					//初期化
+			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->Play(false);
 		}
 		//キーの名前が「jumpAttack_start」の時。
 		else if (wcscmp(eventName, L"jumpAttack_start") == 0)
@@ -413,6 +447,17 @@ namespace nsBoss
 		//ネームプレートの表示
 		m_ui->DrawPlate(true);
 
+		if (m_isPlayNameSE == false)
+		{
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* nameSE = NewGO<SoundSource>(0);
+			nameSE->Init(enSoundName_BossName);							//初期化
+			nameSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			nameSE->Play(false);
+
+			m_isPlayNameSE = true;
+		}
+
 		//一定時間経過で
 		if (m_plateDrawTime <= 0.0f)
 		{
@@ -428,6 +473,18 @@ namespace nsBoss
 
 			//ムービー終了の合図
 			m_gameInfo->SetInMovie(false);
+		}
+	}
+
+	void Boss::WalkSEProcess()
+	{
+		if (m_isWalking == false)
+		{
+			m_walkSE->Stop();
+		}
+		else if (m_walkSE->IsPlaying() == false)
+		{
+			m_walkSE->Play(true);
 		}
 	}
 

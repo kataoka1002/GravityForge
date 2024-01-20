@@ -14,6 +14,7 @@ GameOver::~GameOver()
 	DeleteGO(m_resultCamera);
 	DeleteGO(m_resultUI);
 	DeleteGO(m_blackFade);
+	DeleteGO(m_resultBGM);
 }
 
 void GameOver::InitCamera()

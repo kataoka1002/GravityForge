@@ -1,6 +1,7 @@
 #pragma once
 class ResultCamera;
 class BlackFade;
+class GameInformation;
 
 class Result : public IGameObject, Noncopyable
 {
@@ -40,6 +41,8 @@ protected:
 	ModelRender			m_bgModel;									// 背景のモデル
 	ResultCamera*		m_resultCamera = nullptr;					// カメラ
 	BlackFade*			m_blackFade = nullptr;						// フェード
+	SoundSource*		m_resultBGM = nullptr;						// リザルトのBGM
+	GameInformation*	m_gameInfo = nullptr;
 
 	Vector3				m_playerPosition = Vector3::Zero;			// プレイヤーのポジション
 	float				m_time = 0.0;								// アニメーションを再生するまでの時間

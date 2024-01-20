@@ -14,6 +14,7 @@ GameClear::~GameClear()
 	DeleteGO(m_resultCamera);
 	DeleteGO(m_resultUI);
 	DeleteGO(m_blackFade);
+	DeleteGO(m_resultBGM);
 }
 
 void GameClear::InitCamera()

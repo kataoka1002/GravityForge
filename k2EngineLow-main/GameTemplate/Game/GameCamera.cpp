@@ -5,6 +5,7 @@
 #include "Boss.h"
 #include "BlackFade.h"
 #include "GameStart.h"
+#include "MakeSound.h"
 
 namespace
 {
@@ -165,6 +166,12 @@ void GameCamera::OpeningProcess()
 
 			//バトルスタートを表示(ゲームのスタートはこの中で行っている)
 			NewGO<GameStart>(0,"gamestart");
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* startSE = NewGO<SoundSource>(0);
+			startSE->Init(enSoundName_OpDistortion);					//初期化
+			startSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			startSE->Play(false);
 		}
 
 		//視点を計算する。

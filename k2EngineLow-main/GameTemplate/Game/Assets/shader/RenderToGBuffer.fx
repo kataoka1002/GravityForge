@@ -60,32 +60,32 @@ sampler g_sampler : register(s0);
 float3 CalcNormal(SPSIn psIn);
 
 //スキン行列を計算する。
-//float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
-//{
-//    float4x4 skinning = 0;
-//    float w = 0.0f;
-//	[unroll]
-//    for (int i = 0; i < 3; i++)
-//    {
-//        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
-//        w += skinVert.Weights[i];
-//    }
+float4x4 CalcSkinMatrix(SSkinVSIn skinVert)
+{
+    float4x4 skinning = 0;
+    float w = 0.0f;
+	[unroll]
+    for (int i = 0; i < 3; i++)
+    {
+        skinning += g_boneMatrix[skinVert.Indices[i]] * skinVert.Weights[i];
+        w += skinVert.Weights[i];
+    }
     
-//    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
+    skinning += g_boneMatrix[skinVert.Indices[3]] * (1.0f - w);
 	
-//    return skinning;
-//}
+    return skinning;
+}
 
 //モデル用の頂点シェーダーのエントリーポイント
 SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 {
     SPSIn psIn;
     float4x4 m;
-    //if (hasSkin)
-    //{
-    //    m = CalcSkinMatrix(vsIn.skinVert);
-    //}
-    //else
+    if (hasSkin)
+    {
+        m = CalcSkinMatrix(vsIn.skinVert);
+    }
+    else
     {
         m = mWorld;
     }

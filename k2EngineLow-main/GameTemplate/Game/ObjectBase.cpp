@@ -5,6 +5,7 @@
 #include <math.h>
 #include "collision/CollisionObject.h"
 #include "Boss.h"
+#include "MakeSound.h"
 
 namespace
 {
@@ -226,6 +227,12 @@ void ObjectBase::AttractedToPlayer()
 
 void ObjectBase::InitAttract()
 {
+	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+	SoundSource* windSE = NewGO<SoundSource>(0);
+	windSE->Init(enSoundName_ObjUpWind);						//初期化
+	windSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	windSE->Play(false);
+
 	//ターゲットの設定
 	CalcTargetPosition();
 
@@ -333,6 +340,12 @@ void ObjectBase::Turn(Vector3 speed)
 
 void ObjectBase::InitBlowAway()
 {
+	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+	SoundSource* windSE = NewGO<SoundSource>(0);
+	windSE->Init(enSoundName_ObjBlowWind);						//初期化
+	windSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	windSE->Play(false);
+
 	//エフェクト発生
 	PlayEffect(enEffectName_ObjectPush, m_position, m_player->GetRotation(), Vector3::One);
 
@@ -417,6 +430,12 @@ void ObjectBase::CheckToLand()
 		//エフェクト発生
 		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, DROP_EFFECT_SCALE);
 
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* bombSE = NewGO<SoundSource>(0);
+		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->Play(false);
+
 		//自分が消えるときの処理
 		OnDestroy();
 	}
@@ -457,6 +476,12 @@ void ObjectBase::CalcCollision()
 			//エフェクトの発生
 			PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
 
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* bombSE = NewGO<SoundSource>(0);
+			bombSE->Init(enSoundName_ObjBomb);							//初期化
+			bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			bombSE->Play(false);
+
 			//自分が消えるときの処理
 			OnDestroy();
 
@@ -478,6 +503,12 @@ void ObjectBase::CalcCollision()
 
 				//エフェクトの発生
 				PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
+
+				//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+				SoundSource* bombSE = NewGO<SoundSource>(0);
+				bombSE->Init(enSoundName_ObjBomb);							//初期化
+				bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+				bombSE->Play(false);
 
 				//自分が消えるときの処理
 				OnDestroy();
@@ -506,6 +537,12 @@ void ObjectBase::CalcCollision()
 		//エフェクトの発生
 		PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
 
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* bombSE = NewGO<SoundSource>(0);
+		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->Play(false);
+
 		//自分が消えるときの処理
 		OnDestroy();
 
@@ -524,6 +561,12 @@ void ObjectBase::CalcCollision()
 	{
 		//エフェクト発生
 		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, HIT_STAGE_EFFECT_SCALE);
+
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* bombSE = NewGO<SoundSource>(0);
+		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->Play(false);
 
 		//自分が消えるときの処理
 		OnDestroy();

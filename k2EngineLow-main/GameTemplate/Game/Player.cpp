@@ -10,6 +10,7 @@
 #include "PlayerReactionState.h"
 #include "PlayerDeadState.h"
 #include "GameInformation.h"
+#include "MakeSound.h"
 
 namespace
 {
@@ -107,6 +108,11 @@ namespace nsPlayer
 		m_playerState = new PlayerIdleState(this);
 		m_playerState->Enter();
 
+		//BGMの設定と再生
+		m_walkSE = NewGO<SoundSource>(0);
+		m_walkSE->Init(enSoundName_PlayerWalk);							//初期化
+		m_walkSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());		//音量調整		
+
 		return true;
 	}
 
@@ -147,6 +153,9 @@ namespace nsPlayer
 
 		// 各ステートの更新処理を実行。
 		m_playerState->Update();
+
+		//足音の処理
+		WalkSEProcess();
 
 		// アニメーションを再生する。
 		PlayAnimation(m_currentAnimationClip);
@@ -538,6 +547,12 @@ namespace nsPlayer
 			
 			//エフェクト発生
 			PlayEffect(enEffectName_PlayerPunch, effectPos, m_rotation, Vector3::One);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* attackSE = NewGO<SoundSource>(0);
+			attackSE->Init(enSoundName_PlayerPunch);					//初期化
+			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->Play(false);
 		}
 		//キーの名前が「attack_end」の時。
 		else if (wcscmp(eventName, L"attack_end") == 0)
@@ -561,6 +576,26 @@ namespace nsPlayer
 		m_effect->SetRotation(rot);
 		m_effect->SetScale(scale);
 		m_effect->Play();
+	}
+
+	void Player::WalkSEProcess()
+	{
+		//オブジェクトを保持している状態,ボス戦のムービー中,ジャンプ中なら足音なし
+		if (m_isHoldingObject || m_gameInfo->GetIsInMovie() || m_charaCon.IsOnGround() == false)
+		{
+			m_walkSE->Stop();
+			return;
+		}
+
+		//スティック入力があるならBGMを再生する
+		if (g_pad[0]->GetLStickXF() == 0.0f && g_pad[0]->GetLStickYF() == 0.0f)
+		{
+			m_walkSE->Stop();
+		}
+		else if (m_walkSE->IsPlaying() == false)
+		{
+			m_walkSE->Play(true);
+		}
 	}
 
 	void Player::Render(RenderContext& rc)

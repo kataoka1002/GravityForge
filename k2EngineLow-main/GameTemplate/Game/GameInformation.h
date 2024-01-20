@@ -5,6 +5,7 @@ public:
 	~GameInformation();
 	bool Start();
 	void Update();
+	void DeleteBossBGM();
 
 	/// <summary>
 	/// 倒した数を増やす
@@ -128,4 +129,7 @@ private:
 	bool m_isInMovie = false;			//ムービー中かどうか
 	bool m_isInOpening = true;			//オープニング中かどうか
 	bool m_isInGame = false;			//メインゲームかどうか
+
+	SoundSource* m_gameBGM = nullptr;	//ゲームのBGM
+	SoundSource* m_bossBGM = nullptr;	//ボスのBGM
 };

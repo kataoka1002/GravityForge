@@ -2,9 +2,15 @@
 #include "Result.h"
 #include "Title.h"
 #include "BlackFade.h"
+#include "MakeSound.h"
+#include "GameInformation.h"
 
 bool Result::Start()
 {
+	//ボスBGMの停止
+	m_gameInfo = FindGO<GameInformation>("gameinformation");
+	m_gameInfo->DeleteBossBGM();
+
 	//アニメーションの初期化
 	animationClips[enAnimClip_Idle].Load("Assets/animData/player/player_idle.tka");
 	animationClips[enAnimClip_Idle].SetLoopFlag(true);
@@ -29,6 +35,12 @@ bool Result::Start()
 
 	//フェードクラスの作成
 	m_blackFade = NewGO<BlackFade>(1, "blackfade");
+
+	//BGMの設定と再生
+	m_resultBGM = NewGO<SoundSource>(0);
+	m_resultBGM->Init(enSoundName_ResultBGM);							//初期化
+	m_resultBGM->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	m_resultBGM->Play(true);
 
 	return true;
 }

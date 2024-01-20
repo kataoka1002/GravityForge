@@ -60,6 +60,7 @@ namespace nsPlayer
 		void CheckHP();
 		void CalcCoolDown();
 		void AttackHitProcess(float damage);
+		void WalkSEProcess();
 
 		/// <summary>
 		/// エフェクトの再生
@@ -273,5 +274,6 @@ namespace nsPlayer
 		ObjectBase* m_holdingObject = nullptr;
 		IPlayerState* m_playerState = nullptr;
 		GameInformation* m_gameInfo = nullptr;
+		SoundSource* m_walkSE = nullptr;								//足音
 	};
 }

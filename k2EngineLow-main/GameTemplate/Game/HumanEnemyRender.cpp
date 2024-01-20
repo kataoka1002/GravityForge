@@ -30,6 +30,6 @@ namespace nsHumanEnemy
 
 	void HumanEnemyRender::Render(RenderContext& rc)
 	{
-		m_modelRender.Draw(rc);
+		//m_modelRender.Draw(rc);
 	}
 }

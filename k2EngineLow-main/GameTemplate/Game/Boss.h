@@ -46,6 +46,7 @@ namespace nsBoss
 		void Gravity(float pow);
 		void SetPlate();
 		void MagicAttack();
+		void WalkSEProcess();
 		void FollowPlayer()				override;	//動きの処理
 		void Turn()						override;	//回転処理
 		void OnDestroy()				override;	//消えるときに呼ばれる処理
@@ -174,7 +175,10 @@ namespace nsBoss
 		float				m_plateDrawTime = 2.0f;
 		bool				m_magicAttackNow = false;				// マジック中かどうか
 		bool				m_makeMagicEffe = false;				// マジックのエフェクトを作ったかどうか
+		bool				m_isPlayNameSE = false;					// 名前の効果音を再生したかどうか
+		bool				m_isWalking = false;					// 歩いているかどうか
 
-		BossUI* m_ui = nullptr;
+		BossUI*				m_ui = nullptr;
+		SoundSource*		m_walkSE = nullptr;						// 足音
 	};
 }
