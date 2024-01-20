@@ -38,7 +38,7 @@ bool Result::Start()
 
 	//BGMの設定と再生
 	m_resultBGM = NewGO<SoundSource>(0);
-	m_resultBGM->Init(enSoundName_ResultBGM);							//初期化
+	m_resultBGM->Init(enSoundName_ResultBGM);						//初期化
 	m_resultBGM->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
 	m_resultBGM->Play(true);
 
@@ -54,6 +54,12 @@ void Result::GoTitle()
 		m_pressAButton = true;
 
 		m_blackFade->SetAlphaUp(true);
+
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* clickSE = NewGO<SoundSource>(0);
+		clickSE->Init(enSoundName_TitleClick);						//初期化
+		clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		clickSE->Play(false);
 	}
 
 	if (m_pressAButton)
@@ -72,28 +78,29 @@ void Result::GoTitle()
 
 void Result::SetAnimation()
 {
-	//ドワーフのアニメーションが再生されているなら
-	if (m_didPlayAnim == true)
-	{
-		return;
-	}
-
 	//時間の経過を測る
 	m_time += g_gameTime->GetFrameDeltaTime();
 
-	if (m_time >= 1.0f)
+	//2秒経過で
+	if (m_time >= 2.0f)
 	{
 		//1秒経過でモーション再生
 		m_currentAnimationClip = enAnimClip_Dwarf;
+
+		//ドワーフアニメ再生済みにする
+		m_didPlayAnim = true;
 	}
 
-	//アニメーションが終わったら
-	if (m_playerModel.IsPlayingAnimation() == false)
+	//ドワーフアニメが再生し終わったら
+	if (m_didPlayAnim && m_playerModel.IsPlayingAnimation() == false)
 	{
 		//アイドルを流す
 		m_currentAnimationClip = enAnimClip_Idle;
 
-		//ドワーフアニメ再生済みにする
-		m_didPlayAnim = true;
+		//ドワーフアニメ未再生状態に戻す
+		m_didPlayAnim = false;
+
+		//タイマーをリセット
+		m_time = 0.0f;
 	}
 }

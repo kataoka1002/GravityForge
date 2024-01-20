@@ -382,8 +382,8 @@ bool Game::Start()
 	m_rockBigRender->SetMaxModel(rockBigNum);
 	m_solarPanelRender = NewGO<SolarPanelRender>(0, "solarpanelrender");
 	m_solarPanelRender->SetMaxModel(solarPanelNum);
-	m_humanEnemyRender = NewGO<nsHumanEnemy::HumanEnemyRender>(0, "humanenemyrender");
-	m_humanEnemyRender->SetMaxHumanEnemy(humanEnemyNum);
+	//m_humanEnemyRender = NewGO<nsHumanEnemy::HumanEnemyRender>(0, "humanenemyrender");
+	//m_humanEnemyRender->SetMaxHumanEnemy(humanEnemyNum);
 	
 	//スカイキューブの作成
 	SetSkyCube();
@@ -428,6 +428,9 @@ void Game::SetGameClear()
 		m_blackFade->SetAlphaUp(true);
 
 		m_gameClear = true;
+
+		//BGMの停止
+		m_gameInfo->StopBGM();
 	}
 }
 
@@ -439,6 +442,9 @@ void Game::SetGameOver()
 		m_blackFade->SetAlphaUp(true);
 
 		m_gameOver = true;
+
+		//BGMの停止
+		m_gameInfo->StopBGM();
 	}
 }
 

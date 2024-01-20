@@ -6,6 +6,7 @@ public:
 	bool Start();
 	void Update();
 	void DeleteBossBGM();
+	void StopBGM();
 
 	/// <summary>
 	/// “|‚µ‚½”‚ğ‘‚â‚·

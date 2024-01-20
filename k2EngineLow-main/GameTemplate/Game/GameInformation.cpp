@@ -37,6 +37,7 @@ bool GameInformation::Start()
 	m_zombieVoice->Init(enSoundName_ZombieVoice);					//‰Šú‰»
 	m_zombieVoice->SetVolume(0.5f * g_soundEngine->GetBgmVolume());	//‰¹—Ê’²®
 	m_zombieVoice->Play(true);
+
 	return true;
 }
 
@@ -56,4 +57,11 @@ void GameInformation::Update()
 			m_bossBGM->Play(true);
 		}
 	}
+}
+
+void GameInformation::StopBGM()
+{
+	m_gameBGM->Stop();
+	m_zombieVoice->Stop();
+	m_bossBGM->Stop();
 }
