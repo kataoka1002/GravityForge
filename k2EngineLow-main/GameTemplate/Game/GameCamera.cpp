@@ -170,7 +170,7 @@ void GameCamera::OpeningProcess()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* startSE = NewGO<SoundSource>(0);
 			startSE->Init(enSoundName_OpDistortion);					//初期化
-			startSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			startSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			startSE->Play(false);
 		}
 

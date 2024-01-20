@@ -153,7 +153,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* clickSE = NewGO<SoundSource>(0);
 			clickSE->Init(enSoundName_TitleClick);						//初期化
-			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			clickSE->Play(false);
 		}
 
@@ -170,7 +170,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* clickSE = NewGO<SoundSource>(0);
 			clickSE->Init(enSoundName_TitleClick);						//初期化
-			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			clickSE->Play(false);
 		}
 
@@ -200,7 +200,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* moveSE = NewGO<SoundSource>(0);
 			moveSE->Init(enSoundName_TitleMove);						//初期化
-			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->SetVolume(3.0f * g_soundEngine->GetSeVolume());	//音量調整
 			moveSE->Play(false);
 		}
 
@@ -216,7 +216,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* clickSE = NewGO<SoundSource>(0);
 			clickSE->Init(enSoundName_TitleClick);						//初期化
-			clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			clickSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			clickSE->Play(false);
 		}
 
@@ -233,7 +233,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* moveSE = NewGO<SoundSource>(0);
 			moveSE->Init(enSoundName_TitleMove);						//初期化
-			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->SetVolume(3.0f * g_soundEngine->GetSeVolume());	//音量調整
 			moveSE->Play(false);
 		}
 
@@ -249,7 +249,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* moveSE = NewGO<SoundSource>(0);
 			moveSE->Init(enSoundName_TitleCancel);						//初期化
-			moveSE->SetVolume(2.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->SetVolume(2.0f * g_soundEngine->GetSeVolume());	//音量調整
 			moveSE->Play(false);
 		}
 
@@ -268,7 +268,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* moveSE = NewGO<SoundSource>(0);
 			moveSE->Init(enSoundName_TitleMove);						//初期化
-			moveSE->SetVolume(3.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->SetVolume(3.0f * g_soundEngine->GetSeVolume());	//音量調整
 			moveSE->Play(false);
 		}
 
@@ -284,7 +284,7 @@ void Title::ManageState()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* moveSE = NewGO<SoundSource>(0);
 			moveSE->Init(enSoundName_TitleCancel);						//初期化
-			moveSE->SetVolume(2.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			moveSE->SetVolume(2.0f * g_soundEngine->GetSeVolume());	//音量調整
 			moveSE->Play(false);
 		}
 

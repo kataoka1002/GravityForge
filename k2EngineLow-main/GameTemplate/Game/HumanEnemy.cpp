@@ -179,7 +179,7 @@ namespace nsHumanEnemy
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* deadSE = NewGO<SoundSource>(0);
 		deadSE->Init(enSoundName_HumanEnemyDead);					//初期化
-		deadSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		deadSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		deadSE->Play(false);
 
 		//削除
@@ -250,7 +250,7 @@ namespace nsHumanEnemy
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* attackSE = NewGO<SoundSource>(0);
 			attackSE->Init(enSoundName_HumanEnemyAttack);				//初期化
-			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			attackSE->Play(false);
 		}
 		//キーの名前が「attack_end」の時。

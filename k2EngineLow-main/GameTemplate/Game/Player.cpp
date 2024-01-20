@@ -111,7 +111,7 @@ namespace nsPlayer
 		//BGMの設定と再生
 		m_walkSE = NewGO<SoundSource>(0);
 		m_walkSE->Init(enSoundName_PlayerWalk);							//初期化
-		m_walkSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());		//音量調整		
+		m_walkSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());		//音量調整		
 
 		return true;
 	}
@@ -551,7 +551,7 @@ namespace nsPlayer
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* attackSE = NewGO<SoundSource>(0);
 			attackSE->Init(enSoundName_PlayerPunch);					//初期化
-			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			attackSE->Play(false);
 		}
 		//キーの名前が「attack_end」の時。

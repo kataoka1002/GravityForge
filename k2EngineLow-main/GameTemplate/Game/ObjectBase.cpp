@@ -230,7 +230,7 @@ void ObjectBase::InitAttract()
 	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 	SoundSource* windSE = NewGO<SoundSource>(0);
 	windSE->Init(enSoundName_ObjUpWind);						//初期化
-	windSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	windSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 	windSE->Play(false);
 
 	//ターゲットの設定
@@ -343,7 +343,7 @@ void ObjectBase::InitBlowAway()
 	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 	SoundSource* windSE = NewGO<SoundSource>(0);
 	windSE->Init(enSoundName_ObjBlowWind);						//初期化
-	windSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+	windSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 	windSE->Play(false);
 
 	//エフェクト発生
@@ -433,7 +433,7 @@ void ObjectBase::CheckToLand()
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
 		bombSE->Init(enSoundName_ObjBomb);							//初期化
-		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
 		//自分が消えるときの処理
@@ -479,7 +479,7 @@ void ObjectBase::CalcCollision()
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* bombSE = NewGO<SoundSource>(0);
 			bombSE->Init(enSoundName_ObjBomb);							//初期化
-			bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			bombSE->Play(false);
 
 			//自分が消えるときの処理
@@ -507,7 +507,7 @@ void ObjectBase::CalcCollision()
 				//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 				SoundSource* bombSE = NewGO<SoundSource>(0);
 				bombSE->Init(enSoundName_ObjBomb);							//初期化
-				bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+				bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 				bombSE->Play(false);
 
 				//自分が消えるときの処理
@@ -540,7 +540,7 @@ void ObjectBase::CalcCollision()
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
 		bombSE->Init(enSoundName_ObjBomb);							//初期化
-		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
 		//自分が消えるときの処理
@@ -565,7 +565,7 @@ void ObjectBase::CalcCollision()
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
 		bombSE->Init(enSoundName_ObjBomb);							//初期化
-		bombSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
 		//自分が消えるときの処理

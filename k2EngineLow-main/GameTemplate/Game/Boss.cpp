@@ -84,7 +84,7 @@ namespace nsBoss
 		//SEの設定と再生
 		m_walkSE = NewGO<SoundSource>(0);
 		m_walkSE->Init(enSoundName_BossWalk);							//初期化
-		m_walkSE->SetVolume(1.5f * g_soundEngine->GetBgmVolume());		//音量調整	
+		m_walkSE->SetVolume(1.5f * g_soundEngine->GetSeVolume());		//音量調整	
 	}
 
 	void Boss::Update()
@@ -248,7 +248,7 @@ namespace nsBoss
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* attackSE = NewGO<SoundSource>(0);
 			attackSE->Init(enSoundName_BossSlash);						//初期化
-			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			attackSE->Play(false);
 		}
 		//キーの名前が「punch_start」の時。
@@ -274,7 +274,7 @@ namespace nsBoss
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* attackSE = NewGO<SoundSource>(0);
 			attackSE->Init(enSoundName_BossPunch);						//初期化
-			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			attackSE->Play(false);
 		}
 		//キーの名前が「jump_start」の時。
@@ -292,7 +292,7 @@ namespace nsBoss
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* attackSE = NewGO<SoundSource>(0);
 			attackSE->Init(enSoundName_BossJumpAttack);					//初期化
-			attackSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			attackSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			attackSE->Play(false);
 		}
 		//キーの名前が「jumpAttack_start」の時。
@@ -452,7 +452,7 @@ namespace nsBoss
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* nameSE = NewGO<SoundSource>(0);
 			nameSE->Init(enSoundName_BossName);							//初期化
-			nameSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+			nameSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			nameSE->Play(false);
 
 			m_isPlayNameSE = true;

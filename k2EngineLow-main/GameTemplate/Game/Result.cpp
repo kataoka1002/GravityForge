@@ -58,7 +58,7 @@ void Result::GoTitle()
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* clickSE = NewGO<SoundSource>(0);
 		clickSE->Init(enSoundName_TitleClick);						//初期化
-		clickSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		clickSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		clickSE->Play(false);
 	}
 
@@ -69,6 +69,9 @@ void Result::GoTitle()
 		{
 			//タイトルの作成
 			NewGO<Title>(0, "title");
+
+			//音量のリセット
+			g_soundEngine->SetBgmAndSeVolume(1.0f, 1.0f);
 
 			//削除処理
 			OnDestroy();
