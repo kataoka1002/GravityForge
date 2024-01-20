@@ -176,6 +176,12 @@ namespace nsHumanEnemy
 		Vector3 efePos = m_position + m_forward * 50.0f;
 		PlayEffect(enEffectName_EnemyBlood, efePos, m_rotation, Vector3::One);
 
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* deadSE = NewGO<SoundSource>(0);
+		deadSE->Init(enSoundName_HumanEnemyDead);					//初期化
+		deadSE->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//音量調整
+		deadSE->Play(false);
+
 		//削除
 		DeleteGO(this);
 	}

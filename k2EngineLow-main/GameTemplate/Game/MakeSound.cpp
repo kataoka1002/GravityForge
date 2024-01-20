@@ -23,11 +23,14 @@ bool MakeSound::Start()
 	g_soundEngine->ResistWaveFileBank(enSoundName_BossName, "Assets/audio/bossName.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_BossJumpAttack, "Assets/audio/bossJumpAttack.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_BossWalk, "Assets/audio/bossWalk.wav");
-	g_soundEngine->ResistWaveFileBank(enSoundName_HumanEnemyAttack, "Assets/audio/humanEnemyAttack.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_BossSlash, "Assets/audio/bossSlash.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_BossPunch, "Assets/audio/bossPunch.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_PlayerPunch, "Assets/audio/playerPunch.wav");
 	g_soundEngine->ResistWaveFileBank(enSoundName_PlayerWalk, "Assets/audio/playerWalk.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_HumanEnemyAttack, "Assets/audio/humanEnemyAttack.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_HumanEnemyDead, "Assets/audio/humanEnemyDead2.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_HumanEnemyBatan, "Assets/audio/humanEnemyBatan.wav");
+	g_soundEngine->ResistWaveFileBank(enSoundName_ZombieVoice, "Assets/audio/zombieVoice.wav"); 
 
 	return true;
 }

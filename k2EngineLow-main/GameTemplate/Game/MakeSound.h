@@ -17,13 +17,16 @@ enum SoundName
 	enSoundName_ObjBlowWind,
 	enSoundName_ObjUpWind,
 	enSoundName_BossName,
-	enSoundName_PlayerWalk,
 	enSoundName_BossJumpAttack,
 	enSoundName_BossWalk,
-	enSoundName_HumanEnemyAttack,
 	enSoundName_BossSlash,
 	enSoundName_BossPunch,
+	enSoundName_PlayerWalk,
 	enSoundName_PlayerPunch,
+	enSoundName_HumanEnemyAttack,
+	enSoundName_HumanEnemyDead,
+	enSoundName_HumanEnemyBatan,
+	enSoundName_ZombieVoice,
 	enSoundName_Num,
 };
 

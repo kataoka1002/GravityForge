@@ -10,6 +10,7 @@ namespace
 GameInformation::~GameInformation()
 {
 	DeleteGO(m_gameBGM);
+	DeleteGO(m_zombieVoice);
 }
 
 void GameInformation::DeleteBossBGM()
@@ -30,6 +31,12 @@ bool GameInformation::Start()
 	m_bossBGM = NewGO<SoundSource>(0);
 	m_bossBGM->Init(enSoundName_BossBGM);						//èâä˙âª
 	m_bossBGM->SetVolume(1.0f * g_soundEngine->GetBgmVolume());	//âπó í≤êÆ
+
+	//BGMÇÃê›íËÇ∆çƒê∂
+	m_zombieVoice = NewGO<SoundSource>(0);
+	m_zombieVoice->Init(enSoundName_ZombieVoice);					//èâä˙âª
+	m_zombieVoice->SetVolume(0.5f * g_soundEngine->GetBgmVolume());	//âπó í≤êÆ
+	m_zombieVoice->Play(true);
 	return true;
 }
 
@@ -45,6 +52,7 @@ void GameInformation::Update()
 		if (m_bossBGM->IsPlaying() == false)
 		{
 			m_gameBGM->Stop();
+			m_zombieVoice->Stop();
 			m_bossBGM->Play(true);
 		}
 	}

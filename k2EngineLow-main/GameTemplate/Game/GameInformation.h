@@ -132,4 +132,5 @@ private:
 
 	SoundSource* m_gameBGM = nullptr;	//ゲームのBGM
 	SoundSource* m_bossBGM = nullptr;	//ボスのBGM
+	SoundSource* m_zombieVoice = nullptr;	//ゾンビの声
 };
