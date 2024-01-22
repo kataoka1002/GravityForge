@@ -310,6 +310,9 @@
     <ClCompile Include="HumanEnemyRender.cpp">
       <Filter>MyCode\Enemy\HumanEnemy</Filter>
     </ClCompile>
+    <ClCompile Include="TeapotRender.cpp">
+      <Filter>MyCode\ObjectRender</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -591,6 +594,9 @@
     </ClInclude>
     <ClInclude Include="HumanEnemyRender.h">
       <Filter>MyCode\Enemy\HumanEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TeapotRender.h">
+      <Filter>MyCode\ObjectRender</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

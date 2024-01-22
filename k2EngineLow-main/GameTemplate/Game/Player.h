@@ -61,6 +61,7 @@ namespace nsPlayer
 		void CalcCoolDown();
 		void AttackHitProcess(float damage);
 		void WalkSEProcess();
+		void CarCollisionCheck(Vector3 pos);
 
 		/// <summary>
 		/// エフェクトの再生

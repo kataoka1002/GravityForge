@@ -405,9 +405,11 @@ namespace nsHumanEnemy
 	void HumanEnemy::Render(RenderContext& rc)
 	{
 		//ƒJƒŠƒ“ƒO‚Ì”ÍˆÍ“à‚È‚ç
-		if (m_isWithinRange)
+		if (m_isWithinRange != true)
 		{
-			m_model.Draw(rc);
-		}		
+			return;
+		}
+
+		m_model.Draw(rc);	
 	}
 }

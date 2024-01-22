@@ -193,6 +193,11 @@ protected:
 	/// <param name="scale">‘å‚«‚³</param>
 	void PlayEffect(EffectName name, Vector3 pos, Quaternion rot, Vector3 scale);
 
+	/// <summary>
+	/// ”š”­‚Ìˆ—
+	/// </summary>
+	void BombProcess();
+
 protected:
 	enum EnObjectState
 	{
@@ -236,6 +241,7 @@ protected:
 	nsPlayer::Player*		m_player = nullptr;
 	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;
+	CollisionObject*		m_bombCollisionObject = nullptr;
 	TargetUI*				m_targetUI = nullptr;
 };
 

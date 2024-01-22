@@ -21,6 +21,7 @@ bool MakeEffect::Start()
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossSwipe, u"Assets/effect/bossSwipe.efk");
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_BossJumpAttack, u"Assets/effect/bossJumpAttack.efk");
 	EffectEngine::GetInstance()->ResistEffect(enEffectName_EnemyBlood, u"Assets/effect/enemyBlood.efk");
+	EffectEngine::GetInstance()->ResistEffect(enEffectName_BombLightning, u"Assets/effect/BombLightnig.efk");
 
 	return true;
 }

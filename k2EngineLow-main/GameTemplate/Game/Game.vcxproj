@@ -314,6 +314,7 @@
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="TargetUI.cpp" />
     <ClCompile Include="Teapot.cpp" />
+    <ClCompile Include="TeapotRender.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -410,6 +411,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TargetUI.h" />
     <ClInclude Include="Teapot.h" />
+    <ClInclude Include="TeapotRender.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>

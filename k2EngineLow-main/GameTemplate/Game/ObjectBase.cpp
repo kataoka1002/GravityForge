@@ -432,7 +432,7 @@ void ObjectBase::CheckToLand()
 
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
-		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->Init(enSoundName_ObjBomb);						//初期化
 		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
@@ -478,7 +478,7 @@ void ObjectBase::CalcCollision()
 
 			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 			SoundSource* bombSE = NewGO<SoundSource>(0);
-			bombSE->Init(enSoundName_ObjBomb);							//初期化
+			bombSE->Init(enSoundName_ObjBomb);						//初期化
 			bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 			bombSE->Play(false);
 
@@ -506,7 +506,7 @@ void ObjectBase::CalcCollision()
 
 				//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 				SoundSource* bombSE = NewGO<SoundSource>(0);
-				bombSE->Init(enSoundName_ObjBomb);							//初期化
+				bombSE->Init(enSoundName_ObjBomb);						//初期化
 				bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 				bombSE->Play(false);
 
@@ -539,7 +539,7 @@ void ObjectBase::CalcCollision()
 
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
-		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->Init(enSoundName_ObjBomb);						//初期化
 		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
@@ -564,7 +564,7 @@ void ObjectBase::CalcCollision()
 
 		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 		SoundSource* bombSE = NewGO<SoundSource>(0);
-		bombSE->Init(enSoundName_ObjBomb);							//初期化
+		bombSE->Init(enSoundName_ObjBomb);						//初期化
 		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 		bombSE->Play(false);
 
@@ -572,6 +572,45 @@ void ObjectBase::CalcCollision()
 		OnDestroy();
 
 		return;
+	}
+}
+
+void ObjectBase::BombProcess()
+{
+	//エネミーとぶつかったかを判定
+	for (auto enemy : m_game->GetEnemyList())
+	{
+		if (m_bombCollisionObject->IsHit(enemy->GetCharaCon()))
+		{
+			//エネミーはダメージを受けた時の処理を行う
+			enemy->HandleDamageEvent(m_damage);
+
+			//エフェクトの発生
+			PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
+
+			//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+			SoundSource* bombSE = NewGO<SoundSource>(0);
+			bombSE->Init(enSoundName_ObjBomb);						//初期化
+			bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
+			bombSE->Play(false);
+		}
+		else if (enemy->GetCollision() != nullptr)
+		{
+			if (m_bombCollisionObject->IsHit(enemy->GetCollision()))
+			{
+				//エネミーはダメージを受けた時の処理を行う
+				enemy->HandleDamageEvent(m_damage);
+
+				//エフェクトの発生
+				PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
+
+				//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+				SoundSource* bombSE = NewGO<SoundSource>(0);
+				bombSE->Init(enSoundName_ObjBomb);						//初期化
+				bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
+				bombSE->Play(false);
+			}
+		}
 	}
 }
 

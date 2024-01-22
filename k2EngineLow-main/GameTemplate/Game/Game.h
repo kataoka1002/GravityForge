@@ -49,7 +49,7 @@
 #include "PlantLowRender.h"
 #include "RockBigRender.h"
 #include "SolarPanelRender.h"
-
+#include "TeapotRender.h"
 
 class Game : public IGameObject, Noncopyable
 {
@@ -169,6 +169,7 @@ private:
 	PlantLowRender* m_plantLowRender = nullptr;
 	RockBigRender* m_rockBigRender = nullptr;
 	SolarPanelRender* m_solarPanelRender = nullptr;
+	TeapotRender* m_teapotRender = nullptr;
 
 	std::vector<EnemyBase*> m_enemyList;			//エネミーのリスト
 	std::vector<ObjectBase*> m_objectList;			//ティーポットのリスト

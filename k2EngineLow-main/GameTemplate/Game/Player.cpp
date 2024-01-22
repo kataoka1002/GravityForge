@@ -151,8 +151,14 @@ namespace nsPlayer
 		//体力のチェックをして生きているかを確認する
 		CheckHP();
 
+		//更新する前のポジションを保存
+		Vector3 beforePos = m_position;
+
 		// 各ステートの更新処理を実行。
 		m_playerState->Update();
+
+		//車との衝突判定の処理
+		CarCollisionCheck(beforePos);
 
 		//足音の処理
 		WalkSEProcess();
@@ -435,6 +441,24 @@ namespace nsPlayer
 		}
 		
 		return false;
+	}
+
+	void Player::CarCollisionCheck(Vector3 pos)
+	{
+		//車のコリジョンの配列を取得する。
+		const auto& carCollision = g_collisionObjectManager->FindCollisionObjects("carcollision");
+		//配列をfor文で回す。
+		for (auto collision : carCollision)
+		{
+			//コリジョンとキャラコンが衝突したら。
+			if (collision->IsHit(m_charaCon))
+			{
+				//ポジションを変更しない
+				m_position = pos;
+				m_playerModel.SetPosition(m_position);
+				m_charaCon.SetPosition(m_position);
+			}
+		}
 	}
 
 	void Player::AttackHitProcess(float damage)

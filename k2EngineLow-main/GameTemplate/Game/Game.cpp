@@ -59,6 +59,7 @@ Game::~Game()
 	DeleteGO(m_plantLowRender);
 	DeleteGO(m_rockBigRender);
 	DeleteGO(m_solarPanelRender);
+	DeleteGO(m_teapotRender);
 }
 
 bool Game::Start()
@@ -77,7 +78,8 @@ bool Game::Start()
 	//インスタンス数
 	int AirNum = 0, barrierFenceNum = 0, benchBigNum = 0, benchSmallNum = 0,
 		billboardSmallNum = 0, bushBigNum = 0, coneNum = 0, dustbinNum = 0, fenceNum = 0,
-		hydrantNum = 0, plantLongNum = 0, plantLowNum = 0, rockBigNum = 0, solarPanelNum = 0, humanEnemyNum = 0;
+		hydrantNum = 0, plantLongNum = 0, plantLowNum = 0, rockBigNum = 0, solarPanelNum = 0,
+		teapotNum = 0, humanEnemyNum = 0;
 
 	m_levelRender.Init("Assets/modelData/level/newLevel.tkl",
 		[&](LevelObjectData& objData)
@@ -120,18 +122,6 @@ bool Game::Start()
 				m_boss->SetScale(objData.scale);
 				//回転を設定する。
 				m_boss->SetRotation(objData.rotation);
-				return true;
-			}
-			//名前がteapotだったら。
-			else if (objData.EqualObjectName(L"teapot") == true)
-			{
-				//ティーポットオブジェクトを作成する。
-				m_teapot = NewGO<Teapot>(0, "teapot");
-
-				SetLevel(m_teapot, objData);
-
-				//リストに追加
-				m_objectList.emplace_back(m_teapot);
 				return true;
 			}
 			else if (objData.EqualObjectName(L"air") == true)
@@ -317,6 +307,20 @@ bool Game::Start()
 				m_objectList.emplace_back(m_solarPanel);
 				return true;
 			}
+			//名前がteapotだったら。
+			else if (objData.EqualObjectName(L"teapot") == true)
+			{
+				//ティーポットオブジェクトを作成する。
+				m_teapot = NewGO<Teapot>(0, "teapot");
+
+				SetLevel(m_teapot, objData);
+				m_teapot->SetInstanceNo(teapotNum);
+				teapotNum++;
+
+				//リストに追加
+				m_objectList.emplace_back(m_teapot);
+				return true;
+			}
 			//名前がhumanEnemyだったら。
 			else if (objData.EqualObjectName(L"humanEnemy") == true)
 			{
@@ -382,6 +386,8 @@ bool Game::Start()
 	m_rockBigRender->SetMaxModel(rockBigNum);
 	m_solarPanelRender = NewGO<SolarPanelRender>(0, "solarpanelrender");
 	m_solarPanelRender->SetMaxModel(solarPanelNum);
+	m_teapotRender = NewGO<TeapotRender>(0, "teapotrender");
+	m_teapotRender->SetMaxModel(teapotNum);
 	//m_humanEnemyRender = NewGO<nsHumanEnemy::HumanEnemyRender>(0, "humanenemyrender");
 	//m_humanEnemyRender->SetMaxHumanEnemy(humanEnemyNum);
 	

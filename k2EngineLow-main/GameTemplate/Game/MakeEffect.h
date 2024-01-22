@@ -17,6 +17,7 @@ enum EffectName
 	enEffectName_BossSwipe,
 	enEffectName_BossJumpAttack,
 	enEffectName_EnemyBlood,
+	enEffectName_BombLightning,
 	enEffectName_Num,
 };
 
