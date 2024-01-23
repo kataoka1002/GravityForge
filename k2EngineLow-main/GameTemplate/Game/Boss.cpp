@@ -488,6 +488,23 @@ namespace nsBoss
 		}
 	}
 
+	bool Boss::ToPlayerVecCheck()
+	{
+		Vector3 toPlayerDir = m_player->GetPosition() - m_position;
+
+		//“àÏ‚ð‹‚ß‚é
+		float innerProduct = toPlayerDir.Dot(m_forward);
+
+		if (innerProduct > 0.99f)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	void Boss::Render(RenderContext& rc)
 	{
 		if (m_gameInfo->GetIsInBossBattle() == false)

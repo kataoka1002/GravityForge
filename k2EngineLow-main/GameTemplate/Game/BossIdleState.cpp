@@ -22,7 +22,7 @@ namespace nsBoss
 
 	IBossState* BossIdleState::StateChange()
 	{
-		if (m_boss->CheckDistanceToPlayer() >= FOLLOW_RANGE && m_boss->GetIsMagicCoolDown() != true && m_boss->GetIsHitCoolDown() != true)
+		if (/*m_boss->CheckDistanceToPlayer() >= FOLLOW_RANGE &&*/ m_boss->GetIsMagicCoolDown() != true && m_boss->GetIsHitCoolDown() != true)
 		{
 			return new BossWalkState(m_boss);
 		}

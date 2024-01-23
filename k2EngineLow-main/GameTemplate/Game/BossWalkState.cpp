@@ -23,7 +23,7 @@ namespace nsBoss
 
 	IBossState* BossWalkState::StateChange()
 	{
-		if (m_boss->CheckDistanceToPlayer() < FOLLOW_RANGE)
+		if (m_boss->CheckDistanceToPlayer() < FOLLOW_RANGE && m_boss->ToPlayerVecCheck())
 		{
 			//ƒ‰ƒ“ƒ_ƒ€‚È’l‚ðŽæ‚é
 			int num = std::rand() % 2 + 1;

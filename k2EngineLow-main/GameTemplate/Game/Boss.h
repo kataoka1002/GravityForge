@@ -47,6 +47,7 @@ namespace nsBoss
 		void SetPlate();
 		void MagicAttack();
 		void WalkSEProcess();
+		bool ToPlayerVecCheck();
 		void FollowPlayer()				override;	//“®‚«‚Ìˆ—
 		void Turn()						override;	//‰ñ“]ˆ—
 		void OnDestroy()				override;	//Á‚¦‚é‚Æ‚«‚ÉŒÄ‚Î‚ê‚éˆ—
