@@ -84,6 +84,8 @@ void Teapot::InitModel()
 
 	//—^‚¦‚éƒ_ƒ[ƒW‚Ìİ’è
 	m_damage = DAMAGE_AMOUNT;
+
+	m_localPosition = { 150.0f,200.0f,0.0f };
 }
 
 void Teapot::InitCarCollision()

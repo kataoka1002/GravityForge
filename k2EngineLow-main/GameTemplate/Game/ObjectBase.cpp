@@ -59,8 +59,13 @@ bool ObjectBase::Start()
 	//プレイヤーを探す
 	m_player = FindGO<nsPlayer::Player>("player");
 
+	m_boss = FindGO<nsBoss::Boss>("boss");
+
 	//ゲームを探す
 	m_game = FindGO<Game>("game");
+
+	//ローカルポジションの設定
+	m_localPosition = OBJECT_LOCAL_POSITION;
 
 	//モデルの初期化
 	InitModel();
@@ -151,7 +156,7 @@ void ObjectBase::FollowPlayer()
 	m_rotation = m_player->GetRotation();
 
 	//プレイヤーの回転に合わせたローカルポジションを計算
-	Vector3 localPos = OBJECT_LOCAL_POSITION;
+	Vector3 localPos = m_localPosition;
 	m_rotation.Multiply(localPos);
 
 	//プレイヤーのポジションにローカルポジションを足した場所をターゲットにする
@@ -311,7 +316,7 @@ void ObjectBase::CalcTargetPosition()
 	Quaternion rot = m_player->GetRotation();
 
 	//プレイヤーの回転に合わせたローカルポジションを計算
-	Vector3 localPos = OBJECT_LOCAL_POSITION;
+	Vector3 localPos = m_localPosition;
 	rot.Multiply(localPos);
 
 	//プレイヤーのポジションを渡す	
@@ -342,7 +347,7 @@ void ObjectBase::InitBlowAway()
 {
 	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 	SoundSource* windSE = NewGO<SoundSource>(0);
-	windSE->Init(enSoundName_ObjBlowWind);						//初期化
+	windSE->Init(enSoundName_ObjBlowWind);					//初期化
 	windSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 	windSE->Play(false);
 
@@ -525,14 +530,13 @@ void ObjectBase::CalcCollision()
 	}
 
 	//ボスとぶつかったかを判定
-	nsBoss::Boss* boss = FindGO<nsBoss::Boss>("boss");
-	if (m_collisionObject->IsHit(boss->GetCharaCon()))
+	if (m_collisionObject->IsHit(m_boss->GetCharaCon()))
 	{
 		//ボスはダメージを受けた時の処理を行う
-		boss->HandleDamageEvent(m_damage);
+		m_boss->HandleDamageEvent(m_damage);
 
 		//ボスのステートの変更を行う
-		boss->SetReactionState();
+		m_boss->SetReactionState();
 
 		//エフェクトの発生
 		PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);

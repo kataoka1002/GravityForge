@@ -4,8 +4,8 @@
 
 // 前方宣言。
 namespace nsPlayer { class Player; }
+namespace nsBoss { class Boss; }
 class Game;
-class Boss;
 
 class ObjectBase : public IGameObject, Noncopyable
 {
@@ -222,6 +222,7 @@ protected:
 	Vector3					m_collisionPosition = Vector3::Zero;		//コリジョンオブジェクトの座標
 	Vector3					m_flightDir = Vector3::Zero;				//飛んでいく方向
 	Vector3					m_crossPosition = Vector3::Zero;			//レイとの交点の座標
+	Vector3					m_localPosition = Vector3::Zero;			//持っている時のローカル座標
 	Quaternion				m_rotation;									//クォータニオン
 	EnObjectState			m_objectState = enObjectState_Quiescence;	//オブジェクトのステート(状態)を表す変数
 	float					m_degree = 0.0f;							//フワフワ用の角度
@@ -239,6 +240,7 @@ protected:
 	int						m_instanceNo = 0;							// インスタンス番号。
 
 	nsPlayer::Player*		m_player = nullptr;
+	nsBoss::Boss*			m_boss = nullptr;
 	Game*					m_game = nullptr;
 	CollisionObject*		m_collisionObject = nullptr;
 	CollisionObject*		m_bombCollisionObject = nullptr;
