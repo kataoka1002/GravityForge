@@ -13,8 +13,8 @@ namespace
 	const float PI = 3.141592;
 
 	//引き寄せられる速さ
-	const float OBJECT_SPPED = 20.0f;
-	const float OBJECT_VELOCITY = 10.0f;
+	const float OBJECT_SPPED = 12.0f;
+	const float OBJECT_VELOCITY = 5.0f;
 
 	//カーブの角度
 	const float CURVATURE_RADIUS = 10.0f;
@@ -234,7 +234,7 @@ void ObjectBase::InitAttract()
 {
 	//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
 	SoundSource* windSE = NewGO<SoundSource>(0);
-	windSE->Init(enSoundName_ObjUpWind);						//初期化
+	windSE->Init(enSoundName_ObjUpWind);					//初期化
 	windSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
 	windSE->Play(false);
 
@@ -365,7 +365,7 @@ void ObjectBase::InitBlowAway()
 	//レイの始点と終点を決めてステージとの交点を求める
 	Vector3 start, end;
 	start = m_position;
-	end = m_position += m_flightDir * 7000.0f;
+	end = m_position + m_flightDir * 7000.0f;
 	PhysicsWorld::GetInstance()->RayTest(start, end, m_crossPosition);
 
 	//吹っ飛びステートに変更
