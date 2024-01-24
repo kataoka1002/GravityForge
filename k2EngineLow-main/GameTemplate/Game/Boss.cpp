@@ -323,6 +323,8 @@ namespace nsBoss
 		{
 			//マジック中
 			m_magicAttackNow = true;
+
+			SetAnimationSpeed(1.0f);
 		}
 		//キーの名前が「magic_end」の時。
 		else if (wcscmp(eventName, L"magic_end") == 0)

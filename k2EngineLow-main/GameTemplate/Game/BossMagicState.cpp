@@ -16,6 +16,7 @@ namespace nsBoss
 	{
 		// 再生するアニメーションを設定。
 		m_boss->SetAnimation(Boss::enAnimClip_Magic, 0.3f);
+		m_boss->SetAnimationSpeed(0.7f);
 	}
 	
 	IBossState* BossMagicState::StateChange()

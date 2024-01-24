@@ -67,6 +67,15 @@ namespace nsBoss
 		}
 
 		/// <summary>
+		/// アニメーション速度の設定
+		/// </summary>
+		/// <param name="speed"></param>
+		void SetAnimationSpeed(float speed)
+		{
+			m_model.SetAnimationSpeed(speed);
+		}
+
+		/// <summary>
 		/// キャラコンの再設定
 		/// </summary>
 		void ResetCharaCon()
