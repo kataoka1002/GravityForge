@@ -67,6 +67,23 @@ namespace nsBoss
 			m_position		//座標
 		);
 
+		//コリジョンオブジェクトを作成する。
+		m_collisionObject = NewGO<CollisionObject>(0);
+
+		//カプセルのコリジョンを作成する。
+		m_collisionObject->CreateCapsule(
+			m_position,
+			Quaternion::Identity,
+			140.0f,
+			170.0f
+		);
+
+		//コリジョンに名前を付ける
+		m_collisionObject->SetName("bossCollision");
+
+		//コリジョンオブジェクトが自動で削除されないようにする
+		m_collisionObject->SetIsEnableAutoDelete(false);
+
 		// HPの設定
 		m_hp = MAX_HP;
 
@@ -117,6 +134,13 @@ namespace nsBoss
 
 		// 各ステートの更新処理を実行。
 		m_bossState->Update();
+
+		//コリジョンの回転,移動を設定する
+		m_collisionObject->SetRotation(m_rotation);
+
+		Vector3 collisionPos = m_position;
+		collisionPos.y += 180.0f;
+		m_collisionObject->SetPosition(collisionPos);
 
 		// アニメーションを再生する。
 		PlayAnimation(m_currentAnimationClip);

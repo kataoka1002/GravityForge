@@ -72,6 +72,9 @@ namespace nsHumanEnemy
 			m_position		//座標
 		);
 
+		//コリジョンの作成
+		SetCollision();
+
 		//壁に隠れているかを判定するためのコライダ
 		m_sphereCollider.Create(1.0f);
 
@@ -112,6 +115,8 @@ namespace nsHumanEnemy
 
 		// 各ステートの更新処理を実行。
 		m_humanEnemyState->Update();
+
+		MoveCollision();
 
 		// アニメーションを再生する。
 		PlayAnimation(m_currentAnimationClip);
@@ -237,8 +242,8 @@ namespace nsHumanEnemy
 		m_collisionObject->CreateCapsule(
 			m_position,
 			rot,
-			30.0f,
-			180.0f
+			70.0f,
+			170.0f
 		);
 
 		//コリジョンに名前を付ける
@@ -249,14 +254,24 @@ namespace nsHumanEnemy
 	}
 
 	void HumanEnemy::MoveCollision()
-	{
-		//コリジョンを横に倒す
+	{		
 		Quaternion rot = m_rotation;
-		rot.AddRotationDegX(180.0f);
+		Vector3 collisionPos = m_position;
+
+		//体力が半分以下なら
+		if (m_isCrawling)
+		{
+			//コリジョンを横に倒す
+			rot.AddRotationDegX(180.0f);
+		}
+		else
+		{
+			collisionPos.y += 90.0f;
+		}
 		
 		//コリジョンの回転,移動を設定する
 		m_collisionObject->SetRotation(rot);
-		m_collisionObject->SetPosition(m_position);
+		m_collisionObject->SetPosition(collisionPos);
 	}
 
 	void HumanEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)

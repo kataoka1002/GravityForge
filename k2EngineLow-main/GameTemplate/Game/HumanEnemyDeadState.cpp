@@ -23,11 +23,14 @@ namespace nsHumanEnemy
 		// アニメーションの再生が終わったら四つん這い
 		if (m_enemy->GetIsPlayingAnimation() == false)
 		{
+			//アニメーション速度をもとにもどす
+			m_enemy->SetAnimationSpeed(1.0f);
+
 			//キャラコンの再設定を行う
 			m_enemy->ResetCharaCon();
 
 			//コリジョンの設定
-			m_enemy->SetCollision();
+			//m_enemy->SetCollision();
 
 			//四つん這いをtrueにする
 			m_enemy->SetCrawlNow();

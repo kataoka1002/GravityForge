@@ -111,8 +111,10 @@ void ObjectBase::Move()
 	case enObjectState_Blow:
 		//吹っ飛ぶ処理
 		BlowAway();
+
 		//衝突したかどうかの処理
 		CalcCollision();
+
 		//時間測定
 		CheckFlightTime();
 		break;
@@ -121,6 +123,7 @@ void ObjectBase::Move()
 	case enObjectState_Falling:
 		//落下中の処理
 		FallingObject();
+
 		//着地判定
 		CheckToLand();
 		break;
@@ -359,14 +362,16 @@ void ObjectBase::InitBlowAway()
 
 	//飛んでいく方向の決定(レティクルの方向)
 	m_flightDir = g_camera3D->GetForward();
-	m_flightSpeed = g_camera3D->GetForward() * BLOW_AWAY_SPEED;
-	m_flightSpeed += g_camera3D->GetRight() * -90.0f;
 
 	//レイの始点と終点を決めてステージとの交点を求める
 	Vector3 start, end;
 	start = m_position;
-	end = m_position + m_flightDir * 7000.0f;
+	end = g_camera3D->GetPosition() + m_flightDir * 7000.0f;
 	PhysicsWorld::GetInstance()->RayTest(start, end, m_crossPosition);
+
+	m_flightSpeed = m_crossPosition - m_position;
+	m_flightSpeed.Normalize();
+	m_flightSpeed *= BLOW_AWAY_SPEED;
 
 	//吹っ飛びステートに変更
 	m_objectState = enObjectState_Blow;
@@ -561,7 +566,8 @@ void ObjectBase::CalcCollision()
 
 	//ステージと衝突したかを計算
 	Vector3 length = m_crossPosition - m_position;
-	if (length.Length() <= 80.0f)
+	float distance = length.Length();
+	if (distance <= 70.0f)
 	{
 		//エフェクト発生
 		PlayEffect(enEffectName_ObjectDrop, m_position, m_rotation, HIT_STAGE_EFFECT_SCALE);
