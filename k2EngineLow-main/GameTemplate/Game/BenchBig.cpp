@@ -9,7 +9,7 @@ namespace
 	const float COLLISION_SCALE = 90.0f;
 
 	//与えるダメージ
-	const float DAMAGE_AMOUNT = 50.0f;
+	const float DAMAGE_AMOUNT = 80.0f;
 
 	//キャラコンの半径
 	const float CHARACON_RADIUS = 70.0f;
