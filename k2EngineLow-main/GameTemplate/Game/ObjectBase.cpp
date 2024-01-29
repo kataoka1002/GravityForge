@@ -481,6 +481,7 @@ void ObjectBase::CalcCollision()
 			//エネミーはダメージを受けた時の処理を行う
 			enemy->HandleDamageEvent(m_damage);
 
+			//リアクションの再生
 			enemy->PlayReaction();
 
 			//エフェクトの発生
@@ -510,6 +511,9 @@ void ObjectBase::CalcCollision()
 			{
 				//エネミーはダメージを受けた時の処理を行う
 				enemy->HandleDamageEvent(m_damage);
+
+				//リアクションの再生
+				enemy->PlayReaction();
 
 				//エフェクトの発生
 				PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
