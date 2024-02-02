@@ -568,6 +568,35 @@ void ObjectBase::CalcCollision()
 		return;
 	}
 
+	if (m_collisionObject->IsHit(m_boss->GetCollision()))
+	{
+		//ボスはダメージを受けた時の処理を行う
+		m_boss->HandleDamageEvent(m_damage);
+
+		//ボスのステートの変更を行う
+		m_boss->SetReactionState();
+
+		//エフェクトの発生
+		PlayEffect(enEffectName_ObjectBom, m_position, m_rotation, Vector3::One);
+
+		//一回再生すると終わりなので,インスタンスを保持させない為にここでNewGOする
+		SoundSource* bombSE = NewGO<SoundSource>(0);
+		bombSE->Init(enSoundName_ObjBomb);						//初期化
+		bombSE->SetVolume(1.0f * g_soundEngine->GetSeVolume());	//音量調整
+		bombSE->Play(false);
+
+		//自分が消えるときの処理
+		OnDestroy();
+
+		//UIの削除
+		if (m_targetUI != nullptr)
+		{
+			DeleteGO(m_targetUI);
+		}
+
+		return;
+	}
+
 	//ステージと衝突したかを計算
 	Vector3 length = m_crossPosition - m_position;
 	float distance = length.Length();
