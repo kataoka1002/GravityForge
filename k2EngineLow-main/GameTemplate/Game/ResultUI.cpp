@@ -8,7 +8,7 @@ namespace
 
 	const float KILL_BOSS_TIME_UP_SPEED = 2.0f;
 
-	const int SCORE_UP_SPEED = 50;
+	const int SCORE_UP_SPEED = 150;
 
 	const float SCORE_SCALE_TARGET = 2.5f;
 }
@@ -294,10 +294,16 @@ void ResultUI::ScoreValueProcess()
 		CalcFontScale(m_scoreFontScale, enResultUIState_GoTitle, SCORE_SCALE_TARGET, 1.5f);
 	}
 
+	float posX = -20.0f;
+	if (m_drawScore > 10000.0f)
+	{
+		posX = -50.0f;
+	}
+
 	wchar_t text[256];
 	swprintf_s(text, 256, L"%d", m_drawScore);
 	m_scoreFont.SetText(text);
-	m_scoreFont.SetPosition({ 0.0f,-250.0f,0.0f });
+	m_scoreFont.SetPosition({ posX,-250.0f,0.0f });
 	m_scoreFont.SetScale(m_scoreFontScale);
 }
 
