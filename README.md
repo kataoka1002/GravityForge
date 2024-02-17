@@ -179,7 +179,7 @@
 > #### ・大量のオブジェクトを配置したことでFPSが激減したので、軽量化のために実装しました。<br /> ・今までオブジェクトごとにモデルを描画していたのを、モデルが同じ場合に、ワールド座標などの行列の配列をまとめて渡すことで描画を1度しかしなくてもいいようにします。
 > ![インスタンシング描画](https://github.com/kataoka1002/GravityForge/assets/122655580/3aef4fee-ad93-41da-a802-72ee907fd641)
 > #### ・実装後はFPSが30を切らなくなりました。
-> ![FPS比較](https://github.com/kataoka1002/GravityForge/assets/122655580/9bffc5ab-0bd0-49f2-8d9e-10e55c23574a)
+> ![FPS比較](https://github.com/kataoka1002/GravityForge/assets/122655580/5907c1a5-1986-4366-a299-313435d78b79)
 > ### ⑥コンピュートシェーダー
 > #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・単純計算の得意なGPUに簡単な計算を任せることで軽量化しています。
 > ![コンピュートシェーダー](https://github.com/kataoka1002/GravityForge/assets/122655580/20bb0dfd-95c4-4c01-80c4-5693348bd0e5)
