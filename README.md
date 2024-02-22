@@ -181,9 +181,11 @@
 > #### ・実装後はFPSが30を切らなくなりました。
 > ![FPS比較](https://github.com/kataoka1002/GravityForge/assets/122655580/5907c1a5-1986-4366-a299-313435d78b79)
 > ### ⑥スキニング
-> #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・あらかじめアニメーション済みの頂点を計算しておき使いまわすことで計算回数の削減を行いました。
+> #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・もともとはターゲットごとにアニメーションの計算を行っていました。
 > ![スキニング](https://github.com/kataoka1002/GravityForge/assets/122655580/0f6dc648-729d-4288-b579-0b7b8fc24596)
-> ![スキニング計算](https://github.com/kataoka1002/GravityForge/assets/122655580/de061913-b43e-46a1-a18e-5410909b85c5)
+> #### ・あらかじめアニメーション済みの頂点を計算しておき使いまわすことで計算回数の削減を行いました。
+> ![スキニング(前)](https://github.com/kataoka1002/GravityForge/assets/122655580/6254c627-16a7-4512-9189-32ccd5b92cb9)
+> ![スキニング計算](https://github.com/kataoka1002/GravityForge/assets/122655580/0e0e2669-0003-4126-88ed-854e875096b8)
 > ### ⑦カリング
 > #### ・これも同じく軽量化の為に実装しました。
 > ![フラスタムカリング](https://github.com/kataoka1002/GravityForge/assets/122655580/3e3291de-1c95-4efc-8f34-5383479a1b92)
