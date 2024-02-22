@@ -180,9 +180,10 @@
 > ![インスタンシング描画](https://github.com/kataoka1002/GravityForge/assets/122655580/3aef4fee-ad93-41da-a802-72ee907fd641)
 > #### ・実装後はFPSが30を切らなくなりました。
 > ![FPS比較](https://github.com/kataoka1002/GravityForge/assets/122655580/5907c1a5-1986-4366-a299-313435d78b79)
-> ### ⑥コンピュートシェーダー
-> #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・単純計算の得意なGPUに簡単な計算を任せることで軽量化しています。
-> ![コンピュートシェーダー](https://github.com/kataoka1002/GravityForge/assets/122655580/20bb0dfd-95c4-4c01-80c4-5693348bd0e5)
+> ### ⑥スキニング
+> #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・あらかじめアニメーション済みの頂点を計算しておき使いまわすことで計算回数の削減を行いました。
+> ![スキニング](https://github.com/kataoka1002/GravityForge/assets/122655580/0f6dc648-729d-4288-b579-0b7b8fc24596)
+> ![スキニング計算](https://github.com/kataoka1002/GravityForge/assets/122655580/de061913-b43e-46a1-a18e-5410909b85c5)
 > ### ⑦カリング
 > #### ・これも同じく軽量化の為に実装しました。
 > ![フラスタムカリング](https://github.com/kataoka1002/GravityForge/assets/122655580/3e3291de-1c95-4efc-8f34-5383479a1b92)
