@@ -180,6 +180,8 @@
 > ![インスタンシング描画](https://github.com/kataoka1002/GravityForge/assets/122655580/3aef4fee-ad93-41da-a802-72ee907fd641)
 > #### ・実装後はFPSが30を切らなくなりました。
 > ![FPS比較](https://github.com/kataoka1002/GravityForge/assets/122655580/5907c1a5-1986-4366-a299-313435d78b79)
+> ※大量の敵の描画
+> ![大量の敵](https://github.com/kataoka1002/GravityForge/assets/122655580/f0355817-5370-49ed-87c2-45fc7143824f)
 > ### ⑥スキニング
 > #### ・オブジェクトを大量に置きFPSが減少したので、軽量化のために実装しました。<br /> ・もともとはターゲットごとにアニメーションの計算を行っていました。
 > ![スキニング](https://github.com/kataoka1002/GravityForge/assets/122655580/0f6dc648-729d-4288-b579-0b7b8fc24596)
