@@ -61,6 +61,8 @@
 >  Fork</dd>
 >  <dt>GitHubのURL</dt>
 >  <dd>https://github.com/kataoka1002/333Game.git</dd> 
+>  <dt>動画リンク(YouTube)</dt>
+>  <dd>https://youtu.be/1x_zW5Na3ac</dd>
 > </dl>
 
 <br />
